@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd ">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>magnolia-project</artifactId>
+    <groupId>info.magnolia</groupId>
+    <version>3.1-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+  <artifactId>magnolia-module-imageresizer</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  <name>magnolia-module-imageresizer</name>
+  <description>A Magnolia module that provides a control to resize/crop images, and appropriate dialogs and paragraphs</description>
+  <scm>
+    <connection>scm:svn:http://svn.magnolia.info/svn/modules/community/magnolia-module-imageresizer/trunk</connection>
+    <developerConnection>scm:svn:http://svn.magnolia.info/svn/modules/community/magnolia-module-imageresizer/trunk</developerConnection>
+    <url>http://svn.magnolia.info/view/modules/community/magnolia-module-imageresizer/trunk</url>
+  </scm>
+
+  <properties>
+    <magnoliaVersion>3.1-SNAPSHOT</magnoliaVersion>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>info.magnolia</groupId>
+      <artifactId>magnolia-core</artifactId>
+      <version>${magnoliaVersion}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>info.magnolia</groupId>
+      <artifactId>magnolia-gui</artifactId>
+      <version>${magnoliaVersion}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>info.magnolia</groupId>
+      <artifactId>magnolia-module-admininterface</artifactId>
+      <version>${magnoliaVersion}</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+</project>

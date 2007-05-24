@@ -1,0 +1,44 @@
+    <script type="text/javascript" src="${contextPath}/.magnolia/pages/javascript.js"></script>
+    <script type="text/javascript" src="${contextPath}/.resources/js-libs/json/json.js" language="javascript"></script>
+    <script type="text/javascript" src="${contextPath}/.resources/js-libs/cropper/lib/prototype.js" language="javascript"></script>
+    <script type="text/javascript" src="${contextPath}/.resources/js-libs/cropper/lib/scriptaculous.js?load=builder,dragdrop" language="javascript"></script>
+    <script type="text/javascript" src="${contextPath}/.resources/js-libs/cropper/cropper.js" language="javascript"></script>
+    <script type="text/javascript" language="javascript">
+        var cropperValues = ''; // TODO init with current values ?
+        function onEndCrop(coords, dimensions) {
+            // just store the coordinates, dimensions can be calculated from it.
+            cropperValues = JSON.stringify(coords);
+        }
+
+        function cropperSubmit() {
+            // this function should have been added by the caller. maybe we should just define it here...
+            if (window.cropperCallback) {
+                window.cropperCallback(cropperValues);//, window);
+            }
+        }
+
+
+    </script>
+    <script type="text/javascript" language="javascript">
+        Event.observe(window, 'load', function() {
+            new Cropper.Img('cropperImage', {
+                    onEndCrop: onEndCrop,
+                    [#if this.minWidth > 0]minWidth:${this.minWidth}, [/#if]
+                    [#if this.minHeight > 0]minHeight:${this.minHeight}, [/#if]
+                    [#if this.maxWidth > 0]maxWidth:${this.maxWidth}, [/#if]
+                    [#if this.maxHeight > 0]maxHeight:${this.maxHeight}, [/#if]
+                    ratioDim: { x: ${this.ratioX}, y: ${this.ratioY} },
+                });
+        });
+    </script>
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #mgnlMoveDivShadow, #mgnlMoveDivDenied, #mgnlMoveDivAllowed {
+            display: none;
+        }
+
+    </style>
