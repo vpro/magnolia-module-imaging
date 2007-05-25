@@ -15,7 +15,7 @@ classDef("mgnl.imageresizer.ImageResizer", {
      * @param resultControlId the (html) id of the control where the cropping data should be stored.
      * @param dialogUUID the uuid of the dialog that holds the configuration for the cropper.
      */
-    openCropper: function(resultControlId, dialogUUID) {
+    openCropper: function(resultControlId, dialogUUID, imagePath) {
         // TODO : open to image's size (with a maximum)
         //mgnlOpenWindow('/.magnolia/pages/imageCropper.html', 800, 800);
         //mgnlOpenWindow does not return the window handler
@@ -25,7 +25,7 @@ classDef("mgnl.imageresizer.ImageResizer", {
         // var imggg=document.getElementById('cropperImage');
 
 
-        var imageCropperWindow = window.open(contextPath + '/.magnolia/pages/imageCropper.html?configDialogUUID=' + dialogUUID, 'imageCropper', 'width=800,height=800,scrollbars=auto,status=yes,resizable=yes');
+        var imageCropperWindow = window.open(contextPath + '/.magnolia/pages/imageCropper.html?configDialogUUID=' + dialogUUID + '&imagePath=' + imagePath, 'imageCropper', 'width=800,height=800,scrollbars=auto,status=yes,resizable=yes');
         if (imageCropperWindow.focus) {
             imageCropperWindow.focus();
         }

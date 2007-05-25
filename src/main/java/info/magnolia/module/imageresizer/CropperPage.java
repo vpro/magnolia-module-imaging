@@ -35,7 +35,7 @@ import java.util.HashMap;
  */
 public class CropperPage extends TemplatedMVCHandler {
     private String configDialogUUID;
-    private String imageUrl = "http://farm1.static.flickr.com/84/234142408_a686364f8f.jpg";
+    private String imagePath;
     private long ratioX;
     private long ratioY;
     private long minHeight;
@@ -72,7 +72,6 @@ public class CropperPage extends TemplatedMVCHandler {
         }
     }
 
-
     public void renderHtml(String view) throws IOException {
         try {
             // let's fake a dialog for the sake of its layout ... and save button.
@@ -100,8 +99,12 @@ public class CropperPage extends TemplatedMVCHandler {
         this.configDialogUUID = configDialogUUID;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    public String getImagePath() {
+        return imagePath;
     }
 
     public long getRatioX() {
