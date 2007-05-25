@@ -40,9 +40,9 @@ public class ImageResizeControl extends DialogFile {
         // could allow for instance multiple sizes of one image in the same paragraph,
         // and decouples the cropper from the file upload mechanism
 
-        final Hidden cropperInfo = new Hidden();
-        cropperInfo.setName("cropperInfo");
+        final Hidden cropperInfo = new Hidden("cropperInfo", getWebsiteNode());
         cropperInfo.setId("cropperInfo");
+        cropperInfo.setSaveInfo(true);
 
         final Button button = new Button();
         button.setLabel(getMessage("cropper.edit.button"));
