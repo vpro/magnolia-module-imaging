@@ -36,6 +36,7 @@ import java.util.HashMap;
 public class CropperPage extends TemplatedMVCHandler {
     private String configDialogUUID;
     private String imagePath;
+    private String currentCrop;
     private long ratioX;
     private long ratioY;
     private long minHeight;
@@ -64,8 +65,6 @@ public class CropperPage extends TemplatedMVCHandler {
             minWidth = getLong(imageControlConfigNode, "minWidth");
             maxHeight = getLong(imageControlConfigNode, "maxHeight");
             maxWidth = getLong(imageControlConfigNode, "maxWidth");
-
-            // TODO : get current crop zone !
 
         } catch (RepositoryException e) {
             throw new RuntimeException(e);
@@ -103,8 +102,16 @@ public class CropperPage extends TemplatedMVCHandler {
         this.imagePath = imagePath;
     }
 
+    public void setCurrentCrop(String currentCrop) {
+        this.currentCrop = currentCrop;
+    }
+
     public String getImagePath() {
         return imagePath;
+    }
+
+    public String getCurrentCrop() {
+        return currentCrop;
     }
 
     public long getRatioX() {
@@ -136,13 +143,6 @@ public class CropperPage extends TemplatedMVCHandler {
             super.drawHtmlPreSubsHead(out);
             renderTemplate("/info/magnolia/module/imageresizer/CropperPage.head.html", out);
         }
-
-//        public String getConfigValue(String key, String nullValue) {
-//            if ("saveOnclick".equals(key)) {
-//                return "cropperSubmit();";
-//            }
-//            return super.getConfigValue(key, nullValue);
-//        }
     }
 
     private final class CropperControl extends DialogControlImpl {

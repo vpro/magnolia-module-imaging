@@ -40,18 +40,21 @@ public class ImageResizeControl extends DialogFile {
         // could allow for instance multiple sizes of one image in the same paragraph,
         // and decouples the cropper from the file upload mechanism
 
-        final String imagePath = getFileURI(getFileControl());
+        // TODO : for now we can't handle a paragraph where the image hasn't been uploaded yet.
+        if (getWebsiteNode() != null) {
+            final String imagePath = getFileURI(getFileControl());
 
-        final Hidden cropperInfo = new Hidden("cropperInfo", getWebsiteNode());
-        cropperInfo.setId("cropperInfo");
-        cropperInfo.setSaveInfo(true);
+            final Hidden cropperInfo = new Hidden("cropperInfo", getWebsiteNode());
+            cropperInfo.setId("cropperInfo");
+            cropperInfo.setSaveInfo(true);
 
-        final Button button = new Button();
-        button.setLabel(getMessage("cropper.edit.button"));
-        button.setOnclick("new mgnl.imageresizer.ImageResizer.openCropper('" + cropperInfo.getId() + "', '" + controlUUID + "', '" + imagePath + "');");
+            final Button button = new Button();
+            button.setLabel(getMessage("cropper.edit.button"));
+            button.setOnclick("new mgnl.imageresizer.ImageResizer.openCropper('" + cropperInfo.getId() + "', '" + controlUUID + "', '" + imagePath + "');");
 
-        out.write(button.getHtml());
-        out.write(cropperInfo.getHtml());
+            out.write(button.getHtml());
+            out.write(cropperInfo.getHtml());
+        }
 
         super.drawHtmlPost(out);
     }

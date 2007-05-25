@@ -4,16 +4,18 @@
     <script type="text/javascript" src="${contextPath}/.resources/js-libs/cropper/lib/scriptaculous.js?load=builder,dragdrop" language="javascript"></script>
     <script type="text/javascript" src="${contextPath}/.resources/js-libs/cropper/cropper.js" language="javascript"></script>
     <script type="text/javascript" language="javascript">
-        var cropperValues = ''; // TODO init with current values ?
+        var cropperCoords;
+
         function onEndCrop(coords, dimensions) {
             // just store the coordinates, dimensions can be calculated from it.
-            cropperValues = JSON.stringify(coords);
+            cropperCoords = coords;
         }
 
         function cropperSubmit() {
             // this function should have been added by the caller. maybe we should just define it here...
             if (window.cropperCallback) {
-                window.cropperCallback(cropperValues);//, window);
+                var cropperCoordsStr = JSON.stringify(cropperCoords)
+                window.cropperCallback(cropperCoordsStr);
             }
         }
 
@@ -22,12 +24,14 @@
     <script type="text/javascript" language="javascript">
         Event.observe(window, 'load', function() {
             new Cropper.Img('cropperImage', {
-                    onEndCrop: onEndCrop,
                     [#if this.minWidth > 0]minWidth:${this.minWidth}, [/#if]
                     [#if this.minHeight > 0]minHeight:${this.minHeight}, [/#if]
                     [#if this.maxWidth > 0]maxWidth:${this.maxWidth}, [/#if]
                     [#if this.maxHeight > 0]maxHeight:${this.maxHeight}, [/#if]
-                    ratioDim: { x: ${this.ratioX}, y: ${this.ratioY} },
+                    [#if this.ratioX > 0]ratioDim: { x: ${this.ratioX}, y: ${this.ratioY} }, [/#if]
+                    [#if this.currentCrop?has_content]onloadCoords: JSON.parse('${this.currentCrop}'), [/#if]
+                    [#if this.currentCrop?has_content]displayOnInit: true, [/#if]
+                    onEndCrop: onEndCrop
                 });
         });
     </script>
