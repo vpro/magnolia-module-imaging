@@ -42,7 +42,7 @@ public class CropperPage extends TemplatedMVCHandler {
     private long minWidth;
     private long maxHeight;
     private long maxWidth;
-    private Content dialogConfigNode;
+    private Content imageControlConfigNode;
 
     public CropperPage(String name, HttpServletRequest request, HttpServletResponse response) {
         super(name, request, response);
@@ -56,13 +56,14 @@ public class CropperPage extends TemplatedMVCHandler {
         }
         try {
             final HierarchyManager hm = MgnlContext.getHierarchyManager(ContentRepository.CONFIG);
-            dialogConfigNode = hm.getContentByUUID(configDialogUUID);
-            ratioX = getLong(dialogConfigNode, "ratioX");
-            ratioY = getLong(dialogConfigNode, "ratioY");
-            minHeight = getLong(dialogConfigNode, "minHeight");
-            minWidth = getLong(dialogConfigNode, "minWidth");
-            maxHeight = getLong(dialogConfigNode, "maxHeight");
-            maxWidth = getLong(dialogConfigNode, "maxWidth");
+            imageControlConfigNode = hm.getContentByUUID(configDialogUUID);
+
+            ratioX = getLong(imageControlConfigNode, "ratioX");
+            ratioY = getLong(imageControlConfigNode, "ratioY");
+            minHeight = getLong(imageControlConfigNode, "minHeight");
+            minWidth = getLong(imageControlConfigNode, "minWidth");
+            maxHeight = getLong(imageControlConfigNode, "maxHeight");
+            maxWidth = getLong(imageControlConfigNode, "maxWidth");
 
             // TODO : get current crop zone !
 
@@ -76,9 +77,12 @@ public class CropperPage extends TemplatedMVCHandler {
         try {
             // let's fake a dialog for the sake of its layout ... and save button.
             final Dialog dialog = new CropperDialog();
-            dialog.init(request, response, null, dialogConfigNode);
+            dialog.init(request, response, null, imageControlConfigNode);
+            dialog.setConfig("saveOnclick", "cropperSubmit();");
+            dialog.setConfig("i18nBasename", "info.magnolia.module.imageresizer.messages");
 
-            final DialogTab tab = dialog.addTab("foo");
+            final String tabLabel = dialog.getMessage("cropper.tab.label");
+            final DialogTab tab = dialog.addTab(tabLabel);
             tab.addSub(new CropperControl());
 
             dialog.drawHtml(getResponse().getWriter());
@@ -130,12 +134,12 @@ public class CropperPage extends TemplatedMVCHandler {
             renderTemplate("/info/magnolia/module/imageresizer/CropperPage.head.html", out);
         }
 
-        public String getConfigValue(String key, String nullValue) {
-            if ("saveOnclick".equals(key)) {
-                return "cropperSubmit();";
-            }
-            return super.getConfigValue(key, nullValue);
-        }
+//        public String getConfigValue(String key, String nullValue) {
+//            if ("saveOnclick".equals(key)) {
+//                return "cropperSubmit();";
+//            }
+//            return super.getConfigValue(key, nullValue);
+//        }
     }
 
     private final class CropperControl extends DialogControlImpl {

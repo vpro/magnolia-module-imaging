@@ -28,14 +28,12 @@ import java.io.Writer;
  * @version $Revision: $ ($Author: $)
  */
 public class ImageResizeControl extends DialogFile {
-    private String dialogUUID;
+    private String controlUUID;
 
     public void init(HttpServletRequest request, HttpServletResponse response, Content websiteNode, Content configNode) throws RepositoryException {
         super.init(request, response, websiteNode, configNode);
-        dialogUUID=configNode.getUUID();
+        controlUUID = configNode.getUUID();
     }
-
-    // TODO:  do reisze, based on new targetSizeX and targetSizeY params ? 
 
     public void drawHtmlPost(Writer out) throws IOException {
         // TODO ? use 2 separate controls, one for the image and one JUST for the cropping ?
@@ -47,8 +45,8 @@ public class ImageResizeControl extends DialogFile {
         cropperInfo.setId("cropperInfo");
 
         final Button button = new Button();
-        button.setLabel("cropper.edit.button"); // TODO
-        button.setOnclick("new mgnl.imageresizer.ImageResizer.openCropper('" + cropperInfo.getId() + "', '"+dialogUUID+"');");
+        button.setLabel(getMessage("cropper.edit.button"));
+        button.setOnclick("new mgnl.imageresizer.ImageResizer.openCropper('" + cropperInfo.getId() + "', '" + controlUUID + "');");
 
         out.write(button.getHtml());
         out.write(cropperInfo.getHtml());
