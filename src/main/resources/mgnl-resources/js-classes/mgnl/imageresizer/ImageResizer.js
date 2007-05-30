@@ -16,7 +16,7 @@ classDef("mgnl.imageresizer.ImageResizer", {
      * @param dialogUUID the uuid of the dialog that holds the configuration for the cropper.
      */
     openCropper: function(cropValueControlId, dialogUUID, imagePath) {
-        // TODO : open to image's size (with a maximum)
+        // TODO : open to image's size (with a maximum) MGNLIMG-6
         //mgnlOpenWindow('/.magnolia/pages/imageCropper.html', 800, 800);
         //mgnlOpenWindow does not return the window handler
         //mgnlOpenDialog(???'image-cropper', 'website')

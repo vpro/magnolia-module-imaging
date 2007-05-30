@@ -30,6 +30,8 @@ import java.io.Writer;
 import java.util.HashMap;
 
 /**
+ * The page that provides the image cropping dialog/widget.
+ * 
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
@@ -86,7 +88,7 @@ public class CropperPage extends TemplatedMVCHandler {
             dialog.drawHtml(getResponse().getWriter());
 
         } catch (RepositoryException e) {
-            throw new RuntimeException(e); // TODO
+            throw new RuntimeException(e); // TODO ?
         }
     }
 

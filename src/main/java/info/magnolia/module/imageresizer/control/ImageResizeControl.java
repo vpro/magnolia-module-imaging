@@ -36,16 +36,17 @@ public class ImageResizeControl extends DialogFile {
     }
 
     public void drawHtmlPost(Writer out) throws IOException {
-        // TODO ? use 2 separate controls, one for the image and one JUST for the cropping ?
+        // TODO ? use 2 separate controls, one for the image and one JUST for the cropping ? (MGNLIMG-9)
         // could allow for instance multiple sizes of one image in the same paragraph,
         // and decouples the cropper from the file upload mechanism
 
-        // TODO : for now we can't handle a paragraph where the image hasn't been uploaded yet.
+        // TODO : for now we can't handle a paragraph where the image hasn't been uploaded yet. (MGNL-7)
         if (getWebsiteNode() != null) {
             final String imagePath = getFileURI(getFileControl());
 
-            final Hidden cropperInfo = new Hidden("cropperInfo", getWebsiteNode());
-            cropperInfo.setId("cropperInfo");
+            final String cropperInfoControlName = getCropperInfoControlName(getName());
+            final Hidden cropperInfo = new Hidden(cropperInfoControlName, getWebsiteNode());
+            cropperInfo.setId(cropperInfoControlName);
             cropperInfo.setSaveInfo(true);
 
             final Button button = new Button();
@@ -57,5 +58,13 @@ public class ImageResizeControl extends DialogFile {
         }
 
         super.drawHtmlPost(out);
+    }
+
+    public static String getCropperInfoControlName(String fileControlName) {
+        return fileControlName + "_cropperInfo";
+    }
+
+    public static String getTargetBinaryProperty(String fileControlName) {
+        return fileControlName + "_resized";
     }
 }

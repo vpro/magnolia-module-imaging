@@ -41,6 +41,32 @@
       <version>${magnoliaVersion}</version>
       <scope>provided</scope>
     </dependency>
+    <!--<dependency>-->
+      <!--<groupId>com.jhlabs</groupId>-->
+      <!--<artifactId>filters</artifactId>-->
+      <!--<version>2.0.235</version>-->
+      <!--<scope>compile</scope>-->
+    <!--</dependency>-->
+    <dependency>
+      <groupId>net.sf.json-lib</groupId>
+      <artifactId>json-lib</artifactId>
+      <version>0.9</version>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>info.magnolia</groupId>
+      <artifactId>magnolia-core</artifactId>
+      <version>${magnoliaVersion}</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
 
 </project>
