@@ -22,6 +22,7 @@ import java.awt.image.BufferedImage;
  */
 public class ImageResizerImpl implements ImageResizer {
 
+    // TODO : check targetWidth & targetHeight - potentially calculate a ratio if only one is provided
     public BufferedImage resize(Image src, CropperInfo cropperInfo, int targetWidth, int targetHeight) {
         // this is pretty unsatisfying from a quality standpoint - colors are ugly - but is pretty fast
         final BufferedImage dst = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_RGB);

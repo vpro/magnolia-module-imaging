@@ -20,5 +20,8 @@ import java.awt.image.BufferedImage;
  * @version $Revision: $ ($Author: $)
  */
 public interface ImageResizer {
+    /**
+     * If targetWidth or targetHeight is <=0, no resizing will happen.
+     */
     BufferedImage resize(Image source, CropperInfo cropperInfo, int targetWidth, int targetHeight);
 }

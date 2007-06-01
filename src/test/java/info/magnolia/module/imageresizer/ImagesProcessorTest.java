@@ -33,6 +33,14 @@ import java.util.Arrays;
  */
 public class ImagesProcessorTest extends TestCase {
     public void testPostSaveCallsImageResizerForBinaryNodesThatHaveCorrespondingCropperInfo() throws IOException, RepositoryException {
+        final Content configNode = createMock(Content.class);
+        final NodeData targetWidth = createMock(NodeData.class);
+        final NodeData targetHeight = createMock(NodeData.class);
+        expect(configNode.getNodeData("targetWidth")).andReturn(targetWidth);
+        expect(configNode.getNodeData("targetHeight")).andReturn(targetHeight);
+        expect(targetWidth.getLong()).andReturn(234l);
+        expect(targetHeight.getLong()).andReturn(567l);
+        
         final Content storageNode = createMock(Content.class);
         // let's create dummy binary properties. the second one has a corresponding cropperInfo property and should thus be processed
         final NodeData bin1 = createMock(NodeData.class);
@@ -55,16 +63,15 @@ public class ImagesProcessorTest extends TestCase {
 
         final CropperInfo expectedCropperInfo = new CropperInfo(1, 30, 20, 50);
         final ImageResizer imageResizer = createStrictMock(ImageResizer.class);
-        // TODO : 100's should be configured values
         final BufferedImage dummyResultImg = ImageIO.read(getClass().getResourceAsStream("/funnel.gif"));
-        expect(imageResizer.resize(isA(Image.class), eq(expectedCropperInfo), eq(100), eq(100))).andReturn(dummyResultImg);
+        expect(imageResizer.resize(isA(Image.class), eq(expectedCropperInfo), eq(234), eq(567))).andReturn(dummyResultImg);
 
-        replay(imageResizer, storageNode, bin1, bin2, bin2Crop);
+        replay(imageResizer, configNode, targetHeight, targetWidth, storageNode, bin1, bin2, bin2Crop);
 
         final ImagesProcessor imagesProcessor = new ImagesProcessor(imageResizer);
-        imagesProcessor.processImages(storageNode, null);
+        imagesProcessor.processImages(storageNode, configNode);
 
-        verify(imageResizer, storageNode, bin1, bin2, bin2Crop);
+        verify(imageResizer, configNode, targetHeight, targetWidth, storageNode, bin1, bin2, bin2Crop);
     }
 
     public void testCropperInfoAreProperlyDecoded() {

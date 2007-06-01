@@ -51,6 +51,10 @@ public class ImagesProcessor {
     }
 
     public void processImages(Content storageNode, Content configNode) throws RepositoryException, IOException {
+        // TODO : using the DialogHandler, this is currently configured at dialog level. Ideally it should be configured at control level, especially once the file and crop controls are decoupled. 
+        final int targetWidth = (int) configNode.getNodeData("targetWidth").getLong();
+        final int targetHeight = (int) configNode.getNodeData("targetHeight").getLong();
+
         // let's loop through all properties, see which ones are binaries and see if they have a corresponding cropperInfo
         final Collection props = storageNode.getNodeDataCollection();
         Iterator it = props.iterator();
@@ -63,17 +67,17 @@ public class ImagesProcessor {
                     final NodeData cropperInfo = storageNode.getNodeData(potentialCropperInfoProperty);
                     final String targetBinaryProperty = ImageResizeControl.getTargetBinaryProperty(binaryName);
                     final NodeData target = NodeDataUtil.getOrCreate(storageNode, targetBinaryProperty, PropertyType.BINARY);
-                    processImage(nd, cropperInfo, target);
+                    processImage(nd, cropperInfo, target, targetWidth, targetHeight);
                 }
             }
         }
     }
 
-    protected void processImage(NodeData binary, NodeData cropperInfoProp, NodeData target) throws IOException, RepositoryException {
+    protected void processImage(NodeData binary, NodeData cropperInfoProp, NodeData target, int targetWidth, int targetHeight) throws IOException, RepositoryException {
         final Image img = getImage(binary);
         final CropperInfo cropperInfo = getCropperInfo(cropperInfoProp);
 
-        final BufferedImage resized = imageResizer.resize(img, cropperInfo, 100, 100); // TODO targetSizeXY
+        final BufferedImage resized = imageResizer.resize(img, cropperInfo, targetWidth, targetHeight);
 
         final File tempImageFile = File.createTempFile("tmp-imageprocessor-", ".jpg");
         try {
