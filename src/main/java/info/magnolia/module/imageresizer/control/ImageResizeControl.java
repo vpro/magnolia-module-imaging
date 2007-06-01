@@ -40,7 +40,7 @@ public class ImageResizeControl extends DialogFile {
         // could allow for instance multiple sizes of one image in the same paragraph,
         // and decouples the cropper from the file upload mechanism
 
-        // TODO : for now we can't handle a paragraph where the image hasn't been uploaded yet. (MGNL-7)
+        // TODO : for now we can't handle a paragraph where the image hasn't been uploaded yet. (MGNLIMG-7)
         if (getWebsiteNode() != null) {
             final String imagePath = getFileURI(getFileControl());
 
