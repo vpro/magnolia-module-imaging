@@ -37,6 +37,8 @@ public class ImageResizeControl extends DialogBox {
     }
 
     public void drawHtml(Writer out) throws IOException {
+        drawHtmlPre(out);
+
         // TODO : for now we can't handle a paragraph where the image hasn't been uploaded yet. (MGNLIMG-7)
         if (getWebsiteNode() != null) {
             final String fileControlName = getConfigValue("fileControlName", null);
@@ -59,7 +61,7 @@ public class ImageResizeControl extends DialogBox {
             out.write(cropperInfo.getHtml());
         }
 
-        super.drawHtmlPost(out);
+        drawHtmlPost(out);
     }
 
     public static String getCropperInfoPropertyName(String fileControlName) {
