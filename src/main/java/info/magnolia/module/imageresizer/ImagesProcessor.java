@@ -50,14 +50,17 @@ public class ImagesProcessor {
         this.imageResizer = imageResizer;
     }
 
+    /**
+     * @param storageNode where the resized image should be stored
+     * @param configNode where the control is configured (for targetWidth and targetHeight)
+     */
     public void processImages(Content storageNode, Content configNode) throws RepositoryException, IOException {
-        // TODO : using the DialogHandler, this is currently configured at dialog level. Ideally it should be configured at control level, especially once the file and crop controls are decoupled. 
         final int targetWidth = (int) configNode.getNodeData("targetWidth").getLong();
         final int targetHeight = (int) configNode.getNodeData("targetHeight").getLong();
 
         // let's loop through all properties, see which ones are binaries and see if they have a corresponding cropperInfo
         final Collection props = storageNode.getNodeDataCollection();
-        Iterator it = props.iterator();
+        final Iterator it = props.iterator();
         while (it.hasNext()) {
             NodeData nd = (NodeData) it.next();
             if (nd.getType() == PropertyType.BINARY) {
@@ -82,14 +85,14 @@ public class ImagesProcessor {
         final File tempImageFile = File.createTempFile("tmp-imageprocessor-", ".jpg");
         try {
             final OutputStream tempOut = new FileOutputStream(tempImageFile);
-            ImageIO.write(resized, "jpg", tempOut); // TODO : file format (jpg, png, ...)
+            ImageIO.write(resized, "jpg", tempOut); // TODO : MGNLIMG-11 file format (jpg, png, ...)
             tempOut.flush();
             IOUtils.closeQuietly(tempOut);
 
             // TODO this needs to be factored out of SaveHandlerImpl.saveDocument() and ScaleImageTag.createImageNode() !
             final InputStream tempIn = new FileInputStream(tempImageFile);
             target.setValue(tempIn);
-            target.setAttribute(FileProperties.PROPERTY_CONTENTTYPE, "image/jpg"); // TODO file format
+            target.setAttribute(FileProperties.PROPERTY_CONTENTTYPE, "image/jpg"); // TODO MGNLIMG-11 file format
             target.setAttribute(FileProperties.PROPERTY_LASTMODIFIED, DateUtil.getCurrentUTCCalendar());
 
             IOUtils.closeQuietly(tempIn);
