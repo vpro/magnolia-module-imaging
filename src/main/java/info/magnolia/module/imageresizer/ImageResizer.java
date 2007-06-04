@@ -21,7 +21,9 @@ import java.awt.image.BufferedImage;
  */
 public interface ImageResizer {
     /**
-     * If targetWidth or targetHeight is <=0, no resizing will happen.
+     * If targetWidth and targetHeight are <=0, no resizing will happen. (ie the CropperInfo will be used to determine targetWidth and targetHeight)
+     * If targetWidth or targetHeight is <=0, the other side will be sized proportionally, using the given CropperInfo.
+     * If both targetWidth and targetHeight are >0, we will use them even if they don't match the original ratio.
      */
     BufferedImage resize(Image source, CropperInfo cropperInfo, int targetWidth, int targetHeight);
 }
