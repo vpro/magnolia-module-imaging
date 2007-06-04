@@ -13,13 +13,18 @@
 package info.magnolia.module.imageresizer;
 
 import info.magnolia.cms.core.Content;
+import info.magnolia.cms.gui.dialog.DialogControlImpl;
 import info.magnolia.module.admininterface.SaveHandler;
 import info.magnolia.module.admininterface.dialogs.ParagraphEditDialog;
+import info.magnolia.module.imageresizer.control.ImageResizeControl;
 
 import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author gjoseph
@@ -43,8 +48,17 @@ public class CroppedImageDialogHandler extends ParagraphEditDialog {
         try {
             final ImagesProcessor processor = new ImagesProcessor(new ImageResizerImpl());
             final Content storageNode = getStorageNode();
-            final Content configNode = getConfigNode();
-            processor.processImages(storageNode, configNode);
+
+            final List croppers = new LinkedList();
+            final List dialogSubs = getDialog().getSubs();
+            findCroppersConfigNodes(croppers, dialogSubs);
+
+            final Iterator it = croppers.iterator();
+            while (it.hasNext()) {
+                final Content configNode = (Content) it.next();
+                processor.processImages(storageNode, configNode);
+            }
+
             storageNode.save();
             return true;
         } catch (IOException e) {
@@ -54,6 +68,20 @@ public class CroppedImageDialogHandler extends ParagraphEditDialog {
             log.error("Couldn't resize image: " + e.getMessage(), e);
             return false;
         }
+    }
+
+    private void findCroppersConfigNodes(List foundCroppers, List dialogSubs) {
+        final Iterator it = dialogSubs.iterator();
+        while (it.hasNext()) {
+            DialogControlImpl c = (DialogControlImpl) it.next();
+            if (c instanceof ImageResizeControl) {
+                final ImageResizeControl irc = (ImageResizeControl) c;
+                foundCroppers.add(irc.getConfigNode());
+            } else {
+                findCroppersConfigNodes(foundCroppers, c.getSubs());
+            }
+        }
+
     }
 
 }

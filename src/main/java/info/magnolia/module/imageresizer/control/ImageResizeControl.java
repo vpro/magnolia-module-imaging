@@ -29,11 +29,15 @@ import java.io.Writer;
  * @version $Revision: $ ($Author: $)
  */
 public class ImageResizeControl extends DialogBox {
-    private String controlUUID;
+    private Content configNode;
 
     public void init(HttpServletRequest request, HttpServletResponse response, Content websiteNode, Content configNode) throws RepositoryException {
         super.init(request, response, websiteNode, configNode);
-        controlUUID = configNode.getUUID();
+        this.configNode = configNode;
+    }
+
+    public Content getConfigNode() {
+        return configNode;
     }
 
     public void drawHtml(Writer out) throws IOException {
@@ -53,6 +57,7 @@ public class ImageResizeControl extends DialogBox {
             cropperInfo.setId(cropperInfoControlName);
             cropperInfo.setSaveInfo(true);
 
+            final String controlUUID = configNode.getUUID();
             final Button button = new Button();
             button.setLabel(getMessage("cropper.edit.button"));
             button.setOnclick("new mgnl.imageresizer.ImageResizer.openCropper('" + cropperInfo.getId() + "', '" + controlUUID + "', '" + imagePath + "');");
