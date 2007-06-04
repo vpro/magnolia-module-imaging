@@ -62,10 +62,10 @@ public class ImagesProcessor {
             NodeData nd = (NodeData) it.next();
             if (nd.getType() == PropertyType.BINARY) {
                 final String binaryName = nd.getName();
-                final String potentialCropperInfoProperty = ImageResizeControl.getCropperInfoControlName(binaryName);
+                final String potentialCropperInfoProperty = ImageResizeControl.getCropperInfoPropertyName(binaryName);
                 if (storageNode.hasNodeData(potentialCropperInfoProperty)) {
                     final NodeData cropperInfo = storageNode.getNodeData(potentialCropperInfoProperty);
-                    final String targetBinaryProperty = ImageResizeControl.getTargetBinaryProperty(binaryName);
+                    final String targetBinaryProperty = ImageResizeControl.getTargetBinaryPropertyName(binaryName);
                     final NodeData target = NodeDataUtil.getOrCreate(storageNode, targetBinaryProperty, PropertyType.BINARY);
                     processImage(nd, cropperInfo, target, targetWidth, targetHeight);
                 }

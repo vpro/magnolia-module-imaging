@@ -15,7 +15,8 @@ package info.magnolia.module.imageresizer.control;
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.gui.control.Button;
 import info.magnolia.cms.gui.control.Hidden;
-import info.magnolia.cms.gui.dialog.DialogFile;
+import info.magnolia.cms.gui.control.File;
+import info.magnolia.cms.gui.dialog.DialogBox;
 
 import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +28,7 @@ import java.io.Writer;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class ImageResizeControl extends DialogFile {
+public class ImageResizeControl extends DialogBox {
     private String controlUUID;
 
     public void init(HttpServletRequest request, HttpServletResponse response, Content websiteNode, Content configNode) throws RepositoryException {
@@ -35,16 +36,17 @@ public class ImageResizeControl extends DialogFile {
         controlUUID = configNode.getUUID();
     }
 
-    public void drawHtmlPost(Writer out) throws IOException {
-        // TODO ? use 2 separate controls, one for the image and one JUST for the cropping ? (MGNLIMG-9)
-        // could allow for instance multiple sizes of one image in the same paragraph,
-        // and decouples the cropper from the file upload mechanism
-
+    public void drawHtml(Writer out) throws IOException {
         // TODO : for now we can't handle a paragraph where the image hasn't been uploaded yet. (MGNLIMG-7)
         if (getWebsiteNode() != null) {
-            final String imagePath = getFileURI(getFileControl());
+            final String fileControlName = getConfigValue("fileControlName", null);
+            if (fileControlName == null){
+                throw new IllegalStateException("Need a fileControlName config parameter to know which file control to use.");
+            }
+            final File fileControl = new File(fileControlName, getWebsiteNode());
+            final String imagePath = fileControl.getHandle();
 
-            final String cropperInfoControlName = getCropperInfoControlName(getName());
+            final String cropperInfoControlName = getCropperInfoPropertyName(fileControlName);
             final Hidden cropperInfo = new Hidden(cropperInfoControlName, getWebsiteNode());
             cropperInfo.setId(cropperInfoControlName);
             cropperInfo.setSaveInfo(true);
@@ -60,11 +62,11 @@ public class ImageResizeControl extends DialogFile {
         super.drawHtmlPost(out);
     }
 
-    public static String getCropperInfoControlName(String fileControlName) {
+    public static String getCropperInfoPropertyName(String fileControlName) {
         return fileControlName + "_cropperInfo";
     }
 
-    public static String getTargetBinaryProperty(String fileControlName) {
+    public static String getTargetBinaryPropertyName(String fileControlName) {
         return fileControlName + "_resized";
     }
 }

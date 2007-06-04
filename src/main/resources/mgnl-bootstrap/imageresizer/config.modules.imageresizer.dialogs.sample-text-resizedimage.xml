@@ -16,6 +16,9 @@
   <sv:property sv:name="class" sv:type="String">
     <sv:value>info.magnolia.module.imageresizer.CroppedImageDialogHandler</sv:value>
   </sv:property>
+  <sv:property sv:name="targetHeight" sv:type="String">
+    <sv:value>150</sv:value>
+  </sv:property>
   <sv:property sv:name="i18nBasename" sv:type="String">
     <sv:value>info.magnolia.module.imageresizer.messages</sv:value>
   </sv:property>
@@ -24,7 +27,7 @@
       <sv:value>mgnl:metaData</sv:value>
     </sv:property>
     <sv:property sv:name="jcr:uuid" sv:type="String">
-      <sv:value>3fc8c3ca-17b9-4d18-a84f-d65a54606943</sv:value>
+      <sv:value>20e519bb-ac57-4590-9283-90a91c7de3f5</sv:value>
     </sv:property>
     <sv:property sv:name="mgnl:authorid" sv:type="String">
       <sv:value>superuser</sv:value>
@@ -36,7 +39,7 @@
       <sv:value>2004-11-02T15:34:23.417+01:00</sv:value>
     </sv:property>
     <sv:property sv:name="mgnl:lastmodified" sv:type="Date">
-      <sv:value>2007-05-29T14:47:50.314+02:00</sv:value>
+      <sv:value>2007-06-04T15:47:02.518+02:00</sv:value>
     </sv:property>
     <sv:property sv:name="mgnl:activated" sv:type="Boolean">
       <sv:value>false</sv:value>
@@ -72,7 +75,7 @@
         <sv:value>mgnl:metaData</sv:value>
       </sv:property>
       <sv:property sv:name="jcr:uuid" sv:type="String">
-        <sv:value>21ada5ad-778b-4207-997d-3b5b3c74a783</sv:value>
+        <sv:value>731bdf4c-e250-4f2b-98ff-e4926806b76f</sv:value>
       </sv:property>
       <sv:property sv:name="mgnl:authorid" sv:type="String">
         <sv:value>superuser</sv:value>
@@ -104,19 +107,74 @@
         <sv:value>mix:versionable</sv:value>
       </sv:property>
       <sv:property sv:name="jcr:uuid" sv:type="String">
+        <sv:value>1f2e2145-2884-4302-90aa-3bb147955927</sv:value>
+      </sv:property>
+      <sv:property sv:name="type" sv:type="String">
+        <sv:value>Binary</sv:value>
+      </sv:property>
+      <sv:property sv:name="description" sv:type="String">
+        <sv:value>dialog.imageResizer.image.description</sv:value>
+      </sv:property>
+      <sv:property sv:name="label" sv:type="String">
+        <sv:value>dialog.imageResizer.image.label</sv:value>
+      </sv:property>
+      <sv:property sv:name="controlType" sv:type="String">
+        <sv:value>file</sv:value>
+      </sv:property>
+      <sv:node sv:name="MetaData">
+        <sv:property sv:name="jcr:primaryType" sv:type="Name">
+          <sv:value>mgnl:metaData</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:uuid" sv:type="String">
+          <sv:value>4f8e6cbc-0cc4-40c3-a6df-a77d76b0b33b</sv:value>
+        </sv:property>
+        <sv:property sv:name="mgnl:authorid" sv:type="String">
+          <sv:value>superuser</sv:value>
+        </sv:property>
+        <sv:property sv:name="mgnl:creationdate" sv:type="String">
+          <sv:value>2004-11-02T15:34:22.111+01:00</sv:value>
+        </sv:property>
+        <sv:property sv:name="mgnl:lastmodified" sv:type="Date">
+          <sv:value>2007-06-04T16:13:52.292+02:00</sv:value>
+        </sv:property>
+        <sv:property sv:name="mgnl:activated" sv:type="Boolean">
+          <sv:value>false</sv:value>
+        </sv:property>
+        <sv:property sv:name="mgnl:Data" sv:type="String">
+          <sv:value>MetaData</sv:value>
+        </sv:property>
+        <sv:property sv:name="mgnl:lastaction" sv:type="Date">
+          <sv:value>2007-06-04T15:45:47.059+02:00</sv:value>
+        </sv:property>
+        <sv:property sv:name="mgnl:activatorid" sv:type="String">
+          <sv:value>superuser</sv:value>
+        </sv:property>
+      </sv:node>
+    </sv:node>
+    <sv:node sv:name="imageCrop">
+      <sv:property sv:name="jcr:primaryType" sv:type="Name">
+        <sv:value>mgnl:contentNode</sv:value>
+      </sv:property>
+      <sv:property sv:name="jcr:mixinTypes" sv:type="Name">
+        <sv:value>mix:versionable</sv:value>
+      </sv:property>
+      <sv:property sv:name="jcr:uuid" sv:type="String">
         <sv:value>fdfd9cd0-4929-4796-99de-65c69ce16db9</sv:value>
       </sv:property>
       <sv:property sv:name="type" sv:type="String">
         <sv:value>Binary</sv:value>
       </sv:property>
+      <sv:property sv:name="_ratioX" sv:type="String">
+        <sv:value>100</sv:value>
+      </sv:property>
       <sv:property sv:name="label" sv:type="String">
-        <sv:value>dialog.imageResizer.image.label</sv:value>
+        <sv:value>dialog.imageResizer.imageCrop.label</sv:value>
+      </sv:property>
+      <sv:property sv:name="_ratioY" sv:type="String">
+        <sv:value>100</sv:value>
       </sv:property>
       <sv:property sv:name="_maxHeight" sv:type="String">
         <sv:value>150</sv:value>
-      </sv:property>
-      <sv:property sv:name="name" sv:type="String">
-        <sv:value>image</sv:value>
       </sv:property>
       <sv:property sv:name="_minHeight" sv:type="String">
         <sv:value>50</sv:value>
@@ -128,13 +186,10 @@
         <sv:value>150</sv:value>
       </sv:property>
       <sv:property sv:name="description" sv:type="String">
-        <sv:value>dialog.imageResizer.image.description</sv:value>
+        <sv:value>dialog.imageResizer.imageCrop.description</sv:value>
       </sv:property>
-      <sv:property sv:name="ratioX" sv:type="String">
-        <sv:value>100</sv:value>
-      </sv:property>
-      <sv:property sv:name="ratioY" sv:type="String">
-        <sv:value>100</sv:value>
+      <sv:property sv:name="fileControlName" sv:type="String">
+        <sv:value>image</sv:value>
       </sv:property>
       <sv:property sv:name="controlType" sv:type="String">
         <sv:value>imageResizer</sv:value>
@@ -144,7 +199,7 @@
           <sv:value>mgnl:metaData</sv:value>
         </sv:property>
         <sv:property sv:name="jcr:uuid" sv:type="String">
-          <sv:value>1752d283-f9dc-49fa-ae10-3ceebff45b58</sv:value>
+          <sv:value>15c2c115-8e06-4b49-82bb-65c0b2b85599</sv:value>
         </sv:property>
         <sv:property sv:name="mgnl:authorid" sv:type="String">
           <sv:value>superuser</sv:value>
@@ -153,7 +208,7 @@
           <sv:value>2004-11-02T15:34:29.357+01:00</sv:value>
         </sv:property>
         <sv:property sv:name="mgnl:lastmodified" sv:type="Date">
-          <sv:value>2007-05-29T15:43:15.204+02:00</sv:value>
+          <sv:value>2007-06-04T16:13:46.467+02:00</sv:value>
         </sv:property>
         <sv:property sv:name="mgnl:activated" sv:type="Boolean">
           <sv:value>false</sv:value>
@@ -162,7 +217,7 @@
           <sv:value>MetaData</sv:value>
         </sv:property>
         <sv:property sv:name="mgnl:lastaction" sv:type="Date">
-          <sv:value>2007-05-23T19:05:36.678+02:00</sv:value>
+          <sv:value>2007-06-04T15:45:44.127+02:00</sv:value>
         </sv:property>
         <sv:property sv:name="mgnl:activatorid" sv:type="String">
           <sv:value>superuser</sv:value>
@@ -191,7 +246,7 @@
         <sv:value>mgnl:metaData</sv:value>
       </sv:property>
       <sv:property sv:name="jcr:uuid" sv:type="String">
-        <sv:value>91a4c8d3-187d-4f9c-b349-73698954c148</sv:value>
+        <sv:value>f722e448-8367-4336-acf7-4f609e3b3b3d</sv:value>
       </sv:property>
       <sv:property sv:name="mgnl:authorid" sv:type="String">
         <sv:value>superuser</sv:value>
@@ -248,7 +303,7 @@
           <sv:value>mgnl:metaData</sv:value>
         </sv:property>
         <sv:property sv:name="jcr:uuid" sv:type="String">
-          <sv:value>981e4ac4-7fae-4a42-ba1c-1ea656080c7e</sv:value>
+          <sv:value>5b5f114d-3e29-4444-9d66-a2948f637f99</sv:value>
         </sv:property>
         <sv:property sv:name="mgnl:authorid" sv:type="String">
           <sv:value>superuser</sv:value>
@@ -306,7 +361,7 @@
           <sv:value>mgnl:metaData</sv:value>
         </sv:property>
         <sv:property sv:name="jcr:uuid" sv:type="String">
-          <sv:value>35cef370-9724-4af4-9b1e-a9c3a3502ddb</sv:value>
+          <sv:value>97acbcae-5cbf-4e1f-abc2-ac4637387af7</sv:value>
         </sv:property>
         <sv:property sv:name="mgnl:authorid" sv:type="String">
           <sv:value>superuser</sv:value>
