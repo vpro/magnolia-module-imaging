@@ -12,7 +12,10 @@
  */
 package info.magnolia.module.imageresizer;
 
+import info.magnolia.cms.core.Content;
+import info.magnolia.cms.core.NodeData;
 import junit.framework.TestCase;
+import static org.easymock.classextension.EasyMock.*;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -43,11 +46,34 @@ public class ImageResizerImplTest extends TestCase {
     }
 
     private void doResizeTest(int targetWidth, int targetHeight, int expectedWidth, int expectedHeight) throws IOException {
-        final BufferedImage dummyResultImg = ImageIO.read(getClass().getResourceAsStream("/funnel.gif"));
-        final CropperInfo cropperInfo = new CropperInfo(0, 0, 16, 8);
-        final BufferedImage result = new ImageResizerImpl().resize(dummyResultImg, cropperInfo, targetWidth, targetHeight);
+        final BufferedImage dummyImg = ImageIO.read(getClass().getResourceAsStream("/funnel.gif"));
+        final CropperInfo.Coords cropCoords = new CropperInfo.Coords(0, 0, 16, 8);
+        final BufferedImage result = new ImageResizerImpl().resize(dummyImg, cropCoords, targetWidth, targetHeight);
         assertEquals(expectedWidth, result.getWidth());
         assertEquals(expectedHeight, result.getHeight());
+    }
+
+    public void testGetsTargetWidthAndHeightFromSpecifiedConfigSubNode() throws IOException {
+        final Content configNode = createStrictMock(Content.class);
+        final Content configSubNode = createStrictMock(Content.class);
+        final NodeData targetWidth = createStrictMock(NodeData.class);
+        final NodeData targetHeight = createStrictMock(NodeData.class);
+        expect(configNode.getChildByName("foo")).andReturn(configSubNode);
+        expect(configSubNode.getNodeData("targetWidth")).andReturn(targetWidth);
+        expect(configSubNode.getNodeData("targetHeight")).andReturn(targetHeight);
+        expect(targetWidth.getLong()).andReturn(234l);
+        expect(targetHeight.getLong()).andReturn(567l);
+
+        replay(configNode, configSubNode, targetWidth, targetHeight);
+
+        final BufferedImage dummyImg = ImageIO.read(getClass().getResourceAsStream("/funnel.gif"));
+        final CropperInfo.Coords cropCoords = new CropperInfo.Coords(0, 0, 16, 8);
+        final CropperInfo cropInfo = new CropperInfo("foo", cropCoords);
+        final BufferedImage result = new ImageResizerImpl().apply(dummyImg, cropInfo, configNode);
+        assertEquals(234, result.getWidth());
+        assertEquals(567, result.getHeight());
+
+        verify(configNode, configSubNode, targetWidth, targetHeight);
     }
 
 }

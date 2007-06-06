@@ -12,6 +12,8 @@
  */
 package info.magnolia.module.imageresizer;
 
+import info.magnolia.cms.core.Content;
+
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
@@ -20,10 +22,7 @@ import java.awt.image.BufferedImage;
  * @version $Revision: $ ($Author: $)
  */
 public interface ImageResizer {
-    /**
-     * If targetWidth and targetHeight are <=0, no resizing will happen. (ie the CropperInfo will be used to determine targetWidth and targetHeight)
-     * If targetWidth or targetHeight is <=0, the other side will be sized proportionally, using the given CropperInfo.
-     * If both targetWidth and targetHeight are >0, we will use them even if they don't match the original ratio.
-     */
-    BufferedImage resize(Image source, CropperInfo cropperInfo, int targetWidth, int targetHeight);
+    Class getParameterType();
+
+    BufferedImage apply(Image source, Object filterParams, Content dialogControlConfigNode);
 }

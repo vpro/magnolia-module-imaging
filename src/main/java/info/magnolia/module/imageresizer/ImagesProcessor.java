@@ -20,6 +20,7 @@ import info.magnolia.cms.util.NodeDataUtil;
 import info.magnolia.module.imageresizer.control.ImageResizeControl;
 import net.sf.json.JSONObject;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringUtils;
 
 import javax.imageio.ImageIO;
@@ -34,7 +35,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * In a given node, searches for binary properties with associated cropper properties,
@@ -44,21 +48,22 @@ import java.util.Iterator;
  * @version $Revision: $ ($Author: $)
  */
 public class ImagesProcessor {
+    private final Map decodeParamsClasses;
     private final ImageResizer imageResizer;
 
     public ImagesProcessor(ImageResizer imageResizer) {
         this.imageResizer = imageResizer;
+        decodeParamsClasses = new HashMap();
+        // TODO loop over filters
+        decodeParamsClasses.put(imageResizer.getParameterType().getSimpleName(), imageResizer.getParameterType());
     }
 
     /**
      * @param storageNode where the resized image should be stored
-     * @param configNode where the control is configured (for targetWidth and targetHeight)
+     * @param dialogControlConfigNode where the control is configured (for targetWidth and targetHeight)
      */
-    public void processImages(Content storageNode, Content configNode) throws RepositoryException, IOException {
-        final int targetWidth = (int) configNode.getNodeData("targetWidth").getLong();
-        final int targetHeight = (int) configNode.getNodeData("targetHeight").getLong();
-
-        // let's loop through all properties, see which ones are binaries and see if they have a corresponding cropperInfo
+    public void processImages(Content storageNode, Content dialogControlConfigNode) throws RepositoryException, IOException {
+        // let'name loop through all properties, see which ones are binaries and see if they have a corresponding cropperInfo
         final Collection props = storageNode.getNodeDataCollection();
         final Iterator it = props.iterator();
         while (it.hasNext()) {
@@ -67,25 +72,28 @@ public class ImagesProcessor {
                 final String binaryName = nd.getName();
                 final String potentialCropperInfoProperty = ImageResizeControl.getCropperInfoPropertyName(binaryName);
                 if (storageNode.hasNodeData(potentialCropperInfoProperty)) {
-                    final NodeData cropperInfo = storageNode.getNodeData(potentialCropperInfoProperty);
+                    final NodeData filteringParams = storageNode.getNodeData(potentialCropperInfoProperty);
                     final String targetBinaryProperty = ImageResizeControl.getTargetBinaryPropertyName(binaryName);
                     final NodeData target = NodeDataUtil.getOrCreate(storageNode, targetBinaryProperty, PropertyType.BINARY);
-                    processImage(nd, cropperInfo, target, targetWidth, targetHeight);
+                    processImage(nd, filteringParams, target, dialogControlConfigNode);
                 }
             }
         }
     }
 
-    protected void processImage(NodeData binary, NodeData cropperInfoProp, NodeData target, int targetWidth, int targetHeight) throws IOException, RepositoryException {
+    protected void processImage(NodeData binary, NodeData filteringParamsProp, NodeData target, Content dialogControlConfigNode) throws IOException, RepositoryException {
         final Image img = getImage(binary);
-        final CropperInfo cropperInfo = getCropperInfo(cropperInfoProp);
+        final Map filteringParams = getParams(filteringParamsProp);
 
-        final BufferedImage resized = imageResizer.resize(img, cropperInfo, targetWidth, targetHeight);
+        // TODO : loop over filters and apply each with their own config ?
+        final String filterParamName = ClassUtils.getShortClassName(imageResizer.getParameterType());
+        final Object filterParams = filteringParams.get(filterParamName);
+        final BufferedImage filtered = imageResizer.apply(img, filterParams, dialogControlConfigNode);
 
         final File tempImageFile = File.createTempFile("tmp-imageprocessor-", ".jpg");
         try {
             final OutputStream tempOut = new FileOutputStream(tempImageFile);
-            ImageIO.write(resized, "jpg", tempOut); // TODO : MGNLIMG-11 file format (jpg, png, ...)
+            ImageIO.write(filtered, "jpg", tempOut); // TODO : MGNLIMG-11 file format (jpg, png, ...)
             tempOut.flush();
             IOUtils.closeQuietly(tempOut);
 
@@ -102,18 +110,17 @@ public class ImagesProcessor {
 
     }
 
-    protected CropperInfo getCropperInfo(NodeData cropperInfoProp) {
-        final String jsonString = cropperInfoProp.getString();
+    protected Map getParams(NodeData paramsProp) {
+        final String jsonString = paramsProp.getString();
         if (StringUtils.isEmpty(jsonString)) {
-            return null;
+            return Collections.EMPTY_MAP;
         }
         final JSONObject json = new JSONObject(jsonString);
-        return (CropperInfo) JSONObject.toBean(json, CropperInfo.class);
+        return (Map) JSONObject.toBean(json, Map.class, decodeParamsClasses);
     }
 
     protected Image getImage(NodeData binary) throws IOException {
         final InputStream stream = binary.getStream();
         return ImageIO.read(stream);
     }
-
 }

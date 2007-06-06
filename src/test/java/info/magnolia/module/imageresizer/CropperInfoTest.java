@@ -20,7 +20,7 @@ import junit.framework.TestCase;
  */
 public class CropperInfoTest extends TestCase {
     public void testCalculatesWidthAndHeightProperly() {
-        final CropperInfo ci = new CropperInfo();
+        final CropperInfo.Coords ci = new CropperInfo.Coords();
         ci.setX1(10);
         ci.setX2(20);
         ci.setY1(30);
@@ -31,7 +31,7 @@ public class CropperInfoTest extends TestCase {
     }
 
     public void testThrowsExceptionWhenCalculatingWidthAndHeightWithInvalidCoordinates() {
-        final CropperInfo ci = new CropperInfo();
+        final CropperInfo.Coords ci = new CropperInfo.Coords();
         ci.setX1(10);
         ci.setX2(10);
         ci.setY1(30);

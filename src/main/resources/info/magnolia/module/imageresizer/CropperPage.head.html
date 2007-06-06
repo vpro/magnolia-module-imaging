@@ -4,32 +4,67 @@
     <script type="text/javascript" src="${contextPath}/.resources/js-libs/cropper/lib/scriptaculous.js?load=builder,dragdrop" language="javascript"></script>
     <script type="text/javascript" src="${contextPath}/.resources/js-libs/cropper/cropper.js" language="javascript"></script>
     <script type="text/javascript" language="javascript">
-        var cropperCoords;
+        var cropper;
+        var result = JSON.parse('${this.currentCrop}');
+        var currentCoords = result.CropperInfo.coords;
+        var cropperConfigs = {
+        [#list this.configs as c]
+            ${c.name} : {
+                minWidth:${c.minWidth},
+                minHeight:${c.minHeight},
+                maxWidth:${c.maxWidth},
+                maxHeight:${c.maxHeight},
+                ratioDim: { x: ${c.ratioX}, y: ${c.ratioY} },
+                [#if this.currentCrop?has_content]onloadCoords: currentCoords, [/#if]
+                [#if this.currentCrop?has_content]displayOnInit: true, [/#if]
+                onEndCrop: onEndCrop
+            }[#if c_has_next],[/#if]
+        [/#list]
+        };
+//
+//        var result = {
+//            CropperInfo : {
+//                configName : currentParams.configName,
+//                coords : currentCoords
+//            }
+//        };
 
         function onEndCrop(coords, dimensions) {
             // just store the coordinates, dimensions can be calculated from it.
-            cropperCoords = coords;
+            result.CropperInfo.coords = coords
         }
 
         function cropperSubmit() {
             // this function should have been added by the caller. maybe we should just define it here...
             if (window.cropperCallback) {
-                var cropperCoordsStr = JSON.stringify(cropperCoords)
-                window.cropperCallback(cropperCoordsStr);
+                var resultStr = JSON.stringify(result);
+                window.cropperCallback(resultStr);
             }
         }
-    </script>
-    <script type="text/javascript" language="javascript">
+
+        function changeCropperConfig(select) {
+            var configName = select.options[select.selectedIndex].value;
+            result.CropperInfo.configName = configName;
+            cropper.remove()
+            registerNewCropper(configName);
+        }
+
+        function registerNewCropper(configName) {
+            cropper = new Cropper.Img('cropperImage', cropperConfigs[configName]);
+        }
+        
         Event.observe(window, 'load', function() {
-            new Cropper.Img('cropperImage', {
-                    [#if this.minWidth > 0]minWidth:${this.minWidth}, [/#if]
-                    [#if this.minHeight > 0]minHeight:${this.minHeight}, [/#if]
-                    [#if this.maxWidth > 0]maxWidth:${this.maxWidth}, [/#if]
-                    [#if this.maxHeight > 0]maxHeight:${this.maxHeight}, [/#if]
-                    [#if this.ratioX > 0]ratioDim: { x: ${this.ratioX}, y: ${this.ratioY} }, [/#if]
-                    [#if this.currentCrop?has_content]onloadCoords: JSON.parse('${this.currentCrop}'), [/#if]
-                    [#if this.currentCrop?has_content]displayOnInit: true, [/#if]
-                    onEndCrop: onEndCrop
-                });
+            // we select the current the current config in the drop down using javascript to avoid having to parse the result string on the server side
+            var configSelector = document.getElementById('cropperConfig');
+            for (var i = 0; i < configSelector.options.length; i++) {
+                var opt = configSelector.options[i];
+                if (opt.value == result.CropperInfo.configName) {
+                    // not sure which of both of these is necessary
+                    opt.selected = true;
+                    configSelector.selectedIndex = i;
+                }
+            }
+
+            registerNewCropper(result.CropperInfo.configName);
         });
     </script>

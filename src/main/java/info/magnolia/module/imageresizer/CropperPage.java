@@ -18,33 +18,37 @@ import info.magnolia.cms.core.Content;
 import info.magnolia.cms.gui.dialog.Dialog;
 import info.magnolia.cms.gui.dialog.DialogControlImpl;
 import info.magnolia.cms.gui.dialog.DialogTab;
+import info.magnolia.cms.util.ContentUtil;
 import info.magnolia.context.MgnlContext;
 import info.magnolia.freemarker.FreemarkerUtil;
 import info.magnolia.module.admininterface.TemplatedMVCHandler;
+import org.apache.commons.lang.StringUtils;
 
 import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * The page that provides the image cropping dialog/widget.
- * 
+ *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
 public class CropperPage extends TemplatedMVCHandler {
     private String configDialogUUID;
     private String imagePath;
+    /**
+     * The current params (crop values, chosen config) as a JSON string.
+     */
     private String currentCrop;
-    private long ratioX;
-    private long ratioY;
-    private long minHeight;
-    private long minWidth;
-    private long maxHeight;
-    private long maxWidth;
+    private List cropAndResizeConfigs; // List<String nodeName, CropAndResizeConfig>
     private Content imageControlConfigNode;
 
     public CropperPage(String name, HttpServletRequest request, HttpServletResponse response) {
@@ -61,16 +65,37 @@ public class CropperPage extends TemplatedMVCHandler {
             final HierarchyManager hm = MgnlContext.getHierarchyManager(ContentRepository.CONFIG);
             imageControlConfigNode = hm.getContentByUUID(configDialogUUID);
 
-            ratioX = getLong(imageControlConfigNode, "ratioX");
-            ratioY = getLong(imageControlConfigNode, "ratioY");
-            minHeight = getLong(imageControlConfigNode, "minHeight");
-            minWidth = getLong(imageControlConfigNode, "minWidth");
-            maxHeight = getLong(imageControlConfigNode, "maxHeight");
-            maxWidth = getLong(imageControlConfigNode, "maxWidth");
+            cropAndResizeConfigs = new ArrayList();
+            final Collection configNodes = imageControlConfigNode.getChildren();
+            final Iterator it = configNodes.iterator();
+            while (it.hasNext()) {
+                final Content configNode = (Content) it.next();
+                cropAndResizeConfigs.add(fromNode(configNode));
+            }
 
         } catch (RepositoryException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static CropAndResizeConfig fromNode(Content node) {
+        // TODO : use content2bean + cleanup
+        final CropAndResizeConfig cfg = (CropAndResizeConfig) ContentUtil.setProperties(new CropAndResizeConfig(), node);
+
+        // if label property wasn't set, we try using the name property, or the node name if neither was set.        
+        if (StringUtils.isEmpty(cfg.getName())) {
+            cfg.setName(node.getName());
+        }
+        if (StringUtils.isEmpty(cfg.getLabel())) {
+            // todo: i18n ?
+            // dialog.getMessage(cfg.getName());
+            cfg.setLabel(cfg.getName());
+        }
+
+        // name is always node name, to avoid illegal characters
+        cfg.setName(node.getName());
+        return cfg;
+
     }
 
     public void renderHtml(String view) throws IOException {
@@ -90,10 +115,6 @@ public class CropperPage extends TemplatedMVCHandler {
         } catch (RepositoryException e) {
             throw new RuntimeException(e); // TODO ?
         }
-    }
-
-    private long getLong(Content node, String name) {
-        return node.getNodeData(name).getLong();
     }
 
     public void setConfigDialogUUID(String configDialogUUID) {
@@ -116,28 +137,8 @@ public class CropperPage extends TemplatedMVCHandler {
         return currentCrop;
     }
 
-    public long getRatioX() {
-        return ratioX;
-    }
-
-    public long getRatioY() {
-        return ratioY;
-    }
-
-    public long getMinHeight() {
-        return minHeight;
-    }
-
-    public long getMinWidth() {
-        return minWidth;
-    }
-
-    public long getMaxHeight() {
-        return maxHeight;
-    }
-
-    public long getMaxWidth() {
-        return maxWidth;
+    public List getConfigs() { // <CropAndResizeConfig>
+        return cropAndResizeConfigs;
     }
 
     private final class CropperDialog extends Dialog {

@@ -1,1 +1,8 @@
+[#if this.configs?size > 1]
+<select onchange="changeCropperConfig(this);" id="cropperConfig" class="mgnlDialogControlSelect">
+[#list this.configs as c]
+  <option value="${c.name}">${c.label}</option>
+[/#list]
+</select>
+[/#if]
 <div id="cropper"><img src="${contextPath}${this.imagePath}" id="cropperImage" /></div>

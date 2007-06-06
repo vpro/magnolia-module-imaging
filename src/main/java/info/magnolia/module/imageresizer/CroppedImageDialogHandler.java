@@ -46,13 +46,16 @@ public class CroppedImageDialogHandler extends ParagraphEditDialog {
         }
 
         try {
-            final ImagesProcessor processor = new ImagesProcessor(new ImageResizerImpl());
+            final ImageResizer imageResizer = new ImageResizerImpl();
+            final ImagesProcessor processor = new ImagesProcessor(imageResizer);
+
             final Content storageNode = getStorageNode();
 
             final List croppers = new LinkedList();
             final List dialogSubs = getDialog().getSubs();
             findCroppersConfigNodes(croppers, dialogSubs);
 
+            // TODO : test this ? (multiple croppers)
             final Iterator it = croppers.iterator();
             while (it.hasNext()) {
                 final Content configNode = (Content) it.next();
@@ -70,6 +73,7 @@ public class CroppedImageDialogHandler extends ParagraphEditDialog {
         }
     }
 
+    // TODO : write tests for this ?
     private void findCroppersConfigNodes(List foundCroppers, List dialogSubs) {
         final Iterator it = dialogSubs.iterator();
         while (it.hasNext()) {
@@ -81,7 +85,6 @@ public class CroppedImageDialogHandler extends ParagraphEditDialog {
                 findCroppersConfigNodes(foundCroppers, c.getSubs());
             }
         }
-
     }
 
 }
