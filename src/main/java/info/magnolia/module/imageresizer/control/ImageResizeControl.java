@@ -14,8 +14,8 @@ package info.magnolia.module.imageresizer.control;
 
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.gui.control.Button;
-import info.magnolia.cms.gui.control.Hidden;
 import info.magnolia.cms.gui.control.File;
+import info.magnolia.cms.gui.control.Hidden;
 import info.magnolia.cms.gui.dialog.DialogBox;
 
 import javax.jcr.RepositoryException;
@@ -46,7 +46,7 @@ public class ImageResizeControl extends DialogBox {
         // TODO : for now we can't handle a paragraph where the image hasn't been uploaded yet. (MGNLIMG-7)
         if (getWebsiteNode() != null) {
             final String fileControlName = getConfigValue("fileControlName", null);
-            if (fileControlName == null){
+            if (fileControlName == null) {
                 throw new IllegalStateException("Need a fileControlName config parameter to know which file control to use.");
             }
             final File fileControl = new File(fileControlName, getWebsiteNode());
