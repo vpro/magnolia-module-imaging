@@ -59,20 +59,20 @@ public class ImagesProcessorTest extends TestCase {
         expect(bin2.getStream()).andReturn(imgStream);
 
         final CropperInfo expectedCropperInfo = new CropperInfo("foo", new CropperInfo.Coords(1, 30, 20, 50));
-        final ImageResizer imageResizer = createStrictMock(ImageResizer.class);
+        final ImageFilter imageFilter = createStrictMock(ImageFilter.class);
         final BufferedImage dummyResultImg = ImageIO.read(getClass().getResourceAsStream("/funnel.gif"));
-        expect(imageResizer.getParameterType()).andReturn(CropperInfo.class).times(3);
-        expect(imageResizer.apply(isA(Image.class), eq(expectedCropperInfo), same(configNode))).andReturn(dummyResultImg);
+        expect(imageFilter.getParameterType()).andReturn(CropperInfo.class).times(3);
+        expect(imageFilter.apply(isA(Image.class), eq(expectedCropperInfo), same(configNode))).andReturn(dummyResultImg);
 
-        replay(imageResizer, configNode, storageNode, bin1, bin2, bin2Crop);
+        replay(imageFilter, configNode, storageNode, bin1, bin2, bin2Crop);
 
-        final ImagesProcessor imagesProcessor = new ImagesProcessor(imageResizer);
+        final ImagesProcessor imagesProcessor = new ImagesProcessor(imageFilter);
         imagesProcessor.processImages(storageNode, configNode);
 
-        verify(imageResizer, configNode, storageNode, bin1, bin2, bin2Crop);
+        verify(imageFilter, configNode, storageNode, bin1, bin2, bin2Crop);
     }
 
-    public void testCropperInfoAreProperlyDecoded() {
+    public void testParamsAreProperlyDecoded() {
         final ImagesProcessor processor = new ImagesProcessor(new ImageResizerImpl());
         final MockNodeData mockData = new MockNodeData("pouet", SAMPLE_PARAMS_WITH_IMAGERESIZER);
         final Map params = processor.getParams(mockData);
@@ -88,7 +88,7 @@ public class ImagesProcessorTest extends TestCase {
         assertEquals(50, coords.getY2());
     }
 
-    public void testCropperInfoIsNullIfPropIsEmpty() {
+    public void testParamsMapIsEmptyPropIsEmpty() {
         final ImagesProcessor processor = new ImagesProcessor(new ImageResizerImpl());
         final MockNodeData mockData = new MockNodeData("pouet", "");
         final Map params = processor.getParams(mockData);

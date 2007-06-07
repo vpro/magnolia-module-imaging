@@ -49,13 +49,13 @@ import java.util.Map;
  */
 public class ImagesProcessor {
     private final Map decodeParamsClasses;
-    private final ImageResizer imageResizer;
+    private final ImageFilter imageFilter;
 
-    public ImagesProcessor(ImageResizer imageResizer) {
-        this.imageResizer = imageResizer;
+    public ImagesProcessor(ImageFilter imageFilter) {
+        this.imageFilter = imageFilter;
         decodeParamsClasses = new HashMap();
         // TODO loop over filters
-        decodeParamsClasses.put(imageResizer.getParameterType().getSimpleName(), imageResizer.getParameterType());
+        decodeParamsClasses.put(imageFilter.getParameterType().getSimpleName(), imageFilter.getParameterType());
     }
 
     /**
@@ -86,9 +86,9 @@ public class ImagesProcessor {
         final Map filteringParams = getParams(filteringParamsProp);
 
         // TODO : loop over filters and apply each with their own config ?
-        final String filterParamName = ClassUtils.getShortClassName(imageResizer.getParameterType());
+        final String filterParamName = ClassUtils.getShortClassName(imageFilter.getParameterType());
         final Object filterParams = filteringParams.get(filterParamName);
-        final BufferedImage filtered = imageResizer.apply(img, filterParams, dialogControlConfigNode);
+        final BufferedImage filtered = imageFilter.apply(img, filterParams, dialogControlConfigNode);
 
         final File tempImageFile = File.createTempFile("tmp-imageprocessor-", ".jpg");
         try {

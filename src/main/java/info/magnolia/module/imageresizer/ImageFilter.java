@@ -21,7 +21,7 @@ import java.awt.image.BufferedImage;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public interface ImageResizer {
+public interface ImageFilter {
     Class getParameterType();
 
     BufferedImage apply(Image source, Object filterParams, Content dialogControlConfigNode);

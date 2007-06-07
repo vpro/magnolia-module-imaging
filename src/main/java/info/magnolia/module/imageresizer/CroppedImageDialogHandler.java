@@ -46,8 +46,8 @@ public class CroppedImageDialogHandler extends ParagraphEditDialog {
         }
 
         try {
-            final ImageResizer imageResizer = new ImageResizerImpl();
-            final ImagesProcessor processor = new ImagesProcessor(imageResizer);
+            final ImageFilter imageFilter = new ImageResizerImpl();
+            final ImagesProcessor processor = new ImagesProcessor(imageFilter);
 
             final Content storageNode = getStorageNode();
 

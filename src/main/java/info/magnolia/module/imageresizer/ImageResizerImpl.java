@@ -22,7 +22,7 @@ import java.awt.image.BufferedImage;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class ImageResizerImpl implements ImageResizer {
+public class ImageResizerImpl implements ImageFilter {
 
     public Class getParameterType() {
         return CropperInfo.class;
