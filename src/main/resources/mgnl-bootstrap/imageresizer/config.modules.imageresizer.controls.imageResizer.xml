@@ -13,7 +13,7 @@
     <sv:value>288a7145-c73e-4673-9e0c-0290f9b0256f</sv:value>
   </sv:property>
   <sv:property sv:name="class" sv:type="String">
-    <sv:value>info.magnolia.module.imageresizer.control.ImageResizeControl</sv:value>
+    <sv:value>info.magnolia.module.imageresizer.cropresize.CropAndResizeControl</sv:value>
   </sv:property>
   <sv:node sv:name="MetaData">
     <sv:property sv:name="jcr:primaryType" sv:type="Name">

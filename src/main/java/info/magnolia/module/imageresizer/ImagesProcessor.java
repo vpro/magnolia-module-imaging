@@ -17,7 +17,7 @@ import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.NodeData;
 import info.magnolia.cms.util.DateUtil;
 import info.magnolia.cms.util.NodeDataUtil;
-import info.magnolia.module.imageresizer.control.ImageResizeControl;
+import info.magnolia.module.imageresizer.cropresize.CropAndResizeControl;
 import net.sf.json.JSONObject;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ClassUtils;
@@ -70,10 +70,10 @@ public class ImagesProcessor {
             NodeData nd = (NodeData) it.next();
             if (nd.getType() == PropertyType.BINARY) {
                 final String binaryName = nd.getName();
-                final String potentialCropperInfoProperty = ImageResizeControl.getCropperInfoPropertyName(binaryName);
+                final String potentialCropperInfoProperty = CropAndResizeControl.getCropperInfoPropertyName(binaryName);
                 if (storageNode.hasNodeData(potentialCropperInfoProperty)) {
                     final NodeData filteringParams = storageNode.getNodeData(potentialCropperInfoProperty);
-                    final String targetBinaryProperty = ImageResizeControl.getTargetBinaryPropertyName(binaryName);
+                    final String targetBinaryProperty = CropAndResizeControl.getTargetBinaryPropertyName(binaryName);
                     final NodeData target = NodeDataUtil.getOrCreate(storageNode, targetBinaryProperty, PropertyType.BINARY);
                     processImage(nd, filteringParams, target, dialogControlConfigNode);
                 }

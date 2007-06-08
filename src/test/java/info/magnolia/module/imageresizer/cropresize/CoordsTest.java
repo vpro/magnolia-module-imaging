@@ -10,7 +10,7 @@
  * Copyright 1993-2006 obinary Ltd. (http://www.obinary.com) All rights reserved.
  *
  */
-package info.magnolia.module.imageresizer;
+package info.magnolia.module.imageresizer.cropresize;
 
 import junit.framework.TestCase;
 
@@ -18,9 +18,9 @@ import junit.framework.TestCase;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class CropperInfoTest extends TestCase {
+public class CoordsTest extends TestCase {
     public void testCalculatesWidthAndHeightProperly() {
-        final CropperInfo.Coords ci = new CropperInfo.Coords();
+        final Coords ci = new Coords();
         ci.setX1(10);
         ci.setX2(20);
         ci.setY1(30);
@@ -31,7 +31,7 @@ public class CropperInfoTest extends TestCase {
     }
 
     public void testThrowsExceptionWhenCalculatingWidthAndHeightWithInvalidCoordinates() {
-        final CropperInfo.Coords ci = new CropperInfo.Coords();
+        final Coords ci = new Coords();
         ci.setX1(10);
         ci.setX2(10);
         ci.setY1(30);

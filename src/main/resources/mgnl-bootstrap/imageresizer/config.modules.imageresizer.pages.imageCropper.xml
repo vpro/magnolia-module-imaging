@@ -14,7 +14,7 @@
     <sv:value>ce3ce48e-0111-4615-9dba-0aaedc13066b</sv:value>
   </sv:property>
   <sv:property sv:name="class" sv:type="String">
-    <sv:value>info.magnolia.module.imageresizer.CropperPage</sv:value>
+    <sv:value>info.magnolia.module.imageresizer.cropresize.CropperPage</sv:value>
   </sv:property>
   <sv:node sv:name="MetaData">
     <sv:property sv:name="jcr:primaryType" sv:type="Name">

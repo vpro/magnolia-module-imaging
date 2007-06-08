@@ -10,10 +10,12 @@
  * Copyright 1993-2006 obinary Ltd. (http://www.obinary.com) All rights reserved.
  *
  */
-package info.magnolia.module.imageresizer;
+package info.magnolia.module.imageresizer.cropresize;
 
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.NodeData;
+import info.magnolia.module.imageresizer.cropresize.CropAndResizeFilter;
+import info.magnolia.module.imageresizer.cropresize.CropperInfo;
 import junit.framework.TestCase;
 import static org.easymock.classextension.EasyMock.*;
 
@@ -25,7 +27,7 @@ import java.io.IOException;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class ImageResizerImplTest extends TestCase {
+public class CropAndResizeFilterTest extends TestCase {
     public void testNoResizeIfWidthAndHeightAreNotSpecified() throws IOException {
         doResizeTest(-1, -1, 16, 8);
     }
@@ -47,8 +49,8 @@ public class ImageResizerImplTest extends TestCase {
 
     private void doResizeTest(int targetWidth, int targetHeight, int expectedWidth, int expectedHeight) throws IOException {
         final BufferedImage dummyImg = ImageIO.read(getClass().getResourceAsStream("/funnel.gif"));
-        final CropperInfo.Coords cropCoords = new CropperInfo.Coords(0, 0, 16, 8);
-        final BufferedImage result = new ImageResizerImpl().resize(dummyImg, cropCoords, targetWidth, targetHeight);
+        final Coords cropCoords = new Coords(0, 0, 16, 8);
+        final BufferedImage result = new CropAndResizeFilter().resize(dummyImg, cropCoords, targetWidth, targetHeight);
         assertEquals(expectedWidth, result.getWidth());
         assertEquals(expectedHeight, result.getHeight());
     }
@@ -67,9 +69,9 @@ public class ImageResizerImplTest extends TestCase {
         replay(configNode, configSubNode, targetWidth, targetHeight);
 
         final BufferedImage dummyImg = ImageIO.read(getClass().getResourceAsStream("/funnel.gif"));
-        final CropperInfo.Coords cropCoords = new CropperInfo.Coords(0, 0, 16, 8);
+        final Coords cropCoords = new Coords(0, 0, 16, 8);
         final CropperInfo cropInfo = new CropperInfo("foo", cropCoords);
-        final BufferedImage result = new ImageResizerImpl().apply(dummyImg, cropInfo, configNode);
+        final BufferedImage result = new CropAndResizeFilter().apply(dummyImg, cropInfo, configNode);
         assertEquals(234, result.getWidth());
         assertEquals(567, result.getHeight());
 

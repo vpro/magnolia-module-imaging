@@ -15,6 +15,9 @@ package info.magnolia.module.imageresizer;
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.NodeData;
 import info.magnolia.test.mock.MockNodeData;
+import info.magnolia.module.imageresizer.cropresize.CropAndResizeFilter;
+import info.magnolia.module.imageresizer.cropresize.CropperInfo;
+import info.magnolia.module.imageresizer.cropresize.Coords;
 import junit.framework.TestCase;
 import static org.easymock.classextension.EasyMock.*;
 
@@ -58,7 +61,7 @@ public class ImagesProcessorTest extends TestCase {
         final InputStream imgStream = getClass().getResourceAsStream("/cookies.gif");
         expect(bin2.getStream()).andReturn(imgStream);
 
-        final CropperInfo expectedCropperInfo = new CropperInfo("foo", new CropperInfo.Coords(1, 30, 20, 50));
+        final CropperInfo expectedCropperInfo = new CropperInfo("foo", new Coords(1, 30, 20, 50));
         final ImageFilter imageFilter = createStrictMock(ImageFilter.class);
         final BufferedImage dummyResultImg = ImageIO.read(getClass().getResourceAsStream("/funnel.gif"));
         expect(imageFilter.getParameterType()).andReturn(CropperInfo.class).times(3);
@@ -73,14 +76,14 @@ public class ImagesProcessorTest extends TestCase {
     }
 
     public void testParamsAreProperlyDecoded() {
-        final ImagesProcessor processor = new ImagesProcessor(new ImageResizerImpl());
+        final ImagesProcessor processor = new ImagesProcessor(new CropAndResizeFilter());
         final MockNodeData mockData = new MockNodeData("pouet", SAMPLE_PARAMS_WITH_IMAGERESIZER);
         final Map params = processor.getParams(mockData);
         assertEquals(1, params.size());
         final CropperInfo cropperInfo = (CropperInfo) params.get("CropperInfo");
         assertNotNull(cropperInfo);
         assertEquals("foo", cropperInfo.getConfigName());
-        final CropperInfo.Coords coords = cropperInfo.getCoords();
+        final Coords coords = cropperInfo.getCoords();
         assertNotNull(coords);
         assertEquals(1, coords.getX1());
         assertEquals(30, coords.getY1());
@@ -89,7 +92,7 @@ public class ImagesProcessorTest extends TestCase {
     }
 
     public void testParamsMapIsEmptyPropIsEmpty() {
-        final ImagesProcessor processor = new ImagesProcessor(new ImageResizerImpl());
+        final ImagesProcessor processor = new ImagesProcessor(new CropAndResizeFilter());
         final MockNodeData mockData = new MockNodeData("pouet", "");
         final Map params = processor.getParams(mockData);
         assertEquals(0, params.size());

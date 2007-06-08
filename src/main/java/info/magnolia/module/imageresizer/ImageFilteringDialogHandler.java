@@ -16,7 +16,8 @@ import info.magnolia.cms.core.Content;
 import info.magnolia.cms.gui.dialog.DialogControlImpl;
 import info.magnolia.module.admininterface.SaveHandler;
 import info.magnolia.module.admininterface.dialogs.ParagraphEditDialog;
-import info.magnolia.module.imageresizer.control.ImageResizeControl;
+import info.magnolia.module.imageresizer.cropresize.CropAndResizeControl;
+import info.magnolia.module.imageresizer.cropresize.CropAndResizeFilter;
 
 import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
@@ -31,10 +32,10 @@ import java.util.List;
  * @version $Revision: $ ($Author: $)
  * @deprecated for 3.1, we should use a SaveHandler, this is only to be compatible with 3.0
  */
-public class CroppedImageDialogHandler extends ParagraphEditDialog {
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(CroppedImageDialogHandler.class);
+public class ImageFilteringDialogHandler extends ParagraphEditDialog {
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(ImageFilteringDialogHandler.class);
 
-    public CroppedImageDialogHandler(String name, HttpServletRequest request, HttpServletResponse response, Content configNode) {
+    public ImageFilteringDialogHandler(String name, HttpServletRequest request, HttpServletResponse response, Content configNode) {
         super(name, request, response, configNode);
     }
 
@@ -46,7 +47,7 @@ public class CroppedImageDialogHandler extends ParagraphEditDialog {
         }
 
         try {
-            final ImageFilter imageFilter = new ImageResizerImpl();
+            final ImageFilter imageFilter = new CropAndResizeFilter();
             final ImagesProcessor processor = new ImagesProcessor(imageFilter);
 
             final Content storageNode = getStorageNode();
@@ -78,8 +79,8 @@ public class CroppedImageDialogHandler extends ParagraphEditDialog {
         final Iterator it = dialogSubs.iterator();
         while (it.hasNext()) {
             DialogControlImpl c = (DialogControlImpl) it.next();
-            if (c instanceof ImageResizeControl) {
-                final ImageResizeControl irc = (ImageResizeControl) c;
+            if (c instanceof CropAndResizeControl) {
+                final CropAndResizeControl irc = (CropAndResizeControl) c;
                 foundCroppers.add(irc.getConfigNode());
             } else {
                 findCroppersConfigNodes(foundCroppers, c.getSubs());

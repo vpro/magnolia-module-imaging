@@ -10,7 +10,7 @@
  * Copyright 1993-2006 obinary Ltd. (http://www.obinary.com) All rights reserved.
  *
  */
-package info.magnolia.module.imageresizer.control;
+package info.magnolia.module.imageresizer.cropresize;
 
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.gui.control.Button;
@@ -28,7 +28,7 @@ import java.io.Writer;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class ImageResizeControl extends DialogBox {
+public class CropAndResizeControl extends DialogBox {
     private Content configNode;
 
     public void init(HttpServletRequest request, HttpServletResponse response, Content websiteNode, Content configNode) throws RepositoryException {

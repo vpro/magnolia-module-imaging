@@ -10,9 +10,10 @@
  * Copyright 1993-2006 obinary Ltd. (http://www.obinary.com) All rights reserved.
  *
  */
-package info.magnolia.module.imageresizer;
+package info.magnolia.module.imageresizer.cropresize;
 
 import info.magnolia.cms.core.Content;
+import info.magnolia.module.imageresizer.ImageFilter;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -22,7 +23,7 @@ import java.awt.image.BufferedImage;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class ImageResizerImpl implements ImageFilter {
+public class CropAndResizeFilter implements ImageFilter {
 
     public Class getParameterType() {
         return CropperInfo.class;
@@ -50,7 +51,7 @@ public class ImageResizerImpl implements ImageFilter {
         return resize(source, cropperInfo.getCoords(), targetWidth, targetHeight);
     }
 
-    protected BufferedImage resize(Image src, CropperInfo.Coords cropCoords, int targetWidth, int targetHeight) {
+    protected BufferedImage resize(Image src, Coords cropCoords, int targetWidth, int targetHeight) {
         if (targetWidth <= 0 && targetHeight <= 0) {
             targetWidth = cropCoords.getWidth();
             targetHeight = cropCoords.getHeight();

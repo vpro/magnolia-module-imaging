@@ -10,7 +10,7 @@
  * Copyright 1993-2006 obinary Ltd. (http://www.obinary.com) All rights reserved.
  *
  */
-package info.magnolia.module.imageresizer;
+package info.magnolia.module.imageresizer.cropresize;
 
 import info.magnolia.api.HierarchyManager;
 import info.magnolia.cms.beans.config.ContentRepository;
@@ -144,13 +144,13 @@ public class CropperPage extends TemplatedMVCHandler {
     private final class CropperDialog extends Dialog {
         protected void drawHtmlPreSubsHead(Writer out) throws IOException {
             super.drawHtmlPreSubsHead(out);
-            renderTemplate("/info/magnolia/module/imageresizer/CropperPage.head.html", out);
+            renderTemplate("/info/magnolia/module/imageresizer/cropresize/CropperPage.head.html", out);
         }
     }
 
     private final class CropperControl extends DialogControlImpl {
         public void drawHtml(Writer out) throws IOException {
-            renderTemplate("/info/magnolia/module/imageresizer/CropperPage.html", out);
+            renderTemplate("/info/magnolia/module/imageresizer/cropresize/CropperPage.html", out);
         }
     }
 
