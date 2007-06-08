@@ -10,7 +10,7 @@
  * Copyright 1993-2006 obinary Ltd. (http://www.obinary.com) All rights reserved.
  *
  */
-package info.magnolia.module.imageresizer.cropresize;
+package info.magnolia.module.imagefiltering.cropresize;
 
 /**
  * Holds a cropping configuration. (fixed ratio, minimum and maximum sizes

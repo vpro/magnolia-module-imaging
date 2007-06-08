@@ -10,14 +10,14 @@
  * Copyright 1993-2006 obinary Ltd. (http://www.obinary.com) All rights reserved.
  *
  */
-package info.magnolia.module.imageresizer;
+package info.magnolia.module.imagefiltering;
 
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.gui.dialog.DialogControlImpl;
 import info.magnolia.module.admininterface.SaveHandler;
 import info.magnolia.module.admininterface.dialogs.ParagraphEditDialog;
-import info.magnolia.module.imageresizer.cropresize.CropAndResizeControl;
-import info.magnolia.module.imageresizer.cropresize.CropAndResizeFilter;
+import info.magnolia.module.imagefiltering.cropresize.CropAndResizeControl;
+import info.magnolia.module.imagefiltering.cropresize.CropAndResizeFilter;
 
 import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;

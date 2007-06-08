@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sv:node sv:name="imageCropper" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mgnl="http://www.magnolia.info/jcr/mgnl"
+<sv:node sv:name="imageResizer" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mgnl="http://www.magnolia.info/jcr/mgnl"
   xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:rep="internal" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
   xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:fn_old="http://www.w3.org/2004/10/xpath-functions" xmlns:sv="http://www.jcp.org/jcr/sv/1.0" xmlns:jcrfn="http://www.jcp.org/jcr/xpath-functions/1.0">
@@ -8,35 +8,37 @@
   </sv:property>
   <sv:property sv:name="jcr:mixinTypes" sv:type="Name">
     <sv:value>mix:versionable</sv:value>
-    <sv:value>mix:lockable</sv:value>
   </sv:property>
   <sv:property sv:name="jcr:uuid" sv:type="String">
-    <sv:value>ce3ce48e-0111-4615-9dba-0aaedc13066b</sv:value>
+    <sv:value>288a7145-c73e-4673-9e0c-0290f9b0256f</sv:value>
   </sv:property>
   <sv:property sv:name="class" sv:type="String">
-    <sv:value>info.magnolia.module.imageresizer.cropresize.CropperPage</sv:value>
+    <sv:value>info.magnolia.module.imagefiltering.cropresize.CropAndResizeControl</sv:value>
   </sv:property>
   <sv:node sv:name="MetaData">
     <sv:property sv:name="jcr:primaryType" sv:type="Name">
       <sv:value>mgnl:metaData</sv:value>
     </sv:property>
     <sv:property sv:name="jcr:uuid" sv:type="String">
-      <sv:value>b8ba2b19-18fa-4ee6-8cae-d28868f7dec8</sv:value>
+      <sv:value>d2fcd41a-5048-46cf-b1d3-d3af545f4fa0</sv:value>
     </sv:property>
     <sv:property sv:name="mgnl:authorid" sv:type="String">
       <sv:value>superuser</sv:value>
     </sv:property>
-    <sv:property sv:name="mgnl:creationdate" sv:type="Date">
-      <sv:value>2007-05-23T18:58:40.832+02:00</sv:value>
+    <sv:property sv:name="mgnl:creationdate" sv:type="String">
+      <sv:value>2005-04-30T14:46:54.316+02:00</sv:value>
     </sv:property>
     <sv:property sv:name="mgnl:lastmodified" sv:type="Date">
-      <sv:value>2007-05-24T13:23:42.547+02:00</sv:value>
+      <sv:value>2007-05-22T12:58:41.208+02:00</sv:value>
     </sv:property>
     <sv:property sv:name="mgnl:activated" sv:type="Boolean">
       <sv:value>false</sv:value>
     </sv:property>
+    <sv:property sv:name="mgnl:Data" sv:type="String">
+      <sv:value>MetaData</sv:value>
+    </sv:property>
     <sv:property sv:name="mgnl:lastaction" sv:type="Date">
-      <sv:value>2007-05-24T13:23:42.533+02:00</sv:value>
+      <sv:value>2007-05-22T12:58:41.118+02:00</sv:value>
     </sv:property>
     <sv:property sv:name="mgnl:activatorid" sv:type="String">
       <sv:value>superuser</sv:value>

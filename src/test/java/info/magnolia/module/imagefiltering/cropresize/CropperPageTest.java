@@ -10,13 +10,13 @@
  * Copyright 1993-2006 obinary Ltd. (http://www.obinary.com) All rights reserved.
  *
  */
-package info.magnolia.module.imageresizer.cropresize;
+package info.magnolia.module.imagefiltering.cropresize;
 
 import info.magnolia.test.MgnlTestCase;
 import info.magnolia.test.mock.MockContent;
 import info.magnolia.test.mock.MockNodeData;
-import info.magnolia.module.imageresizer.cropresize.CropAndResizeConfig;
-import info.magnolia.module.imageresizer.cropresize.CropperPage;
+import info.magnolia.module.imagefiltering.cropresize.CropAndResizeConfig;
+import info.magnolia.module.imagefiltering.cropresize.CropperPage;
 
 /**
  * @author gjoseph

@@ -10,7 +10,7 @@
  * Copyright 1993-2006 obinary Ltd. (http://www.obinary.com) All rights reserved.
  *
  */
-classDef("mgnl.imageresizer.ImageResizer", {
+classDef("mgnl.imagefiltering.ImageResizer", {
     /**
      * @param resultControlId the (html) id of the control where the cropping data should be stored.
      * @param dialogUUID the uuid of the dialog that holds the configuration for the cropper.
