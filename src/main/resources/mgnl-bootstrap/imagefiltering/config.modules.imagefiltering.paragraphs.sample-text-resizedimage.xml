@@ -26,7 +26,7 @@
     <sv:value>paragraph.imageResizer.description</sv:value>
   </sv:property>
   <sv:property sv:name="templatePath" sv:type="String">
-    <sv:value>/templates/imageresizer/paragraphs/text-resized-image.jsp</sv:value>
+    <sv:value>/templates/imagefiltering/paragraphs/text-resized-image.jsp</sv:value>
   </sv:property>
   <sv:property sv:name="title" sv:type="String">
     <sv:value>paragraph.imageResizer.title</sv:value>

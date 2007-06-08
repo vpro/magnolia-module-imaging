@@ -7,15 +7,17 @@
     <version>3.1-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
-  <artifactId>magnolia-module-imageresizer</artifactId>
+  <artifactId>magnolia-module-imagefiltering</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
-  <name>magnolia-module-imageresizer</name>
-  <description>A Magnolia module that provides a control to resize/crop images, and appropriate dialogs and paragraphs</description>
+  <name>magnolia-module-imagefiltering</name>
+  <description>A Magnolia module that provides image filtering capabilities. Current features include
+    a control to resize/crop images, and appropriate dialogs and paragraphs.
+  </description>
   <scm>
-    <connection>scm:svn:http://svn.magnolia.info/svn/modules/community/magnolia-module-imageresizer/trunk</connection>
-    <developerConnection>scm:svn:http://svn.magnolia.info/svn/modules/community/magnolia-module-imageresizer/trunk</developerConnection>
-    <url>http://svn.magnolia.info/view/modules/community/magnolia-module-imageresizer/trunk</url>
+    <connection>scm:svn:http://svn.magnolia.info/svn/modules/community/magnolia-module-imagefiltering/trunk</connection>
+    <developerConnection>scm:svn:http://svn.magnolia.info/svn/modules/community/magnolia-module-imagefiltering/trunk</developerConnection>
+    <url>http://svn.magnolia.info/view/modules/community/magnolia-module-imagefiltering/trunk</url>
   </scm>
 
   <properties>

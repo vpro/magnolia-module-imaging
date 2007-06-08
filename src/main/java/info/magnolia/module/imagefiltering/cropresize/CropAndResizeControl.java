@@ -60,7 +60,7 @@ public class CropAndResizeControl extends DialogBox {
             final String controlUUID = configNode.getUUID();
             final Button button = new Button();
             button.setLabel(getMessage("cropper.edit.button"));
-            button.setOnclick("new mgnl.imageresizer.ImageResizer.openCropper('" + cropperInfo.getId() + "', '" + controlUUID + "', '" + imagePath + "');");
+            button.setOnclick("new mgnl.imagefiltering.ImageResizer.openCropper('" + cropperInfo.getId() + "', '" + controlUUID + "', '" + imagePath + "');");
 
             out.write(button.getHtml());
             out.write(cropperInfo.getHtml());

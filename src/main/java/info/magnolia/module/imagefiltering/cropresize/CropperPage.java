@@ -104,7 +104,7 @@ public class CropperPage extends TemplatedMVCHandler {
             final Dialog dialog = new CropperDialog();
             dialog.init(request, response, null, imageControlConfigNode);
             dialog.setConfig("saveOnclick", "cropperSubmit();");
-            dialog.setConfig("i18nBasename", "info.magnolia.module.imageresizer.messages");
+            dialog.setConfig("i18nBasename", "info.magnolia.module.imagefiltering.messages");
 
             final String tabLabel = dialog.getMessage("cropper.tab.label");
             final DialogTab tab = dialog.addTab(tabLabel);
@@ -144,13 +144,13 @@ public class CropperPage extends TemplatedMVCHandler {
     private final class CropperDialog extends Dialog {
         protected void drawHtmlPreSubsHead(Writer out) throws IOException {
             super.drawHtmlPreSubsHead(out);
-            renderTemplate("/info/magnolia/module/imageresizer/cropresize/CropperPage.head.html", out);
+            renderTemplate("/info/magnolia/module/imagefiltering/cropresize/CropperPage.head.html", out);
         }
     }
 
     private final class CropperControl extends DialogControlImpl {
         public void drawHtml(Writer out) throws IOException {
-            renderTemplate("/info/magnolia/module/imageresizer/cropresize/CropperPage.html", out);
+            renderTemplate("/info/magnolia/module/imagefiltering/cropresize/CropperPage.html", out);
         }
     }
 
