@@ -18,6 +18,18 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 /**
+ * Applies any kind of filtering to an Image.
+ * 
+ * The filtering can be configured either by the end user or within the dialog definition.
+ * <ul>
+ *  <li>filterParams, an arbitrary object converted to and from javascript by ImagesProcessor using JSON,
+ * represents the settings the user has chosen.</li>
+ *  <li>dialogControlConfigNode is the node configuring the control in the dialog, which can have
+ * properties set to specific values by the dialog designer (i.e if we had a ColouringFilter, it could
+ * set some values to make sure that all images are turned into black/white)</li>
+ *
+ * @see ImagesProcessor
+ *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
