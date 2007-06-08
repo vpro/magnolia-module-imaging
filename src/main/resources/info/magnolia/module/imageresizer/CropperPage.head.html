@@ -21,13 +21,6 @@
             }[#if c_has_next],[/#if]
         [/#list]
         };
-//
-//        var result = {
-//            CropperInfo : {
-//                configName : currentParams.configName,
-//                coords : currentCoords
-//            }
-//        };
 
         function onEndCrop(coords, dimensions) {
             // just store the coordinates, dimensions can be calculated from it.
@@ -56,15 +49,16 @@
         Event.observe(window, 'load', function() {
             // we select the current the current config in the drop down using javascript to avoid having to parse the result string on the server side
             var configSelector = document.getElementById('cropperConfig');
-            for (var i = 0; i < configSelector.options.length; i++) {
-                var opt = configSelector.options[i];
-                if (opt.value == result.CropperInfo.configName) {
-                    // not sure which of both of these is necessary
-                    opt.selected = true;
-                    configSelector.selectedIndex = i;
+            if (configSelector) {
+                for (var i = 0; i < configSelector.options.length; i++) {
+                    var opt = configSelector.options[i];
+                    if (opt.value == result.CropperInfo.configName) {
+                        // not sure which of both of these is necessary
+                        opt.selected = true;
+                        configSelector.selectedIndex = i;
+                    }
                 }
             }
-
             registerNewCropper(result.CropperInfo.configName);
         });
     </script>
