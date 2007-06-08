@@ -15,8 +15,6 @@ package info.magnolia.module.imagefiltering.cropresize;
 import info.magnolia.test.MgnlTestCase;
 import info.magnolia.test.mock.MockContent;
 import info.magnolia.test.mock.MockNodeData;
-import info.magnolia.module.imagefiltering.cropresize.CropAndResizeConfig;
-import info.magnolia.module.imagefiltering.cropresize.CropperPage;
 
 /**
  * @author gjoseph
@@ -26,7 +24,7 @@ public class CropperPageTest extends MgnlTestCase {
     /**
      * testFromNodeAlwaysSetsConfigNameToNodeNameAndUsesLabelOrNameOrNodeNameToSetConfigLabel()
      */
-    public void testFromNode() {
+    public void testFromNodeHasNameAndLabelProperlySet() {
         doTestFromNode("myName", "myLabel", "myLabel");
         doTestFromNode(null, "myLabel", "myLabel");
         doTestFromNode("myName", null, "myName");
