@@ -78,7 +78,7 @@ public class ImageFilteringDialogHandler extends ParagraphEditDialog {
     private void findCroppersConfigNodes(List foundCroppers, List dialogSubs) {
         final Iterator it = dialogSubs.iterator();
         while (it.hasNext()) {
-            DialogControlImpl c = (DialogControlImpl) it.next();
+            final DialogControlImpl c = (DialogControlImpl) it.next();
             if (c instanceof CropAndResizeControl) {
                 final CropAndResizeControl irc = (CropAndResizeControl) c;
                 foundCroppers.add(irc.getConfigNode());
