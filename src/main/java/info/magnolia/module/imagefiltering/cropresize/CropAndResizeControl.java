@@ -25,6 +25,8 @@ import java.io.IOException;
 import java.io.Writer;
 
 /**
+ * A control that's related to another control (named with fileControlName) and opens an edit window.
+ * 
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
@@ -50,7 +52,7 @@ public class CropAndResizeControl extends DialogBox {
                 throw new IllegalStateException("Need a fileControlName config parameter to know which file control to use.");
             }
             final File fileControl = new File(fileControlName, getWebsiteNode());
-            final String imagePath = fileControl.getHandle();
+            final String imagePath = fileControl.getHandle() + "." + fileControl.getExtension();
 
             final String cropperInfoControlName = getCropperInfoPropertyName(fileControlName);
             final Hidden cropperInfo = new Hidden(cropperInfoControlName, getWebsiteNode());
