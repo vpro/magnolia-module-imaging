@@ -14,17 +14,21 @@ package info.magnolia.module.imagefiltering;
 
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.NodeData;
-import info.magnolia.test.mock.MockNodeData;
+import info.magnolia.cms.util.FactoryUtil;
+import info.magnolia.content2bean.Content2BeanException;
+import info.magnolia.content2bean.Content2BeanProcessor;
+import info.magnolia.content2bean.Content2BeanTransformer;
+import info.magnolia.content2bean.impl.Content2BeanTransformerImpl;
+import info.magnolia.module.imagefiltering.cropresize.Coords;
 import info.magnolia.module.imagefiltering.cropresize.CropAndResizeFilter;
 import info.magnolia.module.imagefiltering.cropresize.CropperInfo;
-import info.magnolia.module.imagefiltering.cropresize.Coords;
+import info.magnolia.test.mock.MockNodeData;
 import junit.framework.TestCase;
 import static org.easymock.classextension.EasyMock.*;
 
 import javax.imageio.ImageIO;
 import javax.jcr.PropertyType;
 import javax.jcr.RepositoryException;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,7 +42,7 @@ import java.util.Map;
 public class ImagesProcessorTest extends TestCase {
     private final static String SAMPLE_PARAMS_WITH_IMAGERESIZER = "{\"CropperInfo\":{configName:\"foo\",coords:{\"x1\":1,\"y1\":30,\"x2\":20,\"y2\":50}}}";
 
-    public void testPostSaveCallsImageResizerForBinaryNodesThatHaveCorrespondingCropperInfo() throws IOException, RepositoryException {
+    public void testPostSaveCallsImageResizerForBinaryNodesThatHaveCorrespondingCropperInfo() throws IOException, RepositoryException, Content2BeanException {
         final Content configNode = createMock(Content.class);
 
         final Content storageNode = createMock(Content.class);
@@ -61,24 +65,35 @@ public class ImagesProcessorTest extends TestCase {
         final InputStream imgStream = getClass().getResourceAsStream("/cookies.gif");
         expect(bin2.getStream()).andReturn(imgStream);
 
+        final ImageFormat expectedFormat = new ImageFormat();
+        expectedFormat.setFormatName("jpeg");
+        expectedFormat.setProgressive(true);
+        expectedFormat.setQuality(50);
+
+        Content2BeanProcessor content2bean = createStrictMock(Content2BeanProcessor.class);
+        expect(content2bean.setProperties(isA(ImageFormat.class), same(configNode), eq(false), (Content2BeanTransformer) anyObject())).andReturn(expectedFormat);
+
+        FactoryUtil.setImplementation(Content2BeanTransformer.class, Content2BeanTransformerImpl.class);
+        FactoryUtil.setInstance(Content2BeanProcessor.class, content2bean);
+
         final CropperInfo expectedCropperInfo = new CropperInfo("foo", new Coords(1, 30, 20, 50));
         final ImageFilter imageFilter = createStrictMock(ImageFilter.class);
         final BufferedImage dummyResultImg = ImageIO.read(getClass().getResourceAsStream("/funnel.gif"));
         expect(imageFilter.getParameterType()).andReturn(CropperInfo.class).times(3);
-        expect(imageFilter.apply(isA(Image.class), eq(expectedCropperInfo), same(configNode))).andReturn(dummyResultImg);
+        expect(imageFilter.apply(isA(BufferedImage.class), eq(expectedCropperInfo), same(configNode))).andReturn(dummyResultImg);
 
-        replay(imageFilter, configNode, storageNode, bin1, bin2, bin2Crop);
+        replay(content2bean, imageFilter, configNode, storageNode, bin1, bin2, bin2Crop);
 
         final ImagesProcessor imagesProcessor = new ImagesProcessor(imageFilter);
         imagesProcessor.processImages(storageNode, configNode);
 
-        verify(imageFilter, configNode, storageNode, bin1, bin2, bin2Crop);
+        verify(content2bean, imageFilter, configNode, storageNode, bin1, bin2, bin2Crop);
     }
 
     public void testParamsAreProperlyDecoded() {
         final ImagesProcessor processor = new ImagesProcessor(new CropAndResizeFilter());
         final MockNodeData mockData = new MockNodeData("pouet", SAMPLE_PARAMS_WITH_IMAGERESIZER);
-        final Map params = processor.getParams(mockData);
+        final Map params = processor.getUserParams(mockData);
         assertEquals(1, params.size());
         final CropperInfo cropperInfo = (CropperInfo) params.get("CropperInfo");
         assertNotNull(cropperInfo);
@@ -94,7 +109,7 @@ public class ImagesProcessorTest extends TestCase {
     public void testParamsMapIsEmptyPropIsEmpty() {
         final ImagesProcessor processor = new ImagesProcessor(new CropAndResizeFilter());
         final MockNodeData mockData = new MockNodeData("pouet", "");
-        final Map params = processor.getParams(mockData);
+        final Map params = processor.getUserParams(mockData);
         assertEquals(0, params.size());
     }
 }

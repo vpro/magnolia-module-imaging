@@ -15,6 +15,7 @@ package info.magnolia.module.imagefiltering;
 import info.magnolia.cms.beans.runtime.FileProperties;
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.NodeData;
+import info.magnolia.cms.util.ContentUtil;
 import info.magnolia.cms.util.DateUtil;
 import info.magnolia.cms.util.NodeDataUtil;
 import info.magnolia.module.imagefiltering.cropresize.CropAndResizeControl;
@@ -23,10 +24,14 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringUtils;
 
+import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageTypeSpecifier;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
 import javax.jcr.PropertyType;
 import javax.jcr.RepositoryException;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -82,25 +87,43 @@ public class ImagesProcessor {
     }
 
     protected void processImage(NodeData binary, NodeData filteringParamsProp, NodeData target, Content dialogControlConfigNode) throws IOException, RepositoryException {
-        final Image img = getImage(binary);
-        final Map filteringParams = getParams(filteringParamsProp);
+        final BufferedImage img = getImage(binary);
+        final Map filteringParams = getUserParams(filteringParamsProp);
 
         // TODO : loop over filters and apply each with their own config ?
         final String filterParamName = ClassUtils.getShortClassName(imageFilter.getParameterType());
         final Object filterParams = filteringParams.get(filterParamName);
         final BufferedImage filtered = imageFilter.apply(img, filterParams, dialogControlConfigNode);
 
-        final File tempImageFile = File.createTempFile("tmp-imageprocessor-", ".jpg");
+        final ImageFormat imageFormat = getImageFormat(dialogControlConfigNode);
+        final String formatName = imageFormat.getFormatName();
+        final File tempImageFile = File.createTempFile("magnolia-module-imagefiltering-", "." + formatName);
         try {
             final OutputStream tempOut = new FileOutputStream(tempImageFile);
-            ImageIO.write(filtered, "jpg", tempOut); // TODO : MGNLIMG-11 file format (jpg, png, ...)
+
+            // this is factored out of ImageIO.write() to allow customization of the ImageWriteParam
+            final ImageOutputStream imgOut = ImageIO.createImageOutputStream(tempOut);
+            final ImageTypeSpecifier imgType = ImageTypeSpecifier.createFromRenderedImage(filtered);
+            final Iterator iter = ImageIO.getImageWriters(imgType, formatName);
+            if (!iter.hasNext()) {
+                throw new IllegalStateException("Can't find ImageWriter for " + formatName);
+            }
+            final ImageWriter imageWriter = (ImageWriter) iter.next();
+            final ImageWriteParam params = imageWriter.getDefaultWriteParam();
+            imageFormat.applyTo(params);
+            imageWriter.setOutput(imgOut);
+            imageWriter.write(null, new IIOImage(filtered, null, null), params);
+            imgOut.flush();
+            imageWriter.dispose();
+            imgOut.close();
+
             tempOut.flush();
             IOUtils.closeQuietly(tempOut);
 
             // TODO this needs to be factored out of SaveHandlerImpl.saveDocument() and ScaleImageTag.createImageNode() !
             final InputStream tempIn = new FileInputStream(tempImageFile);
             target.setValue(tempIn);
-            target.setAttribute(FileProperties.PROPERTY_CONTENTTYPE, "image/jpg"); // TODO MGNLIMG-11 file format
+            target.setAttribute(FileProperties.PROPERTY_CONTENTTYPE, "image/" + formatName);
             target.setAttribute(FileProperties.PROPERTY_LASTMODIFIED, DateUtil.getCurrentUTCCalendar());
 
             IOUtils.closeQuietly(tempIn);
@@ -110,7 +133,12 @@ public class ImagesProcessor {
 
     }
 
-    protected Map getParams(NodeData paramsProp) {
+    protected ImageFormat getImageFormat(Content dialogControlConfigNode) {
+        // TODO : use content2bean
+        return (ImageFormat) ContentUtil.setProperties(new ImageFormat(), dialogControlConfigNode);
+    }
+
+    protected Map getUserParams(NodeData paramsProp) {
         final String jsonString = paramsProp.getString();
         if (StringUtils.isEmpty(jsonString)) {
             return Collections.EMPTY_MAP;
@@ -119,7 +147,7 @@ public class ImagesProcessor {
         return (Map) JSONObject.toBean(json, Map.class, decodeParamsClasses);
     }
 
-    protected Image getImage(NodeData binary) throws IOException {
+    protected BufferedImage getImage(NodeData binary) throws IOException {
         final InputStream stream = binary.getStream();
         return ImageIO.read(stream);
     }
