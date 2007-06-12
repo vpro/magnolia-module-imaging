@@ -5,7 +5,18 @@
     <script type="text/javascript" src="${contextPath}/.resources/js-libs/cropper/cropper.js" language="javascript"></script>
     <script type="text/javascript" language="javascript">
         var cropper;
-        var result = JSON.parse('${this.currentCrop}');
+        var currentCrop = '${this.currentCrop}';
+        var result;
+        if (currentCrop) {
+            result = JSON.parse(currentCrop);
+        } else{
+            result = {
+                CropperInfo: {
+                    configName: '',
+                    coords: {}
+                }
+            }
+        }
         var currentCoords = result.CropperInfo.coords;
         var cropperConfigs = {
         [#list this.configs as c]
@@ -58,6 +69,9 @@
                         configSelector.selectedIndex = i;
                     }
                 }
+            }
+            if (!result.CropperInfo.configName) {
+                result.CropperInfo.configName = ${this.configs[0].name};
             }
             registerNewCropper(result.CropperInfo.configName);
         });
