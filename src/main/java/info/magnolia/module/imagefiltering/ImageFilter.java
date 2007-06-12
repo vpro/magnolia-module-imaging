@@ -14,12 +14,11 @@ package info.magnolia.module.imagefiltering;
 
 import info.magnolia.cms.core.Content;
 
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 /**
  * Applies any kind of filtering to an Image.
- * 
+ *
  * The filtering can be configured either by the end user or within the dialog definition.
  * <ul>
  *  <li>filterParams, an arbitrary object converted to and from javascript by ImagesProcessor using JSON,
@@ -36,5 +35,5 @@ import java.awt.image.BufferedImage;
 public interface ImageFilter {
     Class getParameterType();
 
-    BufferedImage apply(Image source, Object filterParams, Content dialogControlConfigNode);
+    BufferedImage apply(BufferedImage source, Object filterParams, Content dialogControlConfigNode);
 }

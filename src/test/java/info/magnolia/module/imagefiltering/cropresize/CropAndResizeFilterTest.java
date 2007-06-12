@@ -14,8 +14,6 @@ package info.magnolia.module.imagefiltering.cropresize;
 
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.NodeData;
-import info.magnolia.module.imagefiltering.cropresize.CropAndResizeFilter;
-import info.magnolia.module.imagefiltering.cropresize.CropperInfo;
 import junit.framework.TestCase;
 import static org.easymock.classextension.EasyMock.*;
 
@@ -30,6 +28,8 @@ import java.io.IOException;
 public class CropAndResizeFilterTest extends TestCase {
     public void testNoResizeIfWidthAndHeightAreNotSpecified() throws IOException {
         doResizeTest(-1, -1, 16, 8);
+        doResizeTest(0, 0, 16, 8);
+        doResizeTest(0, 0, new Coords(5, 6, 10, 18), 5, 12);
     }
 
     public void testResizesProportionallyIfOnlyWidthIsSpecified() throws IOException {
@@ -48,8 +48,11 @@ public class CropAndResizeFilterTest extends TestCase {
     }
 
     private void doResizeTest(int targetWidth, int targetHeight, int expectedWidth, int expectedHeight) throws IOException {
+        doResizeTest(targetWidth, targetHeight, new Coords(0, 0, 16, 8), expectedWidth, expectedHeight);
+    }
+
+    private void doResizeTest(int targetWidth, int targetHeight, Coords cropCoords, int expectedWidth, int expectedHeight) throws IOException {
         final BufferedImage dummyImg = ImageIO.read(getClass().getResourceAsStream("/funnel.gif"));
-        final Coords cropCoords = new Coords(0, 0, 16, 8);
         final BufferedImage result = new CropAndResizeFilter().resize(dummyImg, cropCoords, targetWidth, targetHeight);
         assertEquals(expectedWidth, result.getWidth());
         assertEquals(expectedHeight, result.getHeight());

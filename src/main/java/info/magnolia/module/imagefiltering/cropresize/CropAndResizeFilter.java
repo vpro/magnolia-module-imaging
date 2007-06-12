@@ -16,8 +16,9 @@ import info.magnolia.cms.core.Content;
 import info.magnolia.module.imagefiltering.ImageFilter;
 
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.WritableRaster;
 
 /**
  * @author gjoseph
@@ -40,7 +41,7 @@ public class CropAndResizeFilter implements ImageFilter {
      * If targetWidth or targetHeight is <=0, the other side will be sized proportionally, using the given CropperInfo.
      * If both targetWidth and targetHeight are >0, we will use them even if they don't match the original ratio.
      */
-    public BufferedImage apply(Image source, Object filterParams, Content dialogControlConfigNode) {
+    public BufferedImage apply(BufferedImage source, Object filterParams, Content dialogControlConfigNode) {
         final CropperInfo cropperInfo = (CropperInfo) filterParams;
 
         // TODO get these from dialogControlConfigNode if not specified in subnode ??
@@ -51,7 +52,7 @@ public class CropAndResizeFilter implements ImageFilter {
         return resize(source, cropperInfo.getCoords(), targetWidth, targetHeight);
     }
 
-    protected BufferedImage resize(Image src, Coords cropCoords, int targetWidth, int targetHeight) {
+    protected BufferedImage resize(BufferedImage src, Coords cropCoords, int targetWidth, int targetHeight) {
         if (targetWidth <= 0 && targetHeight <= 0) {
             targetWidth = cropCoords.getWidth();
             targetHeight = cropCoords.getHeight();
@@ -63,8 +64,9 @@ public class CropAndResizeFilter implements ImageFilter {
             targetHeight = (int) (cropCoords.getHeight() * ratio);
         }
 
-        // this is pretty unsatisfying from a quality standpoint - colors are ugly - but is pretty fast
-        final BufferedImage dst = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_RGB);
+        final ColorModel cm = src.getColorModel();
+        final WritableRaster raster = cm.createCompatibleWritableRaster(targetWidth, targetHeight);
+        final BufferedImage dst = new BufferedImage(cm, raster, cm.isAlphaPremultiplied(), null);
         Graphics2D g = dst.createGraphics();
         g.drawImage(src, 0, 0, targetWidth, targetHeight, cropCoords.getX1(), cropCoords.getY1(), cropCoords.getX2(), cropCoords.getY2(), null);
         g.dispose();
