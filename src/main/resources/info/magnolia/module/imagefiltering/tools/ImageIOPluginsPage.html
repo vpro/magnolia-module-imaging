@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>ImageIO page</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="${this.request.contextPath}/.resources/admin-css/admin-all.css" type="text/css" rel="stylesheet"/>
+</head>
+<body id="mgnl" class="mgnlBgLight">
+<h1>ImageIO page</h1>
+
+<p>This page lists the formats currently available to the javax.imageio package,
+    as installed on this system.</p>
+
+<h3>Supported input formats</h3>
+<ul>
+    [#list this.inputFormatNames as s]
+    <li>${s}</li>
+    [/#list]
+</ul>
+<h3>Supported input mime types</h3>
+<ul>
+    [#list this.inputFormatMimeTypes as s]
+    <li>${s}</li>
+    [/#list]
+</ul>
+
+<h3>Supported output formats</h3>
+<ul>
+    [#list this.outputFormatNames as s]
+    <li>${s}</li>
+    [/#list]
+</ul>
+
+<h3>Supported output mime types</h3>
+<ul>
+    [#list this.outputFormatMimeTypes as s]
+    <li>${s}</li>
+    [/#list]
+</ul>
+
+</body>
+</html>
