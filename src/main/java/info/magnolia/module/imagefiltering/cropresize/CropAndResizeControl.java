@@ -65,12 +65,25 @@ public class CropAndResizeControl extends DialogBox {
             final NodeData bin = getWebsiteNode().getNodeData(getTargetBinaryPropertyName(fileControlName));
             if (bin.isExist()) {
                 final File preview = new File(getTargetBinaryPropertyName(fileControlName), getWebsiteNode());
+                int previewHeight = -1;
+                try {
+                    previewHeight = Integer.parseInt(preview.getImageHeight());
+                    if (previewHeight > 100) {
+                        previewHeight = 100;
+                    }
+                } catch (NumberFormatException e) {
+                    // if the height wasn't stored .. should really not happen except if you used an old snapshot of this module ...
+                }
+
                 out.write("<img src=\"");
                 out.write(getRequest().getContextPath());
                 out.write(preview.getPath());
-                // bin.getHandle()
-                out.write("\"/>");
-
+                if (previewHeight > 0) {
+                    out.write("\" height=\"");
+                    out.write(String.valueOf(previewHeight));
+                    //out.write("");
+                }
+                out.write("\" />");
                 if (StringUtils.isNotEmpty(preview.getImageWidth())) {
                     out.write("<em style='white-space:nowrap'>");
                     out.write("width: ");
@@ -112,5 +125,9 @@ public class CropAndResizeControl extends DialogBox {
 
     public static String getTargetBinaryPropertyName(String fileControlName) {
         return fileControlName + "_resized";
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Integer.parseInt(\"\") = " + Integer.parseInt(""));
     }
 }
