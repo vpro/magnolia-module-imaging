@@ -125,6 +125,11 @@ public class ImagesProcessor {
             target.setValue(tempIn);
             target.setAttribute(FileProperties.PROPERTY_CONTENTTYPE, "image/" + formatName);
             target.setAttribute(FileProperties.PROPERTY_LASTMODIFIED, DateUtil.getCurrentUTCCalendar());
+            target.setAttribute(FileProperties.PROPERTY_FILENAME, "filtered"); // TODO : change this hardcoded name ?
+            target.setAttribute(FileProperties.PROPERTY_EXTENSION, formatName);
+            target.setAttribute(FileProperties.PROPERTY_SIZE, Long.toString(tempImageFile.length()));
+            target.setAttribute(FileProperties.PROPERTY_WIDTH, Integer.toString(filtered.getWidth()));
+            target.setAttribute(FileProperties.PROPERTY_HEIGHT, Integer.toString(filtered.getHeight()));
 
             IOUtils.closeQuietly(tempIn);
         } finally {
