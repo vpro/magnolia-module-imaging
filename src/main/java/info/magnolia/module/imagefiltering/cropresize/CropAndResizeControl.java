@@ -130,8 +130,4 @@ public class CropAndResizeControl extends DialogBox {
     public static String getTargetBinaryPropertyName(String fileControlName) {
         return fileControlName + "_resized";
     }
-
-    public static void main(String[] args) {
-        System.out.println("Integer.parseInt(\"\") = " + Integer.parseInt(""));
-    }
 }
