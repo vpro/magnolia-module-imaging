@@ -32,7 +32,28 @@ classDef("mgnl.imagefiltering.ImageResizer", {
         }
 
         imageCropperWindow.cropperCallback = function(resultStr) {
+            // put the result in the crop control
             document.getElementById(cropValueControlId).value = resultStr;
+
+            // clear the preview image, replace it with a temp message
+            var previewBlock = document.getElementById(cropValueControlId + '_previewZone');
+            var img = previewBlock.getElementsByTagName("IMG");
+            var p = previewBlock.getElementsByTagName("P");
+
+            // remove the img
+            if (img.length > 0) {
+                previewBlock.removeChild(img[0]);
+            }
+
+            // remove the p with height/width
+            if (p.length > 1) {
+                previewBlock.removeChild(p[0]);
+            }
+
+            // display the warning text
+            var textIdx = p.length - 1;
+            p[textIdx].style.display = 'block';
+
             imageCropperWindow.close();
         }
     }

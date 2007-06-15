@@ -56,6 +56,8 @@ public class CropAndResizeControl extends DialogBox {
             }
             final File fileControl = new File(fileControlName, getWebsiteNode());
             final String imagePath = fileControl.getHandle() + "." + fileControl.getExtension();
+            final String cropperInfoControlName = getCropperInfoPropertyName(fileControlName);
+            final String previewId = cropperInfoControlName + "_previewZone";
 
             out.write("\n<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\">");
             //width=\"" + width + "\">");
@@ -63,6 +65,9 @@ public class CropAndResizeControl extends DialogBox {
 
             // preview
             final NodeData bin = getWebsiteNode().getNodeData(getTargetBinaryPropertyName(fileControlName));
+            out.write("<div id=\"");
+            out.write(previewId);
+            out.write("\">");
             if (bin.isExist()) {
                 final File preview = new File(getTargetBinaryPropertyName(fileControlName), getWebsiteNode());
                 int previewHeight = -1;
@@ -81,22 +86,21 @@ public class CropAndResizeControl extends DialogBox {
                 if (previewHeight > 0) {
                     out.write("\" height=\"");
                     out.write(String.valueOf(previewHeight));
-                    //out.write("");
                 }
                 out.write("\" />");
                 if (StringUtils.isNotEmpty(preview.getImageWidth())) {
-                    out.write("<em style='white-space:nowrap'>");
-                    out.write("width: ");
-                    out.write(preview.getImageWidth());
-                    out.write(" height: ");
-                    out.write(preview.getImageHeight());
-                    out.write("</em>\n");
+                    out.write("<p><em style='white-space:nowrap'>");
+                    out.write(getMessage("cropper.preview.widthheight", new String[]{preview.getImageWidth(), preview.getImageHeight()}));
+                    out.write("</em></p>\n");
                 }
-
-                out.write("</td><td>");
             }
+            out.write("<p style=\"display: none;\" class=\"warning\">");
+            out.write(getMessage("cropper.preview.tobeprocessed"));
+            out.write("</p>");
+            out.write("</div>");
 
-            final String cropperInfoControlName = getCropperInfoPropertyName(fileControlName);
+            out.write("</td><td>");
+
             final Hidden cropperInfo = new Hidden(cropperInfoControlName, getWebsiteNode());
             cropperInfo.setId(cropperInfoControlName);
             cropperInfo.setSaveInfo(true);
