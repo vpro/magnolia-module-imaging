@@ -4,7 +4,7 @@
   <parent>
     <artifactId>magnolia-project</artifactId>
     <groupId>info.magnolia</groupId>
-    <version>3.1-SNAPSHOT</version>
+    <version>3.0.2</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>magnolia-module-imagefiltering</artifactId>
@@ -21,7 +21,9 @@
   </scm>
 
   <properties>
-    <magnoliaVersion>3.1-SNAPSHOT</magnoliaVersion>
+    <magnoliaVersion>3.0.2</magnoliaVersion>
+    <!-- remove this as from 3.1 -->
+    <maven.test.skip>true</maven.test.skip>
   </properties>
 
   <dependencies>
@@ -61,13 +63,13 @@
       </exclusions>
     </dependency>
 
-    <dependency>
-      <groupId>info.magnolia</groupId>
-      <artifactId>magnolia-core</artifactId>
-      <version>${magnoliaVersion}</version>
-      <type>test-jar</type>
-      <scope>test</scope>
-    </dependency>
+    <!--<dependency>-->
+    <!--<groupId>info.magnolia</groupId>-->
+    <!--<artifactId>magnolia-core</artifactId>-->
+    <!--<version>${magnoliaVersion}</version>-->
+    <!--<type>test-jar</type>-->
+    <!--<scope>test</scope>-->
+    <!--</dependency>-->
     <dependency>
       <groupId>org.easymock</groupId>
       <artifactId>easymock</artifactId>

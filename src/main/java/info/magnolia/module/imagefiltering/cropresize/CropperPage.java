@@ -12,7 +12,8 @@
  */
 package info.magnolia.module.imagefiltering.cropresize;
 
-import info.magnolia.api.HierarchyManager;
+import info.magnolia.cms.core.HierarchyManager;
+//import info.magnolia.api.HierarchyManager;
 import info.magnolia.cms.beans.config.ContentRepository;
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.gui.dialog.Dialog;
@@ -20,7 +21,8 @@ import info.magnolia.cms.gui.dialog.DialogControlImpl;
 import info.magnolia.cms.gui.dialog.DialogTab;
 import info.magnolia.cms.util.ContentUtil;
 import info.magnolia.context.MgnlContext;
-import info.magnolia.freemarker.FreemarkerUtil;
+import info.magnolia.cms.util.FreeMarkerUtil;
+//import info.magnolia.freemarker.FreemarkerUtil;
 import info.magnolia.module.admininterface.TemplatedMVCHandler;
 import org.apache.commons.lang.StringUtils;
 
@@ -103,6 +105,7 @@ public class CropperPage extends TemplatedMVCHandler {
             // let's fake a dialog for the sake of its layout ... and save button.
             final Dialog dialog = new CropperDialog();
             dialog.init(request, response, null, imageControlConfigNode);
+            // TODO : this is not needed with 3.1
             dialog.setConfig("i18nBasename", "info.magnolia.module.imagefiltering.messages");
             dialog.setConfig("saveLabel", dialog.getMessage("cropper.apply.button"));
             dialog.setConfig("saveOnclick", "cropperSubmit();");
@@ -158,7 +161,7 @@ public class CropperPage extends TemplatedMVCHandler {
     private void renderTemplate(String templateName, Writer out) {
         final HashMap map = new HashMap();
         map.put("this", this);
-        FreemarkerUtil.process(templateName, map, out);
+        FreeMarkerUtil.process(templateName, map, out);
     }
 
 }
