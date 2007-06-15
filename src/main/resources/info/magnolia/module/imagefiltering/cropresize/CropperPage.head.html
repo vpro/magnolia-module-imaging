@@ -71,7 +71,7 @@
                 }
             }
             if (!result.CropperInfo.configName) {
-                result.CropperInfo.configName = ${this.configs[0].name};
+                result.CropperInfo.configName = '${this.configs[0].name}';
             }
             registerNewCropper(result.CropperInfo.configName);
         });
