@@ -13,10 +13,15 @@
 package info.magnolia.module.imagefiltering.tools;
 
 import info.magnolia.module.admininterface.TemplatedMVCHandler;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Transformer;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.TreeSet;
 
 /**
  *
@@ -29,19 +34,31 @@ public class ImageIOPluginsPage extends TemplatedMVCHandler {
         super(name, request, response);
     }
 
-    public String[] getInputFormatNames() {
-        return ImageIO.getReaderFormatNames();
+    public Collection getInputFormatNames() {
+        return filter(ImageIO.getReaderFormatNames());
     }
 
-    public String[] getInputFormatMimeTypes() {
-        return ImageIO.getReaderMIMETypes();
+    public Collection getInputFormatMimeTypes() {
+        return filter(ImageIO.getReaderMIMETypes());
     }
 
-    public String[] getOutputFormatNames() {
-        return ImageIO.getWriterFormatNames();
+    public Collection getOutputFormatNames() {
+        return filter(ImageIO.getWriterFormatNames());
     }
 
-    public String[] getOutputFormatMimeTypes() {
-        return ImageIO.getWriterMIMETypes();
+    public Collection getOutputFormatMimeTypes() {
+        return filter(ImageIO.getWriterMIMETypes());
+    }
+
+    // this is just static to make testing easier... hu.
+    protected static Collection filter(String[] arr) {
+        final TreeSet set = new TreeSet(String.CASE_INSENSITIVE_ORDER);
+        set.addAll(Arrays.asList(arr));
+        CollectionUtils.transform(set, new Transformer() {
+            public Object transform(Object input) {
+                return ((String) input).toLowerCase();
+            }
+        });
+        return set;
     }
 }
