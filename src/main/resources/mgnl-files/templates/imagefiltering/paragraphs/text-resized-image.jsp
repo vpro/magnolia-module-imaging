@@ -11,7 +11,14 @@
     <cms:out nodeDataName="image" var="originalImageUrl"/>
     <cms:out nodeDataName="image_resized" var="resizedImageUrl"/>
     <%-- inline styles shouldn't be used, but hey, this is only a sample --%>
-    <a href="${ctx}${originalImageUrl}"><img src="${ctx}${resizedImageUrl}" style="border: none; float: left; margin: 0; padding: 0 1em 0 0;"/></a>
+
+    <cms:ifNotEmpty nodeDataName="image_resized">
+        <a href="${ctx}${originalImageUrl}"><img src="${ctx}${resizedImageUrl}" style="border: none; float: left; margin: 0; padding: 0 1em 0 0;"/></a>
+    </cms:ifNotEmpty>
+    <cms:ifEmpty nodeDataName="image_resized">
+        <img src="${ctx}${originalImageUrl}" style="border: none; float: left; margin: 0; padding: 0 1em 0 0;"/>
+        <p>Please edit this paragraph to resize / crop this image</p>
+    </cms:ifEmpty>
 </cms:ifNotEmpty>
 <cms:out nodeDataName="text"/>
 </p>
