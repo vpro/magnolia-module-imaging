@@ -12,17 +12,15 @@
  */
 package info.magnolia.module.imagefiltering.cropresize;
 
-import info.magnolia.cms.core.HierarchyManager;
-//import info.magnolia.api.HierarchyManager;
 import info.magnolia.cms.beans.config.ContentRepository;
 import info.magnolia.cms.core.Content;
+import info.magnolia.cms.core.HierarchyManager;
 import info.magnolia.cms.gui.dialog.Dialog;
 import info.magnolia.cms.gui.dialog.DialogControlImpl;
 import info.magnolia.cms.gui.dialog.DialogTab;
 import info.magnolia.cms.util.ContentUtil;
-import info.magnolia.context.MgnlContext;
 import info.magnolia.cms.util.FreeMarkerUtil;
-//import info.magnolia.freemarker.FreemarkerUtil;
+import info.magnolia.context.MgnlContext;
 import info.magnolia.module.admininterface.TemplatedMVCHandler;
 import org.apache.commons.lang.StringUtils;
 
@@ -149,12 +147,17 @@ public class CropperPage extends TemplatedMVCHandler {
         protected void drawHtmlPreSubsHead(Writer out) throws IOException {
             super.drawHtmlPreSubsHead(out);
             renderTemplate("/info/magnolia/module/imagefiltering/cropresize/CropperPage.head.html", out);
+            out.flush();
         }
     }
 
     private final class CropperControl extends DialogControlImpl {
         public void drawHtml(Writer out) throws IOException {
+            out.write("<tbody><tr><td>");
+            out.flush();
             renderTemplate("/info/magnolia/module/imagefiltering/cropresize/CropperPage.html", out);
+            out.flush();
+            out.write("</td></tr></tbody>");
         }
     }
 
