@@ -4,7 +4,7 @@
   <parent>
     <artifactId>magnolia-project</artifactId>
     <groupId>info.magnolia</groupId>
-    <version>3.0.2</version>
+    <version>3.1-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>magnolia-module-imagefiltering</artifactId>
@@ -21,9 +21,9 @@
   </scm>
 
   <properties>
-    <magnoliaVersion>3.0.2</magnoliaVersion>
+    <magnoliaVersion>3.1-SNAPSHOT</magnoliaVersion>
     <!-- remove this as from 3.1 -->
-    <maven.test.skip>true</maven.test.skip>
+    <!--<maven.test.skip>true</maven.test.skip>-->
   </properties>
 
   <dependencies>
@@ -59,6 +59,10 @@
         <exclusion>
           <groupId>commons-logging</groupId>
           <artifactId>commons-logging</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>xml-apis</groupId>
+          <artifactId>xml-apis</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
