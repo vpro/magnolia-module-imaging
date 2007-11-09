@@ -52,9 +52,12 @@
       <!--<scope>compile</scope>-->
     <!--</dependency>-->
     <dependency>
+      <!-- TODO 2.1 has been released !!! -->
       <groupId>net.sf.json-lib</groupId>
       <artifactId>json-lib</artifactId>
       <version>0.9</version>
+      <!-- this is already provided by magnolia-module-templating -->
+      <scope>provided</scope>
       <exclusions>
         <exclusion>
           <groupId>commons-logging</groupId>
