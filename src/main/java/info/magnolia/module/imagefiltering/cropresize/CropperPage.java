@@ -124,7 +124,7 @@ public class CropperPage extends TemplatedMVCHandler {
             // let's fake a dialog for the sake of its layout ... and save button.
             final Dialog dialog = new CropperDialog();
             dialog.init(request, response, null, imageControlConfigNode);
-            // TODO : this is not needed with 3.1
+            // TODO : this is not needed with 3.5
             dialog.setConfig("i18nBasename", "info.magnolia.module.imagefiltering.messages");
             dialog.setConfig("saveLabel", dialog.getMessage("cropper.apply.button"));
             dialog.setConfig("saveOnclick", "cropperSubmit();");

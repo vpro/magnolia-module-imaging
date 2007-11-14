@@ -51,7 +51,7 @@ import java.util.List;
 /**
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
- * @deprecated for 3.1, we should use a SaveHandler, this is only to be compatible with 3.0
+ * @deprecated for 3.5, we should use a SaveHandler, this is only to be compatible with 3.0
  */
 public class ImageFilteringDialogHandler extends ParagraphEditDialog {
     private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(ImageFilteringDialogHandler.class);

@@ -4,7 +4,7 @@
   <parent>
     <artifactId>magnolia-project</artifactId>
     <groupId>info.magnolia</groupId>
-    <version>3.1-SNAPSHOT</version>
+    <version>3.5-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>magnolia-module-imagefiltering</artifactId>
@@ -21,8 +21,8 @@
   </scm>
 
   <properties>
-    <magnoliaVersion>3.1-SNAPSHOT</magnoliaVersion>
-    <!-- remove this as from 3.1 -->
+    <magnoliaVersion>3.5-SNAPSHOT</magnoliaVersion>
+    <!-- remove this as from 3.5 -->
     <!--<maven.test.skip>true</maven.test.skip>-->
   </properties>
 
