@@ -2,7 +2,7 @@
 <!DOCTYPE module SYSTEM "module.dtd" >
 <module>
   <name>imagefiltering</name>
-  <displayName>magnolia-module-imagefiltering</displayName>
+  <displayName>Magnolia Image Filtering Module</displayName>
   <class>info.magnolia.module.admininterface.SimpleContentModule</class>
   <version>1.0-SNAPSHOT</version>
 
