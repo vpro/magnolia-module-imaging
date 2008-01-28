@@ -4,7 +4,7 @@
   <parent>
     <artifactId>magnolia-project</artifactId>
     <groupId>info.magnolia</groupId>
-    <version>3.5-SNAPSHOT</version>
+    <version>3.5.4-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>magnolia-module-imagefiltering</artifactId>
@@ -14,7 +14,6 @@
   <description>A Magnolia module that provides image filtering capabilities. Current features include
     a control to resize/crop images, and appropriate dialogs and paragraphs.
   </description>
-  <url>http://www.magnolia.info</url>
   <scm>
     <connection>scm:svn:http://svn.magnolia.info/svn/modules/community/magnolia-module-imagefiltering/trunk</connection>
     <developerConnection>scm:svn:http://svn.magnolia.info/svn/modules/community/magnolia-module-imagefiltering/trunk</developerConnection>
@@ -22,9 +21,8 @@
   </scm>
 
   <properties>
-    <magnoliaVersion>3.5-SNAPSHOT</magnoliaVersion>
-    <!-- remove this as from 3.5 -->
-    <!--<maven.test.skip>true</maven.test.skip>-->
+    <magnoliaVersion>3.5.4-SNAPSHOT</magnoliaVersion>
+    <documentationURL>http://documentation.magnolia.info/modules/imagefiltering.html</documentationURL>
   </properties>
 
   <dependencies>
