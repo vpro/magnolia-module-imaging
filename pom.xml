@@ -4,7 +4,7 @@
   <parent>
     <artifactId>magnolia-project</artifactId>
     <groupId>info.magnolia</groupId>
-    <version>3.5.4-SNAPSHOT</version>
+    <version>3.5.4</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>magnolia-module-imagefiltering</artifactId>
@@ -21,7 +21,7 @@
   </scm>
 
   <properties>
-    <magnoliaVersion>3.5.4-SNAPSHOT</magnoliaVersion>
+    <magnoliaVersion>3.5.4</magnoliaVersion>
     <documentationURL>http://documentation.magnolia.info/modules/imagefiltering.html</documentationURL>
   </properties>
 

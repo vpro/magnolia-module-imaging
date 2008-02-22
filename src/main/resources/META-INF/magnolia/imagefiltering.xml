@@ -2,14 +2,13 @@
 <!DOCTYPE module SYSTEM "module.dtd" >
 <module>
   <name>imagefiltering</name>
-  <displayName>Magnolia Image Filtering Module</displayName>
-  <class>info.magnolia.module.admininterface.SimpleContentModule</class>
-  <version>1.0-SNAPSHOT</version>
+  <displayName>${project.name}</displayName>
+  <version>${project.version}</version>
 
   <dependencies>
     <dependency>
       <name>adminInterface</name>
-      <version>3.0</version>
+      <version>3.5/*</version>
     </dependency>
   </dependencies>
 
