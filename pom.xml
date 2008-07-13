@@ -14,17 +14,19 @@
   <description>A Magnolia module that provides image filtering capabilities. Current features include
     a control to resize/crop images, and appropriate dialogs and paragraphs.
   </description>
+  <properties>
+    <magnoliaVersion>3.5.4</magnoliaVersion>
+    <documentationURL>http://documentation.magnolia.info/modules/imagefiltering.html</documentationURL>
+  </properties>
+  <issueManagement>
+    <system>Jira</system>
+    <url>http://jira.magnolia.info/browse/MGNLIMG</url>
+  </issueManagement>
   <scm>
     <connection>scm:svn:http://svn.magnolia.info/svn/modules/community/magnolia-module-imagefiltering/trunk</connection>
     <developerConnection>scm:svn:http://svn.magnolia.info/svn/modules/community/magnolia-module-imagefiltering/trunk</developerConnection>
     <url>http://svn.magnolia.info/view/modules/community/magnolia-module-imagefiltering/trunk</url>
   </scm>
-
-  <properties>
-    <magnoliaVersion>3.5.4</magnoliaVersion>
-    <documentationURL>http://documentation.magnolia.info/modules/imagefiltering.html</documentationURL>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>info.magnolia</groupId>
