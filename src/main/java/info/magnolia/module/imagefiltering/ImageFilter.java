@@ -47,6 +47,7 @@ import java.awt.image.BufferedImage;
  *  <li>dialogControlConfigNode is the node configuring the control in the dialog, which can have
  * properties set to specific values by the dialog designer (i.e if we had a ColouringFilter, it could
  * set some values to make sure that all images are turned into black/white)</li>
+ * </ul>
  *
  * @see ImagesProcessor
  *
