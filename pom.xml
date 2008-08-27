@@ -23,9 +23,9 @@
     <url>http://jira.magnolia.info/browse/MGNLIMG</url>
   </issueManagement>
   <scm>
-    <connection>scm:svn:http://svn.magnolia.info/svn/modules/community/magnolia-module-imagefiltering/trunk</connection>
-    <developerConnection>scm:svn:http://svn.magnolia.info/svn/modules/community/magnolia-module-imagefiltering/trunk</developerConnection>
-    <url>http://svn.magnolia.info/view/modules/community/magnolia-module-imagefiltering/trunk</url>
+    <connection>scm:svn:http://svn.magnolia.info/svn/community/modules/magnolia-module-imagefiltering/trunk</connection>
+    <developerConnection>scm:svn:http://svn.magnolia.info/svn/community/modules/magnolia-module-imagefiltering/trunk</developerConnection>
+    <url>http://svn.magnolia.info/view/community/modules/magnolia-module-imagefiltering/trunk</url>
   </scm>
   <dependencies>
     <dependency>
