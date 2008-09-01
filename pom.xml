@@ -2,10 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd ">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>magnolia-project</artifactId>
+    <artifactId>magnolia-parent-pom-community-module</artifactId>
     <groupId>info.magnolia</groupId>
-    <version>3.6.1</version>
-    <relativePath>../pom.xml</relativePath>
+    <version>5-SNAPSHOT</version>
   </parent>
   <artifactId>magnolia-module-imagefiltering</artifactId>
   <version>1.1-SNAPSHOT</version>
@@ -46,12 +45,12 @@
       <version>${magnoliaVersion}</version>
       <scope>provided</scope>
     </dependency>
-    <!--<dependency>-->
-      <!--<groupId>com.jhlabs</groupId>-->
-      <!--<artifactId>filters</artifactId>-->
-      <!--<version>2.0.235</version>-->
-      <!--<scope>compile</scope>-->
-    <!--</dependency>-->
+    <dependency>
+      <groupId>com.jhlabs</groupId>
+      <artifactId>filters</artifactId>
+      <version>2.0.235</version>
+      <scope>compile</scope>
+    </dependency>
     <dependency>
       <!-- TODO 2.1 has been released !!! -->
       <groupId>net.sf.json-lib</groupId>
