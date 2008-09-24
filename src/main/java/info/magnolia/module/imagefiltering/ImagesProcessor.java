@@ -90,7 +90,7 @@ public class ImagesProcessor {
      * @param dialogControlConfigNode where the control is configured (for targetWidth and targetHeight)
      */
     public void processImages(Content storageNode, Content dialogControlConfigNode) throws RepositoryException, IOException {
-        // let'name loop through all properties, see which ones are binaries and see if they have a corresponding cropperInfo
+        // let's loop through all properties, see which ones are binaries and see if they have a corresponding cropperInfo
         final Collection props = storageNode.getNodeDataCollection();
         final Iterator it = props.iterator();
         while (it.hasNext()) {
@@ -107,7 +107,6 @@ public class ImagesProcessor {
             }
         }
     }
-
     protected void processImage(NodeData binary, NodeData filteringParamsProp, NodeData target, Content dialogControlConfigNode) throws IOException, RepositoryException {
         final BufferedImage img = getImage(binary);
         final Map filteringParams = getUserParams(filteringParamsProp);
