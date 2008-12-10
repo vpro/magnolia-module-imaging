@@ -40,8 +40,8 @@ import info.magnolia.cms.gui.dialog.Dialog;
 import info.magnolia.cms.gui.dialog.DialogControlImpl;
 import info.magnolia.cms.gui.dialog.DialogTab;
 import info.magnolia.cms.util.ContentUtil;
-import info.magnolia.cms.util.FreeMarkerUtil;
 import info.magnolia.context.MgnlContext;
+import info.magnolia.freemarker.FreemarkerUtil;
 import info.magnolia.module.admininterface.TemplatedMVCHandler;
 import org.apache.commons.lang.StringUtils;
 
@@ -185,7 +185,7 @@ public class CropperPage extends TemplatedMVCHandler {
     private void renderTemplate(String templateName, Writer out) {
         final HashMap map = new HashMap();
         map.put("this", this);
-        FreeMarkerUtil.process(templateName, map, out);
+        FreemarkerUtil.process(templateName, map, out);
     }
 
 }
