@@ -39,10 +39,10 @@ import info.magnolia.cms.core.HierarchyManager;
 import info.magnolia.cms.gui.dialog.Dialog;
 import info.magnolia.cms.gui.dialog.DialogControlImpl;
 import info.magnolia.cms.gui.dialog.DialogTab;
-import info.magnolia.cms.util.ContentUtil;
 import info.magnolia.context.MgnlContext;
 import info.magnolia.freemarker.FreemarkerUtil;
 import info.magnolia.module.admininterface.TemplatedMVCHandler;
+import info.magnolia.content2bean.Content2BeanUtil;
 import org.apache.commons.lang.StringUtils;
 
 import javax.jcr.RepositoryException;
@@ -101,7 +101,7 @@ public class CropperPage extends TemplatedMVCHandler {
 
     public static CropAndResizeConfig fromNode(Content node) {
         // TODO : use content2bean + cleanup
-        final CropAndResizeConfig cfg = (CropAndResizeConfig) ContentUtil.setProperties(new CropAndResizeConfig(), node);
+        final CropAndResizeConfig cfg = (CropAndResizeConfig) Content2BeanUtil.setProperties(new CropAndResizeConfig(), node);
 
         // if label property wasn't set, we try using the name property, or the node name if neither was set.        
         if (StringUtils.isEmpty(cfg.getName())) {

@@ -36,10 +36,10 @@ package info.magnolia.module.imagefiltering;
 import info.magnolia.cms.beans.runtime.FileProperties;
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.NodeData;
-import info.magnolia.cms.util.ContentUtil;
 import info.magnolia.cms.util.DateUtil;
 import info.magnolia.cms.util.NodeDataUtil;
 import info.magnolia.module.imagefiltering.cropresize.CropAndResizeControl;
+import info.magnolia.content2bean.Content2BeanUtil;
 import net.sf.json.JSONObject;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ClassUtils;
@@ -106,6 +106,7 @@ public class ImagesProcessor {
             }
         }
     }
+
     protected void processImage(NodeData binary, NodeData filteringParamsProp, NodeData target, Content dialogControlConfigNode) throws IOException, RepositoryException {
         final BufferedImage img = getImage(binary);
         final Map filteringParams = getUserParams(filteringParamsProp);
@@ -160,7 +161,7 @@ public class ImagesProcessor {
 
     protected ImageFormat getImageFormat(Content dialogControlConfigNode) {
         // TODO : use content2bean
-        return (ImageFormat) ContentUtil.setProperties(new ImageFormat(), dialogControlConfigNode);
+        return (ImageFormat) Content2BeanUtil.setProperties(new ImageFormat(), dialogControlConfigNode);
     }
 
     protected Map getUserParams(NodeData paramsProp) {
