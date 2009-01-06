@@ -4,7 +4,7 @@
   <parent>
     <artifactId>magnolia-parent-pom-community-module</artifactId>
     <groupId>info.magnolia</groupId>
-    <version>5</version>
+    <version>6-SNAPSHOT</version>
   </parent>
   <artifactId>magnolia-module-imagefiltering</artifactId>
   <version>1.1-SNAPSHOT</version>
