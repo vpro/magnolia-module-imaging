@@ -15,16 +15,16 @@
   </description>
   <properties>
     <magnoliaVersion>3.6.1</magnoliaVersion>
-    <documentationURL>http://documentation.magnolia.info/modules/imagefiltering.html</documentationURL>
+    <documentationURL>http://documentation.magnolia-cms.com/modules/imagefiltering.html</documentationURL>
   </properties>
   <issueManagement>
     <system>Jira</system>
-    <url>http://jira.magnolia.info/browse/MGNLIMG</url>
+    <url>http://jira.magnolia-cms.com/browse/MGNLIMG</url>
   </issueManagement>
   <scm>
-    <connection>scm:svn:http://svn.magnolia.info/svn/community/modules/magnolia-module-imagefiltering/trunk</connection>
-    <developerConnection>scm:svn:http://svn.magnolia.info/svn/community/modules/magnolia-module-imagefiltering/trunk</developerConnection>
-    <url>http://svn.magnolia.info/view/community/modules/magnolia-module-imagefiltering/trunk</url>
+    <connection>scm:svn:http://svn.magnolia-cms.com/svn/community/modules/magnolia-module-imagefiltering/trunk</connection>
+    <developerConnection>scm:svn:http://svn.magnolia-cms.com/svn/community/modules/magnolia-module-imagefiltering/trunk</developerConnection>
+    <url>http://svn.magnolia-cms.com/view/community/modules/magnolia-module-imagefiltering/trunk</url>
   </scm>
   <dependencies>
     <dependency>
