@@ -14,7 +14,7 @@
     a control to resize/crop images, and appropriate dialogs and paragraphs.
   </description>
   <properties>
-    <magnoliaVersion>3.6.1</magnoliaVersion>
+    <magnoliaVersion>3.6.3</magnoliaVersion>
     <documentationURL>http://documentation.magnolia-cms.com/modules/imagefiltering.html</documentationURL>
   </properties>
   <issueManagement>
