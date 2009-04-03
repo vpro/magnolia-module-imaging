@@ -43,6 +43,7 @@ import info.magnolia.context.MgnlContext;
 import info.magnolia.freemarker.FreemarkerUtil;
 import info.magnolia.module.admininterface.TemplatedMVCHandler;
 import info.magnolia.content2bean.Content2BeanUtil;
+import info.magnolia.content2bean.Content2BeanException;
 import org.apache.commons.lang.StringUtils;
 
 import javax.jcr.RepositoryException;
@@ -101,7 +102,12 @@ public class CropperPage extends TemplatedMVCHandler {
 
     public static CropAndResizeConfig fromNode(Content node) {
         // TODO : use content2bean + cleanup
-        final CropAndResizeConfig cfg = (CropAndResizeConfig) Content2BeanUtil.setProperties(new CropAndResizeConfig(), node);
+        final CropAndResizeConfig cfg;
+        try {
+            cfg = (CropAndResizeConfig) Content2BeanUtil.setProperties(new CropAndResizeConfig(), node);
+        } catch (Content2BeanException e) {
+            throw new IllegalStateException(e); // TODO
+        }
 
         // if label property wasn't set, we try using the name property, or the node name if neither was set.        
         if (StringUtils.isEmpty(cfg.getName())) {
