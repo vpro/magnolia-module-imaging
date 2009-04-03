@@ -36,6 +36,7 @@ package info.magnolia.module.imagefiltering.cropresize;
 import info.magnolia.test.MgnlTestCase;
 import info.magnolia.test.mock.MockContent;
 import info.magnolia.test.mock.MockNodeData;
+import info.magnolia.content2bean.Content2BeanException;
 
 /**
  * @author gjoseph
@@ -45,7 +46,7 @@ public class CropperPageTest extends MgnlTestCase {
     /**
      * testFromNodeAlwaysSetsConfigNameToNodeNameAndUsesLabelOrNameOrNodeNameToSetConfigLabel()
      */
-    public void testFromNodeHasNameAndLabelProperlySet() {
+    public void testFromNodeHasNameAndLabelProperlySet() throws Content2BeanException {
         doTestFromNode("myName", "myLabel", "myLabel");
         doTestFromNode(null, "myLabel", "myLabel");
         doTestFromNode("myName", null, "myName");
@@ -56,7 +57,7 @@ public class CropperPageTest extends MgnlTestCase {
         doTestFromNode("", "", "theNodeName");
     }
 
-    private void doTestFromNode(String namePropOrNull, String labelPropOrNull, String expectedLabel) {
+    private void doTestFromNode(String namePropOrNull, String labelPropOrNull, String expectedLabel) throws Content2BeanException {
         final MockContent node = new MockContent("theNodeName");
         if (namePropOrNull != null) {
             node.addNodeData(new MockNodeData("name", namePropOrNull));

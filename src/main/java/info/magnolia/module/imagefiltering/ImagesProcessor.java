@@ -40,6 +40,7 @@ import info.magnolia.cms.util.DateUtil;
 import info.magnolia.cms.util.NodeDataUtil;
 import info.magnolia.module.imagefiltering.cropresize.CropAndResizeControl;
 import info.magnolia.content2bean.Content2BeanUtil;
+import info.magnolia.content2bean.Content2BeanException;
 import net.sf.json.JSONObject;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ClassUtils;
@@ -88,7 +89,7 @@ public class ImagesProcessor {
      * @param storageNode where the resized image should be stored
      * @param dialogControlConfigNode where the control is configured (for targetWidth and targetHeight)
      */
-    public void processImages(Content storageNode, Content dialogControlConfigNode) throws RepositoryException, IOException {
+    public void processImages(Content storageNode, Content dialogControlConfigNode) throws RepositoryException, IOException, Content2BeanException {
         // let's loop through all properties, see which ones are binaries and see if they have a corresponding cropperInfo
         final Collection props = storageNode.getNodeDataCollection();
         final Iterator it = props.iterator();
@@ -107,7 +108,7 @@ public class ImagesProcessor {
         }
     }
 
-    protected void processImage(NodeData binary, NodeData filteringParamsProp, NodeData target, Content dialogControlConfigNode) throws IOException, RepositoryException {
+    protected void processImage(NodeData binary, NodeData filteringParamsProp, NodeData target, Content dialogControlConfigNode) throws IOException, RepositoryException, Content2BeanException {
         final BufferedImage img = getImage(binary);
         final Map filteringParams = getUserParams(filteringParamsProp);
 
@@ -159,7 +160,7 @@ public class ImagesProcessor {
 
     }
 
-    protected ImageFormat getImageFormat(Content dialogControlConfigNode) {
+    protected ImageFormat getImageFormat(Content dialogControlConfigNode) throws Content2BeanException {
         // TODO : use content2bean
         return (ImageFormat) Content2BeanUtil.setProperties(new ImageFormat(), dialogControlConfigNode);
     }

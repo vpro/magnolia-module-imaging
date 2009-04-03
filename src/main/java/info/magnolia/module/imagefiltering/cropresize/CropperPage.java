@@ -97,17 +97,14 @@ public class CropperPage extends TemplatedMVCHandler {
 
         } catch (RepositoryException e) {
             throw new RuntimeException(e);
+        } catch (Content2BeanException e) {
+            throw new RuntimeException(e); // TODO
         }
     }
 
-    public static CropAndResizeConfig fromNode(Content node) {
+    public static CropAndResizeConfig fromNode(Content node) throws Content2BeanException {
         // TODO : use content2bean + cleanup
-        final CropAndResizeConfig cfg;
-        try {
-            cfg = (CropAndResizeConfig) Content2BeanUtil.setProperties(new CropAndResizeConfig(), node);
-        } catch (Content2BeanException e) {
-            throw new IllegalStateException(e); // TODO
-        }
+        final CropAndResizeConfig cfg = (CropAndResizeConfig) Content2BeanUtil.setProperties(new CropAndResizeConfig(), node);
 
         // if label property wasn't set, we try using the name property, or the node name if neither was set.        
         if (StringUtils.isEmpty(cfg.getName())) {

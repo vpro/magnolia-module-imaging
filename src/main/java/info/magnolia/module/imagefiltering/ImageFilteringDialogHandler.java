@@ -1,6 +1,6 @@
 /**
- * This file Copyright (c) 2003-2008 Magnolia International
- * Ltd.  (http://www.magnolia.info). All rights reserved.
+ * This file Copyright (c) 2003-2009 Magnolia International
+ * Ltd.  (http://www.magnolia-cms.com). All rights reserved.
  *
  *
  * This file is dual-licensed under both the Magnolia
@@ -25,7 +25,7 @@
  * 2. For the Magnolia Network Agreement (MNA), this file
  * and the accompanying materials are made available under the
  * terms of the MNA which accompanies this distribution, and
- * is available at http://www.magnolia.info/mna.html
+ * is available at http://www.magnolia-cms.com/mna.html
  *
  * Any modifications to this file must keep this entire header
  * intact.
@@ -39,6 +39,7 @@ import info.magnolia.module.admininterface.SaveHandler;
 import info.magnolia.module.admininterface.dialogs.ParagraphEditDialog;
 import info.magnolia.module.imagefiltering.cropresize.CropAndResizeControl;
 import info.magnolia.module.imagefiltering.cropresize.CropAndResizeFilter;
+import info.magnolia.content2bean.Content2BeanException;
 
 import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
@@ -69,6 +70,7 @@ public class ImageFilteringDialogHandler extends ParagraphEditDialog {
 
         try {
             final ImageFilter imageFilter = new CropAndResizeFilter();
+//            final ImageFilter imageFilter = new TextOverlayImageFilter();
             final ImagesProcessor processor = new ImagesProcessor(imageFilter);
 
             final Content storageNode = getStorageNode();
@@ -90,6 +92,10 @@ public class ImageFilteringDialogHandler extends ParagraphEditDialog {
             log.error("Couldn't resize image: " + e.getMessage(), e);
             return false;
         } catch (RepositoryException e) {
+            log.error("Couldn't resize image: " + e.getMessage(), e);
+            return false;
+        } catch (Content2BeanException e) {
+             // TODO
             log.error("Couldn't resize image: " + e.getMessage(), e);
             return false;
         }
