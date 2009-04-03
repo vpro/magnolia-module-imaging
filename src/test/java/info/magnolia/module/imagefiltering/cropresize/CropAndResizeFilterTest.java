@@ -48,13 +48,6 @@ import java.io.IOException;
  */
 public class CropAndResizeFilterTest extends TestCase {
     public void testNoResizeIfWidthAndHeightAreNotSpecified() throws IOException {
-
-        final String headless = System.getProperty("java.awt.headless");
-        System.out.println("------------------------------------------------------------");
-        System.out.println("headless = " + headless);
-        System.out.println("------------------------------------------------------------");
-
-
         doResizeTest(-1, -1, 16, 8);
         doResizeTest(0, 0, 16, 8);
         doResizeTest(0, 0, new Coords(5, 6, 10, 18), 5, 12);
