@@ -17,7 +17,7 @@
     <sv:value>jsp</sv:value>
   </sv:property>
   <sv:property sv:name="i18nBasename" sv:type="String">
-    <sv:value>info.magnolia.module.imagefiltering.messages</sv:value>
+    <sv:value>info.magnolia.module.imaging.messages</sv:value>
   </sv:property>
   <sv:property sv:name="dialog" sv:type="String">
     <sv:value>sample-text-resizedimage</sv:value>

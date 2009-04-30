@@ -14,10 +14,10 @@
     <sv:value>cd535fdc-08a9-4cf6-926a-50ec31fd0616</sv:value>
   </sv:property>
   <sv:property sv:name="class" sv:type="String">
-    <sv:value>info.magnolia.module.imagefiltering.ImageFilteringDialogHandler</sv:value>
+    <sv:value>info.magnolia.module.imaging.ImageFilteringDialogHandler</sv:value>
   </sv:property>
   <sv:property sv:name="i18nBasename" sv:type="String">
-    <sv:value>info.magnolia.module.imagefiltering.messages</sv:value>
+    <sv:value>info.magnolia.module.imaging.messages</sv:value>
   </sv:property>
   <sv:node sv:name="MetaData">
     <sv:property sv:name="jcr:primaryType" sv:type="Name">

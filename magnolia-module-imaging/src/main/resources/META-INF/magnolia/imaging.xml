@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module SYSTEM "module.dtd" >
+<module>
+  <name>imaging</name>
+  <displayName>${project.name}</displayName>
+  <class>info.magnolia.imaging.Config</class>
+  <versionHandler>info.magnolia.imaging.setup.ImagingModuleVersionHandler</versionHandler>
+  <version>${project.version}</version>
+
+  <dependencies>
+    <dependency>
+      <name>core</name>
+      <version>4.1/*</version>
+    </dependency>
+  </dependencies>
+
+</module>
