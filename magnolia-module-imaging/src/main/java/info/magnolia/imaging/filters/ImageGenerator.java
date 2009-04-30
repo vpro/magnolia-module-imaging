@@ -33,39 +33,35 @@
  */
 package info.magnolia.imaging.filters;
 
-import info.magnolia.cms.core.Content;
+import info.magnolia.cms.filters.AbstractMgnlFilter;
+import info.magnolia.module.ModuleRegistry;
+import info.magnolia.imaging.Config;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.imageio.ImageIO;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 /**
- * An implementation of ImageFilter which delegates to a list of other ImageFilters.
- * 
+ * Filter responsible for the actual generation of the images.
+ * This is totally temporary code.
+ *
+ *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class ImageFilterChain<P> implements ImageFilter<P> {
-    private final List<ImageFilter<P>> filters;
+public class ImageGenerator extends AbstractMgnlFilter {
+    public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+        final String filterName = "chain";
 
-    public ImageFilterChain() {
-        this.filters = new ArrayList<ImageFilter<P>>();
+        final Config config = (Config) ModuleRegistry.Factory.getInstance().getModuleInstance("imaging");
+        final ImageFilter<?> filter = config.getFilters().get(filterName);
+        final BufferedImage result = filter.apply(null, null, null);
+
+        // TODO -- mimetype etc.
+        ImageIO.write(result, "jpg", response.getOutputStream());
     }
-
-    public List<ImageFilter<P>> getFilters() {
-        return filters;
-    }
-
-    public void addFilter(ImageFilter<P> filter) {
-        filters.add(filter);
-    }
-
-    public BufferedImage apply(BufferedImage source, P filterParams, Content dialogControlConfigNode) {
-        BufferedImage result = source;
-        for (ImageFilter<P> filter : filters) {
-            result = filter.apply(result, filterParams, dialogControlConfigNode);
-        }
-        return result;
-    }
-
 }

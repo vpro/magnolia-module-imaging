@@ -39,8 +39,10 @@ import info.magnolia.imaging.filters.ImageFilter;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
+ * An ImageFilter which loads an image from the classpath.
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
@@ -50,7 +52,11 @@ public class ResourceImage implements ImageFilter {
 
     public BufferedImage apply(BufferedImage source, Object filterParams, Content dialogControlConfigNode) {
         try {
-            return ImageIO.read(getClass().getResourceAsStream(src));
+            final InputStream input = getClass().getResourceAsStream(src);
+            if (input == null) {
+                throw new IllegalArgumentException("Can't find image at " + src);
+            }
+            return ImageIO.read(input);
         } catch (IOException e) {
             throw new RuntimeException(e); // TODO
         }

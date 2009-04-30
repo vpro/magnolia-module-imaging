@@ -20,6 +20,11 @@
       <groupId>info.magnolia</groupId>
       <artifactId>magnolia-module-admininterface</artifactId>
     </dependency>
+    <dependency>
+      <groupId>info.magnolia</groupId>
+      <artifactId>magnolia-module-imaging</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
     <dependency>
       <groupId>junit</groupId>

@@ -35,8 +35,8 @@ package info.magnolia.imaging;
 
 import info.magnolia.imaging.filters.ImageFilter;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.LinkedHashMap;
 
 /**
  *
@@ -44,7 +44,7 @@ import java.util.Map;
  * @version $Revision: $ ($Author: $)
  */
 public class Config {
-    private final Map<String, ImageFilter<?>> filters = new HashMap<String, ImageFilter<?>>();
+    private final Map<String, ImageFilter<?>> filters = new LinkedHashMap<String, ImageFilter<?>>();
 
     public void addFilter(String name, ImageFilter<?> filter) {
         filters.put(name, filter);

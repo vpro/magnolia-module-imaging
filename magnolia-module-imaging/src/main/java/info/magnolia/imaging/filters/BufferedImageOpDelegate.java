@@ -39,7 +39,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
 
 /**
- * An implementation of ImageFilter which delegates to a BufferedImageOp.
+ * An implementation of ImageFilter which delegates to a java.awt.image.BufferedImageOp.
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)

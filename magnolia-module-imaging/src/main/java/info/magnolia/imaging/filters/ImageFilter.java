@@ -40,6 +40,11 @@ import java.awt.image.BufferedImage;
 /**
  * Applies any kind of filtering to an Image.
  *
+ * TODO - the javadoc below is completely outdated.
+ * TODO - Image generation/filtering parameters can come from various places. We'll need to define how these are aggregated, if needed, etc.
+ *
+ *
+ *
  * The filtering can be configured either by the end user or within the dialog definition.
  * <ul>
  *  <li>filterParams, an arbitrary object converted to and from javascript by ImagesProcessor using JSON,
