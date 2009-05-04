@@ -33,7 +33,6 @@
  */
 package info.magnolia.imaging.filters.load;
 
-import info.magnolia.cms.core.Content;
 import info.magnolia.imaging.filters.ImageFilter;
 
 import javax.imageio.ImageIO;
@@ -50,7 +49,7 @@ import java.io.InputStream;
 public class ResourceImage implements ImageFilter {
     private String src;
 
-    public BufferedImage apply(BufferedImage source, Object filterParams, Content dialogControlConfigNode) {
+    public BufferedImage apply(BufferedImage source, Object filterParams) {
         try {
             final InputStream input = getClass().getResourceAsStream(src);
             if (input == null) {

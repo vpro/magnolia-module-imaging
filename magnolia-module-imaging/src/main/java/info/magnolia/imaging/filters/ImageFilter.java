@@ -62,6 +62,6 @@ import java.awt.image.BufferedImage;
  */
 public interface ImageFilter<P> {
 
-    BufferedImage apply(BufferedImage source, P filterParams, Content dialogControlConfigNode);
+    BufferedImage apply(BufferedImage source, P filterParams);
 
 }

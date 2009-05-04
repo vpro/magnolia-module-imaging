@@ -58,13 +58,13 @@ public class ImageFilterChainTest extends TestCase {
         filterChain.addFilter(loader);
 
 
-        final RGBAdjustFilter rgb = new RGBAdjustFilter();
-        rgb.setBFactor(0.9f);
-        filterChain.addFilter(new BufferedImageOpDelegate(rgb));
+//        final RGBAdjustFilter rgb = new RGBAdjustFilter();
+//        rgb.setBFactor(0.9f);
+        //filterChain.addFilter(new BufferedImageOpDelegate(rgb));
         filterChain.addFilter(new TextOverlayImageFilter());
 
 
-        final BufferedImage result = filterChain.apply(null, null, null);
+        final BufferedImage result = filterChain.apply(null, null);
         ImageIO.write(result, "jpg", new File("test-result.jpg"));
         Runtime.getRuntime().exec("open test-result.jpg");
 

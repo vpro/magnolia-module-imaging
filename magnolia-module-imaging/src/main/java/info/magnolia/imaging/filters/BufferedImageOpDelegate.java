@@ -33,8 +33,6 @@
  */
 package info.magnolia.imaging.filters;
 
-import info.magnolia.cms.core.Content;
-
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
 
@@ -44,14 +42,11 @@ import java.awt.image.BufferedImageOp;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class BufferedImageOpDelegate implements ImageFilter<Object> {
-    private final BufferedImageOp delegate;
+public abstract class BufferedImageOpDelegate<P> implements ImageFilter<P> {
 
-    public BufferedImageOpDelegate(BufferedImageOp delegate) {
-        this.delegate = delegate;
+    public BufferedImage apply(BufferedImage source, P filterParams) {
+        return getDelegate().filter(source, null);
     }
 
-    public BufferedImage apply(BufferedImage source, Object filterParams, Content dialogControlConfigNode) {
-        return delegate.filter(source, null);
-    }
+    protected abstract BufferedImageOp getDelegate();
 }

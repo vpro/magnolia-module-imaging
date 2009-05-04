@@ -33,8 +33,6 @@
  */
 package info.magnolia.imaging.filters;
 
-import info.magnolia.cms.core.Content;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.image.BufferedImage;
@@ -60,10 +58,10 @@ public class ImageFilterChain<P> implements ImageFilter<P> {
         filters.add(filter);
     }
 
-    public BufferedImage apply(BufferedImage source, P filterParams, Content dialogControlConfigNode) {
+    public BufferedImage apply(BufferedImage source, P filterParams) {
         BufferedImage result = source;
         for (ImageFilter<P> filter : filters) {
-            result = filter.apply(result, filterParams, dialogControlConfigNode);
+            result = filter.apply(result, filterParams);
         }
         return result;
     }

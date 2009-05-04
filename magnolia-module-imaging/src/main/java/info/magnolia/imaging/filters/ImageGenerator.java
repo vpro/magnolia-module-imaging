@@ -59,7 +59,7 @@ public class ImageGenerator extends AbstractMgnlFilter {
 
         final Config config = (Config) ModuleRegistry.Factory.getInstance().getModuleInstance("imaging");
         final ImageFilter<?> filter = config.getFilters().get(filterName);
-        final BufferedImage result = filter.apply(null, null, null);
+        final BufferedImage result = filter.apply(null, null);
 
         // TODO -- mimetype etc.
         ImageIO.write(result, "jpg", response.getOutputStream());

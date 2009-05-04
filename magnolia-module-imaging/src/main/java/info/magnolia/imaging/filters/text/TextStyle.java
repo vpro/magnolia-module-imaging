@@ -45,7 +45,7 @@ public class TextStyle {
     public static final double SHEARING_DIV_FACTOR = 20D;
     public static final double CHARSPACING_DIV_FACTOR = 10D;
 
-    private Font font;
+    private String fontName;
     private int fontStyle = Font.PLAIN;
     private Color color;
     private Color bgColor;
@@ -57,8 +57,10 @@ public class TextStyle {
         return (-1.0D * (new Double(shearingValue)).doubleValue()) / SHEARING_DIV_FACTOR;
     }
 
-    public Font deriveFont() {
-        return this.font.deriveFont(this.fontStyle, (float) this.fontSize);
+//    public Font deriveFont() {
+      //  return this.font.deriveFont(this.fontStyle, (float) this.fontSize);
+    public Font getFont() {
+        return new Font(fontName, fontStyle, fontSize);
     }
 
     // ---generated getters and setters
@@ -70,12 +72,12 @@ public class TextStyle {
         this.charSpacing = charSpacing;
     }
 
-    public Font getFont() {
-        return font;
+    public String getFontName() {
+        return fontName;
     }
 
-    public void setFont(Font font) {
-        this.font = font;
+    public void setFontName(String  fontName) {
+        this.fontName = fontName;
     }
 
     public Color getColor() {
