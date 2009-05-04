@@ -12,27 +12,29 @@
  * intact.
  *
  */
-package info.magnolia.imaging;
+package info.magnolia.imaging.filters.load;
 
-import info.magnolia.imaging.filters.ImageFilter;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.net.URL;
 
 /**
+ * An ImageFilter which loads an image from the classpath.
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class Config {
-    private final Map<String, ImageFilter<?>> filters = new LinkedHashMap<String, ImageFilter<?>>();
+public class ClasspathImageLoader extends AbstractURLImageLoader {
+    private String src;
 
-    public void addFilter(String name, ImageFilter<?> filter) {
-        filters.put(name, filter);
+    protected URL getAndValidateUrl() {
+        final URL url = getClass().getResource(src);
+        if (url == null) {
+            throw new IllegalArgumentException("Can't find image at " + src);
+        }
+        return url;
     }
 
-    public Map<String, ImageFilter<?>> getFilters() {
-        return filters;
+    public void setSrc(String src) {
+        this.src = src;
     }
 
 }

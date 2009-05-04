@@ -14,13 +14,13 @@
  */
 package info.magnolia.imaging.filters;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-import java.awt.image.BufferedImage;
 
 /**
  * An implementation of ImageFilter which delegates to a list of other ImageFilters.
- * 
+ *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */

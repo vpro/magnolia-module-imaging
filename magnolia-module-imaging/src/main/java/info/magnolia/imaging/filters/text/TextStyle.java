@@ -14,13 +14,13 @@
  */
 package info.magnolia.imaging.filters.text;
 
-import java.awt.*;
-
+import java.awt.Font;
 
 /**
+ * A simple bean holding font-related configuration. 
+ *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
- *          TODO : copied from org.mgnl.magnolia.texticons.utils
  */
 public class TextStyle {
     public static final double SHEARING_DIV_FACTOR = 20D;
@@ -28,8 +28,8 @@ public class TextStyle {
 
     private String fontName;
     private int fontStyle = Font.PLAIN;
-    private Color color;
-    private Color bgColor;
+    private String color;
+    private String bgColor;
     private double charSpacing;
     private int fontSize;
     private int shearingValue;
@@ -38,8 +38,8 @@ public class TextStyle {
         return (-1.0D * (new Double(shearingValue)).doubleValue()) / SHEARING_DIV_FACTOR;
     }
 
-//    public Font deriveFont() {
-      //  return this.font.deriveFont(this.fontStyle, (float) this.fontSize);
+    //    public Font deriveFont() {
+    //  return this.font.deriveFont(this.fontStyle, (float) this.fontSize);
     public Font getFont() {
         return new Font(fontName, fontStyle, fontSize);
     }
@@ -57,15 +57,15 @@ public class TextStyle {
         return fontName;
     }
 
-    public void setFontName(String  fontName) {
+    public void setFontName(String fontName) {
         this.fontName = fontName;
     }
 
-    public Color getColor() {
+    public String getColor() {
         return color;
     }
 
-    public void setColor(Color color) {
+    public void setColor(String color) {
         this.color = color;
     }
 
@@ -93,11 +93,11 @@ public class TextStyle {
         this.fontStyle = fontStyle;
     }
 
-    public Color getBgColor() {
+    public String getBgColor() {
         return bgColor;
     }
 
-    public void setBgColor(Color bgColor) {
+    public void setBgColor(String bgColor) {
         this.bgColor = bgColor;
     }
 }

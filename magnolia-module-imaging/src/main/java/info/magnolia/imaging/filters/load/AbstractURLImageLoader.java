@@ -19,31 +19,22 @@ import info.magnolia.imaging.filters.ImageFilter;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.InputStream;
+import java.net.URL;
 
 /**
- * An ImageFilter which loads an image from the classpath.
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class ResourceImage implements ImageFilter {
-    private String src;
-
+public abstract class AbstractURLImageLoader implements ImageFilter {
     public BufferedImage apply(BufferedImage source, Object filterParams) {
         try {
-            final InputStream input = getClass().getResourceAsStream(src);
-            if (input == null) {
-                throw new IllegalArgumentException("Can't find image at " + src);
-            }
-            return ImageIO.read(input);
+            final URL url = getAndValidateUrl();
+            return ImageIO.read(url);
         } catch (IOException e) {
             throw new RuntimeException(e); // TODO
         }
     }
 
-    public void setSrc(String src) {
-        this.src = src;
-    }
-
+    protected abstract URL getAndValidateUrl();
 }

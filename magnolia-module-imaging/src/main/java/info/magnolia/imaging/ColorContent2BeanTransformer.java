@@ -14,25 +14,17 @@
  */
 package info.magnolia.imaging;
 
-import info.magnolia.imaging.filters.ImageFilter;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
+import info.magnolia.content2bean.TransformationState;
+import info.magnolia.content2bean.TypeDescriptor;
+import info.magnolia.content2bean.impl.Content2BeanTransformerImpl;
 
 /**
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class Config {
-    private final Map<String, ImageFilter<?>> filters = new LinkedHashMap<String, ImageFilter<?>>();
-
-    public void addFilter(String name, ImageFilter<?> filter) {
-        filters.put(name, filter);
+public class ColorContent2BeanTransformer extends Content2BeanTransformerImpl {
+    protected TypeDescriptor onResolveType(TransformationState state, TypeDescriptor resolvedType) {
+        return super.onResolveType(state, resolvedType);
     }
-
-    public Map<String, ImageFilter<?>> getFilters() {
-        return filters;
-    }
-
 }

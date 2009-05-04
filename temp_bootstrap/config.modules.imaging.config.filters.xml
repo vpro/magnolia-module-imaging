@@ -117,10 +117,10 @@
           <sv:value>0b45e9c4-2e0c-4819-ba07-1cf107afecc8</sv:value>
         </sv:property>
         <sv:property sv:name="class" sv:type="String">
-          <sv:value>info.magnolia.imaging.filters.load.ResourceImage</sv:value>
+          <sv:value>info.magnolia.imaging.filters.load.URLImageLoader</sv:value>
         </sv:property>
-        <sv:property sv:name="src" sv:type="String">
-          <sv:value>/foobar</sv:value>
+        <sv:property sv:name="url" sv:type="String">
+          <sv:value>http://farm4.static.flickr.com/3334/3501467995_e878c8effb_m.jpg</sv:value>
         </sv:property>
         <sv:node sv:name="MetaData">
           <sv:property sv:name="jcr:primaryType" sv:type="Name">
@@ -133,7 +133,7 @@
             <sv:value>2009-04-30T20:16:33.108+02:00</sv:value>
           </sv:property>
           <sv:property sv:name="mgnl:lastmodified" sv:type="Date">
-            <sv:value>2009-04-30T20:17:18.089+02:00</sv:value>
+            <sv:value>2009-05-04T22:33:13.863+02:00</sv:value>
           </sv:property>
         </sv:node>
       </sv:node>
@@ -166,6 +166,43 @@
           <sv:property sv:name="mgnl:lastmodified" sv:type="Date">
             <sv:value>2009-04-30T20:16:25.267+02:00</sv:value>
           </sv:property>
+        </sv:node>
+        <sv:node sv:name="textStyle">
+          <sv:property sv:name="jcr:primaryType" sv:type="Name">
+            <sv:value>mgnl:contentNode</sv:value>
+          </sv:property>
+          <sv:property sv:name="jcr:mixinTypes" sv:type="Name">
+            <sv:value>mix:lockable</sv:value>
+          </sv:property>
+          <sv:property sv:name="jcr:uuid" sv:type="String">
+            <sv:value>9cde9880-7e7e-4935-9d88-7abae1c3e2c5</sv:value>
+          </sv:property>
+          <sv:property sv:name="color" sv:type="String">
+            <sv:value>cyan</sv:value>
+          </sv:property>
+          <sv:property sv:name="fontName" sv:type="String">
+            <sv:value>Arial</sv:value>
+          </sv:property>
+          <sv:property sv:name="fontSize" sv:type="String">
+            <sv:value>30</sv:value>
+          </sv:property>
+          <sv:property sv:name="fontStyle" sv:type="String">
+            <sv:value>1</sv:value>
+          </sv:property>
+          <sv:node sv:name="MetaData">
+            <sv:property sv:name="jcr:primaryType" sv:type="Name">
+              <sv:value>mgnl:metaData</sv:value>
+            </sv:property>
+            <sv:property sv:name="mgnl:authorid" sv:type="String">
+              <sv:value>superuser</sv:value>
+            </sv:property>
+            <sv:property sv:name="mgnl:creationdate" sv:type="Date">
+              <sv:value>2009-05-04T17:42:32.892+02:00</sv:value>
+            </sv:property>
+            <sv:property sv:name="mgnl:lastmodified" sv:type="Date">
+              <sv:value>2009-05-04T22:10:05.929+02:00</sv:value>
+            </sv:property>
+          </sv:node>
         </sv:node>
       </sv:node>
     </sv:node>

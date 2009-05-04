@@ -15,8 +15,8 @@
 package info.magnolia.imaging.filters;
 
 import info.magnolia.cms.filters.AbstractMgnlFilter;
-import info.magnolia.module.ModuleRegistry;
 import info.magnolia.imaging.Config;
+import info.magnolia.module.ModuleRegistry;
 
 import javax.imageio.ImageIO;
 import javax.servlet.FilterChain;

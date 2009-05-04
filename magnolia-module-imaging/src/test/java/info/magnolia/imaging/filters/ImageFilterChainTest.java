@@ -15,9 +15,9 @@
 package info.magnolia.imaging.filters;
 
 import com.jhlabs.image.PointFilter;
-import com.jhlabs.image.RGBAdjustFilter;
+import info.magnolia.imaging.filters.load.ClasspathImageLoader;
 import info.magnolia.imaging.filters.text.TextOverlayImageFilter;
-import info.magnolia.imaging.filters.load.ResourceImage;
+import info.magnolia.imaging.filters.text.TextStyle;
 import junit.framework.TestCase;
 
 import javax.imageio.ImageIO;
@@ -34,7 +34,7 @@ public class ImageFilterChainTest extends TestCase {
     public void testSomeTransformations() throws IOException {
 
         final ImageFilterChain filterChain = new ImageFilterChain();
-        final ResourceImage loader = new ResourceImage();
+        final ClasspathImageLoader loader = new ClasspathImageLoader();
         loader.setSrc("/IMG_1937.JPG");
         filterChain.addFilter(loader);
 
@@ -42,7 +42,14 @@ public class ImageFilterChainTest extends TestCase {
 //        final RGBAdjustFilter rgb = new RGBAdjustFilter();
 //        rgb.setBFactor(0.9f);
         //filterChain.addFilter(new BufferedImageOpDelegate(rgb));
-        filterChain.addFilter(new TextOverlayImageFilter());
+        final TextOverlayImageFilter textOverlay = new TextOverlayImageFilter();
+        final TextStyle txtStyle = new TextStyle();
+        txtStyle.setFontName("Arial");
+        txtStyle.setColor("red");
+        txtStyle.setFontSize(40);
+        txtStyle.setFontStyle(1);
+        textOverlay.setTextStyle(txtStyle);
+        filterChain.addFilter(textOverlay);
 
 
         final BufferedImage result = filterChain.apply(null, null);
@@ -50,7 +57,7 @@ public class ImageFilterChainTest extends TestCase {
         Runtime.getRuntime().exec("open test-result.jpg");
 
 /*
-        final ResourceImage overlayLoad = new ResourceImage();
+        final ClasspathImageLoader overlayLoad = new ClasspathImageLoader();
         overlayLoad.setSrc("/IMG_2463.JPG");
         final Opacity opacity = new Opacity();
         opacity.setOpacity(40);

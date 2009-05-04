@@ -14,8 +14,6 @@
  */
 package info.magnolia.imaging.filters;
 
-import info.magnolia.cms.core.Content;
-
 import java.awt.image.BufferedImage;
 
 /**

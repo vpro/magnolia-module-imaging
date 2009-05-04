@@ -12,27 +12,32 @@
  * intact.
  *
  */
-package info.magnolia.imaging;
+package info.magnolia.imaging.filters.load;
 
-import info.magnolia.imaging.filters.ImageFilter;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class Config {
-    private final Map<String, ImageFilter<?>> filters = new LinkedHashMap<String, ImageFilter<?>>();
+public class URLImageLoader extends AbstractURLImageLoader {
+    private String url;
 
-    public void addFilter(String name, ImageFilter<?> filter) {
-        filters.put(name, filter);
+    protected URL getAndValidateUrl() {
+        try {
+            return new URL(url);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e); // TODO
+        }
     }
 
-    public Map<String, ImageFilter<?>> getFilters() {
-        return filters;
+    public String getUrl() {
+        return url;
     }
 
+    public void setUrl(String url) {
+        this.url = url;
+    }
 }
