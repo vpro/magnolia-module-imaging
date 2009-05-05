@@ -27,8 +27,7 @@ public class TextFromNode extends AbstractTextOverlay<NodeBasedParameterStrategy
 
     protected String getText(NodeBasedParameterStrategy filterParams) {
         final Content node = filterParams.getParameter();
-        final String txt = node.getNodeData(propertyName).getString();
-        return txt;
+        return node.getNodeData(propertyName).getString();
     }
 
     public String getPropertyName() {
