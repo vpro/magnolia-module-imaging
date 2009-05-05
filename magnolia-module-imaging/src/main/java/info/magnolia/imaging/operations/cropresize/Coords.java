@@ -12,9 +12,12 @@
  * intact.
  *
  */
-package info.magnolia.module.imaging.cropresize;
+package info.magnolia.imaging.operations.cropresize;
 
 /**
+ * A simple bean holding the coordinates of 2 points, determining an area for cropping an image, providing
+ * helper methods calculating and validating the width and height of the area.
+ * 
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */

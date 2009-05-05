@@ -12,22 +12,24 @@
  * intact.
  *
  */
-package info.magnolia.module.imaging.cropresize;
+package info.magnolia.imaging.operations.cropresize;
 
 /**
+ * Holds the result of a human selection in a cropping ui.
+ *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class CropperInfo {
+public class CroppingInfo {
     private String configName;
     private Coords coords;
 
-    public CropperInfo(String configName, Coords coords) {
+    public CroppingInfo(String configName, Coords coords) {
         this.configName = configName;
         this.coords = coords;
     }
 
-    public CropperInfo() {
+    public CroppingInfo() {
     }
 
     // regular (generated) getters and setters :
@@ -56,7 +58,7 @@ public class CropperInfo {
             return false;
         }
 
-        CropperInfo that = (CropperInfo) o;
+        CroppingInfo that = (CroppingInfo) o;
 
         if (configName != null ? !configName.equals(that.configName) : that.configName != null) {
             return false;

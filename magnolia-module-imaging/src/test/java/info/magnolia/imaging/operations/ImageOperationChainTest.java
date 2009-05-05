@@ -16,6 +16,7 @@ package info.magnolia.imaging.operations;
 
 import com.jhlabs.image.PointFilter;
 import info.magnolia.imaging.StringParameterStrategy;
+import info.magnolia.imaging.operations.cropresize.AutoCropAndResize;
 import info.magnolia.imaging.operations.load.ClasspathImageLoader;
 import info.magnolia.imaging.operations.text.FixedText;
 import info.magnolia.imaging.operations.text.TextStyle;
@@ -41,6 +42,11 @@ public class ImageOperationChainTest extends TestCase {
         filterChain.addOperation(loader);
 
 
+        final AutoCropAndResize cropAndResize = new AutoCropAndResize();
+        cropAndResize.setTargetHeight(200);
+        cropAndResize.setTargetWidth(600);
+        filterChain.addOperation(cropAndResize);
+        
 //        final RGBAdjustFilter rgb = new RGBAdjustFilter();
 //        rgb.setBFactor(0.9f);
         //filterChain.addFilter(new BufferedImageOpDelegate(rgb));
@@ -53,7 +59,6 @@ public class ImageOperationChainTest extends TestCase {
         textOverlay.setTextStyle(txtStyle);
         textOverlay.setText("heyyyyyy");
         filterChain.addOperation(textOverlay);
-
 
         final StringParameterStrategy p = new StringParameterStrategy();
 

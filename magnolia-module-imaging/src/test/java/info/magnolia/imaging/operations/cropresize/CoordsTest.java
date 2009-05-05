@@ -12,7 +12,7 @@
  * intact.
  *
  */
-package info.magnolia.module.imaging.cropresize;
+package info.magnolia.imaging.operations.cropresize;
 
 import junit.framework.TestCase;
 

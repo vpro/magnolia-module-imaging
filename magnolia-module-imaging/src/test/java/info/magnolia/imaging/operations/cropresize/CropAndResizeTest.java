@@ -12,12 +12,9 @@
  * intact.
  *
  */
-package info.magnolia.module.imaging.cropresize;
+package info.magnolia.imaging.operations.cropresize;
 
-import info.magnolia.cms.core.Content;
-import info.magnolia.cms.core.NodeData;
 import junit.framework.TestCase;
-import static org.easymock.classextension.EasyMock.*;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -27,7 +24,7 @@ import java.io.IOException;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class CropAndResizeFilterTest extends TestCase {
+public class CropAndResizeTest extends TestCase {
     public void testNoResizeIfWidthAndHeightAreNotSpecified() throws IOException {
         doResizeTest(-1, -1, 16, 8);
         doResizeTest(0, 0, 16, 8);
@@ -55,32 +52,45 @@ public class CropAndResizeFilterTest extends TestCase {
 
     private void doResizeTest(int targetWidth, int targetHeight, Coords cropCoords, int expectedWidth, int expectedHeight) throws IOException {
         final BufferedImage dummyImg = ImageIO.read(getClass().getResourceAsStream("/funnel.gif"));
-        final BufferedImage result = new CropAndResizeFilter().resize(dummyImg, cropCoords, targetWidth, targetHeight);
+        final AutoCropAndResize op = new AutoCropAndResize();
+        op.setTargetWidth(targetWidth);
+        op.setTargetHeight(targetHeight);
+        final BufferedImage result = op.resize(dummyImg, cropCoords);
         assertEquals(expectedWidth, result.getWidth());
         assertEquals(expectedHeight, result.getHeight());
     }
 
-    public void testGetsTargetWidthAndHeightFromSpecifiedConfigSubNode() throws IOException {
-        final Content configNode = createStrictMock(Content.class);
-        final Content configSubNode = createStrictMock(Content.class);
-        final NodeData targetWidth = createStrictMock(NodeData.class);
-        final NodeData targetHeight = createStrictMock(NodeData.class);
-        expect(configNode.getChildByName("foo")).andReturn(configSubNode);
-        expect(configSubNode.getNodeData("targetWidth")).andReturn(targetWidth);
-        expect(configSubNode.getNodeData("targetHeight")).andReturn(targetHeight);
-        expect(targetWidth.getLong()).andReturn(234l);
-        expect(targetHeight.getLong()).andReturn(567l);
+    /**
+     * This test is now irrelevant since this is configured at operation level using content2bean
+     * Keeping the test around because we'll need something similar for ui - when we figure out
+     * how to connect the two together.
+     *
+     *
+     public void testGetsTargetWidthAndHeightFromSpecifiedConfigSubNode() throws IOException {
+     final Content configNode = createStrictMock(Content.class);
+     final Content configSubNode = createStrictMock(Content.class);
+     final NodeData targetWidth = createStrictMock(NodeData.class);
+     final NodeData targetHeight = createStrictMock(NodeData.class);
+     expect(configNode.getChildByName("foo")).andReturn(configSubNode);
+     expect(configSubNode.getNodeData("targetWidth")).andReturn(targetWidth);
+     expect(configSubNode.getNodeData("targetHeight")).andReturn(targetHeight);
+     expect(targetWidth.getLong()).andReturn(234l);
+     expect(targetHeight.getLong()).andReturn(567l);
 
-        replay(configNode, configSubNode, targetWidth, targetHeight);
+     replay(configNode, configSubNode, targetWidth, targetHeight);
 
-        final BufferedImage dummyImg = ImageIO.read(getClass().getResourceAsStream("/funnel.gif"));
-        final Coords cropCoords = new Coords(0, 0, 16, 8);
-        final CropperInfo cropInfo = new CropperInfo("foo", cropCoords);
-        final BufferedImage result = new CropAndResizeFilter().apply(dummyImg, cropInfo, configNode);
-        assertEquals(234, result.getWidth());
-        assertEquals(567, result.getHeight());
+     final BufferedImage dummyImg = ImageIO.read(getClass().getResourceAsStream("/funnel.gif"));
+     final Coords cropCoords = new Coords(0, 0, 16, 8);
+     final CropperInfo cropInfo = new CropperInfo("foo", cropCoords);
+     final CropAndResize op = new CropAndResize();
+     op.setTargetWidth(234);
+     op.setTargetHeight(567);
+     final BufferedImage result = op.apply(dummyImg, cropInfo, configNode);
+     assertEquals(234, result.getWidth());
+     assertEquals(567, result.getHeight());
 
-        verify(configNode, configSubNode, targetWidth, targetHeight);
-    }
+     verify(configNode, configSubNode, targetWidth, targetHeight);
+     }
+     */
 
 }
