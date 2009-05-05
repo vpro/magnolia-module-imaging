@@ -48,7 +48,7 @@ public class ColorConverterTest extends TestCase {
             ColorConverter.toColor("foo");
             fail("should have failed");
         } catch (IllegalArgumentException e) {
-            assertEquals("Can't decode color: foo. Please provide either an #ffffff hexadecimal value or a know named color.", e.getMessage());
+            assertEquals("Can't decode color: foo. Please provide either an #ffffff hexadecimal value or a known named color.", e.getMessage());
         }
     }
 
