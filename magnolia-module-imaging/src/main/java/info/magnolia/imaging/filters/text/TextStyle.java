@@ -15,6 +15,7 @@
 package info.magnolia.imaging.filters.text;
 
 import java.awt.Font;
+import java.awt.Color;
 
 /**
  * A simple bean holding font-related configuration. 
@@ -28,8 +29,8 @@ public class TextStyle {
 
     private String fontName;
     private int fontStyle = Font.PLAIN;
-    private String color;
-    private String bgColor;
+    private Color color;
+    private Color bgColor;
     private double charSpacing;
     private int fontSize;
     private int shearingValue;
@@ -61,11 +62,11 @@ public class TextStyle {
         this.fontName = fontName;
     }
 
-    public String getColor() {
+    public Color getColor() {
         return color;
     }
 
-    public void setColor(String color) {
+    public void setColor(Color color) {
         this.color = color;
     }
 
@@ -93,11 +94,11 @@ public class TextStyle {
         this.fontStyle = fontStyle;
     }
 
-    public String getBgColor() {
+    public Color getBgColor() {
         return bgColor;
     }
 
-    public void setBgColor(String bgColor) {
+    public void setBgColor(Color bgColor) {
         this.bgColor = bgColor;
     }
 }

@@ -22,6 +22,7 @@ import junit.framework.TestCase;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 
@@ -45,7 +46,7 @@ public class ImageFilterChainTest extends TestCase {
         final TextOverlayImageFilter textOverlay = new TextOverlayImageFilter();
         final TextStyle txtStyle = new TextStyle();
         txtStyle.setFontName("Arial");
-        txtStyle.setColor("red");
+        txtStyle.setColor(Color.red);
         txtStyle.setFontSize(40);
         txtStyle.setFontStyle(1);
         textOverlay.setTextStyle(txtStyle);

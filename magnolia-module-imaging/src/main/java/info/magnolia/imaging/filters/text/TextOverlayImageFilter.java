@@ -51,7 +51,7 @@ public class TextOverlayImageFilter implements ImageFilter<TextStyle> {
         float f = 0.0F;
         final Font font = textStyle.getFont();
         g.setFont(font);
-        g.setColor(ColorConverter.toColor(textStyle.getColor()));
+        g.setColor(textStyle.getColor());
 
         final FontMetrics fontMetrics = g.getFontMetrics();
         final FontRenderContext fontRenderContext = new FontRenderContext(null, false, false);
