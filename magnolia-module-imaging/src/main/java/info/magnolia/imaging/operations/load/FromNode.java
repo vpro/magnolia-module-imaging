@@ -32,12 +32,16 @@ import java.io.InputStream;
  * @version $Revision: $ ($Author: $)
  */
 public class FromNode implements ImageOperation<NodeBasedParameterStrategy> {
+    private String propertyName = "binary";
 
     public BufferedImage apply(BufferedImage source, NodeBasedParameterStrategy filterParams) {
         try {
             // TODO - ensure this is an appropriate node/property
+
+            // TODO -- AggregationFilter is not playing well here when using DMS.
+            // TODO --- It's tied too tightly to page rendering.
             final Content node = filterParams.getParameter();
-            final NodeData data = node.getNodeData("binary");
+            final NodeData data = node.getNodeData(propertyName);
             final InputStream in = data.getValue().getStream();
             return ImageIO.read(in);
         } catch (IOException e) {
@@ -45,7 +49,14 @@ public class FromNode implements ImageOperation<NodeBasedParameterStrategy> {
         } catch (RepositoryException e) {
             throw new RuntimeException(e); // TODO
         }
-
-
     }
+
+    public String getPropertyName() {
+        return propertyName;
+    }
+
+    public void setPropertyName(String propertyName) {
+        this.propertyName = propertyName;
+    }
+
 }
