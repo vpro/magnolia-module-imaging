@@ -37,7 +37,7 @@ public class ColorConverter {
         } else if (s.startsWith("#")) {
             return Color.decode(s);
         } else {
-            throw new IllegalArgumentException("Can't decode color: " + s + ". Please provide either an #ffffff hexadecimal value or a know named color.");
+            throw new IllegalArgumentException("Can't decode color: " + s + ". Please provide either an #ffffff hexadecimal value or a known named color.");
         }
     }
 
@@ -53,8 +53,8 @@ public class ColorConverter {
      * Since we've already loaded the java.awt.Color, there is virtually
      * no hit on performance or memory usage, except for this very small
      * map.
-     * Yes, this is a bit ugly, since we're relying on a convention..
-     * .. but it is not very likely to change.
+     * Yes, this is a bit ugly, since we're relying on how those constants
+     * are declared ... but it is not very likely to change, is it ?
      */
     private static Map<String, Color> reflectivelyGetNamedColors() {
         try {
