@@ -12,22 +12,30 @@
  * intact.
  *
  */
-package info.magnolia.imaging.filters;
+package info.magnolia.imaging.operations.load;
 
+import info.magnolia.imaging.ImageOperation;
+import info.magnolia.imaging.ParameterStrategy;
+
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
+import java.io.IOException;
+import java.net.URL;
 
 /**
- * An implementation of ImageFilter which delegates to a java.awt.image.BufferedImageOp.
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public abstract class BufferedImageOpDelegate<P extends FilterParameterStrategy<?>> implements ImageFilter<P> {
-
+public abstract class AbstractURLImageLoader<P extends ParameterStrategy<?>> implements ImageOperation<P> {
     public BufferedImage apply(BufferedImage source, P filterParams) {
-        return getDelegate().filter(source, null);
+        try {
+            final URL url = getAndValidateUrl();
+            return ImageIO.read(url);
+        } catch (IOException e) {
+            throw new RuntimeException(e); // TODO
+        }
     }
 
-    protected abstract BufferedImageOp getDelegate();
+    protected abstract URL getAndValidateUrl();
 }

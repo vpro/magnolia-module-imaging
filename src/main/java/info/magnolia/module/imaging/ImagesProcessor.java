@@ -22,7 +22,7 @@ import info.magnolia.cms.util.NodeDataUtil;
 import info.magnolia.module.cropui.CropAndResizeControl;
 import info.magnolia.content2bean.Content2BeanUtil;
 import info.magnolia.content2bean.Content2BeanException;
-import info.magnolia.imaging.filters.ImageFilter;
+import info.magnolia.imaging.operations.ImageFilter;
 import net.sf.json.JSONObject;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;

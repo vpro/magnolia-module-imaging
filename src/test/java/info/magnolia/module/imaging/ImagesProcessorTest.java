@@ -26,7 +26,7 @@ import info.magnolia.module.imaging.cropresize.CropAndResizeFilter;
 import info.magnolia.module.imaging.cropresize.CropperInfo;
 import info.magnolia.test.mock.MockNodeData;
 import info.magnolia.imaging.OuputFormat;
-import info.magnolia.imaging.filters.ImageFilter;
+import info.magnolia.imaging.operations.ImageFilter;
 import junit.framework.TestCase;
 import static org.easymock.classextension.EasyMock.*;
 

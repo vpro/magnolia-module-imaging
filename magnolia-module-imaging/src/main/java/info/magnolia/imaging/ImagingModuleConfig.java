@@ -12,13 +12,25 @@
  * intact.
  *
  */
-package info.magnolia.imaging.filters;
+package info.magnolia.imaging;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public interface FilterParameterStrategy<T> {
-    T getParameter();
+public class ImagingModuleConfig<P extends ParameterStrategy<?>> {
+    private final Map<String, ImageOperation<P>> operations = new LinkedHashMap<String, ImageOperation<P>>();
+
+    public void addOperation(String name, ImageOperation<P> operation) {
+        operations.put(name, operation);
+    }
+
+    public Map<String, ImageOperation<P>> getOperations() {
+        return operations;
+    }
+
 }

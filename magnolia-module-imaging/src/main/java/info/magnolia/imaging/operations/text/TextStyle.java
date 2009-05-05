@@ -12,10 +12,10 @@
  * intact.
  *
  */
-package info.magnolia.imaging.filters.text;
+package info.magnolia.imaging.operations.text;
 
-import java.awt.Font;
 import java.awt.Color;
+import java.awt.Font;
 
 /**
  * A simple bean holding font-related configuration. 

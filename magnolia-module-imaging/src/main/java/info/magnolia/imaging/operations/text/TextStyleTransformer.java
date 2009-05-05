@@ -12,7 +12,7 @@
  * intact.
  *
  */
-package info.magnolia.imaging.filters.text;
+package info.magnolia.imaging.operations.text;
 
 import info.magnolia.content2bean.Content2BeanException;
 import info.magnolia.content2bean.impl.Content2BeanTransformerImpl;

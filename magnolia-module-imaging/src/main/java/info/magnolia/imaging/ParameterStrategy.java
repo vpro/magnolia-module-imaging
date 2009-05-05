@@ -12,15 +12,13 @@
  * intact.
  *
  */
-package info.magnolia.imaging.filters;
+package info.magnolia.imaging;
 
 /**
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class StringFilterParameterStrategy implements FilterParameterStrategy<String> {
-    public String getParameter() {
-        return "hello";
-    }
+public interface ParameterStrategy<T> {
+    T getParameter();
 }

@@ -15,7 +15,7 @@
 package info.magnolia.module.imaging.cropresize;
 
 import info.magnolia.cms.core.Content;
-import info.magnolia.imaging.filters.ImageFilter;
+import info.magnolia.imaging.operations.ImageFilter;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;

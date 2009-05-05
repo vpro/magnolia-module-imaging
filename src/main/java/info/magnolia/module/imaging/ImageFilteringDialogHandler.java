@@ -21,7 +21,7 @@ import info.magnolia.module.admininterface.dialogs.ParagraphEditDialog;
 import info.magnolia.module.cropui.CropAndResizeControl;
 import info.magnolia.module.imaging.cropresize.CropAndResizeFilter;
 import info.magnolia.content2bean.Content2BeanException;
-import info.magnolia.imaging.filters.ImageFilter;
+import info.magnolia.imaging.operations.ImageFilter;
 
 import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;

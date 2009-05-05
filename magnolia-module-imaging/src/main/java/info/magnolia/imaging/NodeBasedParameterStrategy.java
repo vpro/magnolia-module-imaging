@@ -12,20 +12,18 @@
  * intact.
  *
  */
-package info.magnolia.imaging.filters.text;
+package info.magnolia.imaging;
 
-import info.magnolia.imaging.filters.StringFilterParameterStrategy;
-
-import java.awt.image.BufferedImage;
+import info.magnolia.cms.core.Content;
+import info.magnolia.context.MgnlContext;
 
 /**
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class GivenText extends TextOverlayImageFilter<StringFilterParameterStrategy>{
-    public BufferedImage apply(BufferedImage source, StringFilterParameterStrategy filterParams) {
-        renderText(source, filterParams.getParameter(), 10, 10);
-        return source;
+public class NodeBasedParameterStrategy implements ParameterStrategy<Content> {
+    public Content getParameter() {
+        return MgnlContext.getAggregationState().getCurrentContent();
     }
 }

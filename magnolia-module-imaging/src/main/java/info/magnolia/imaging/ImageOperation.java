@@ -12,7 +12,7 @@
  * intact.
  *
  */
-package info.magnolia.imaging.filters;
+package info.magnolia.imaging;
 
 import java.awt.image.BufferedImage;
 
@@ -39,7 +39,7 @@ import java.awt.image.BufferedImage;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public interface ImageFilter<P extends FilterParameterStrategy<?>> {
+public interface ImageOperation<P extends ParameterStrategy<?>> {
 
     BufferedImage apply(BufferedImage source, P filterParams);
 

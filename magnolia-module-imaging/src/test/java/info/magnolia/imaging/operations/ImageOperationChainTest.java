@@ -12,17 +12,18 @@
  * intact.
  *
  */
-package info.magnolia.imaging.filters;
+package info.magnolia.imaging.operations;
 
 import com.jhlabs.image.PointFilter;
-import info.magnolia.imaging.filters.load.ClasspathImageLoader;
-import info.magnolia.imaging.filters.text.TextStyle;
-import info.magnolia.imaging.filters.text.GivenText;
+import info.magnolia.imaging.StringParameterStrategy;
+import info.magnolia.imaging.operations.load.ClasspathImageLoader;
+import info.magnolia.imaging.operations.text.FixedText;
+import info.magnolia.imaging.operations.text.TextStyle;
 import junit.framework.TestCase;
 
 import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -31,29 +32,30 @@ import java.io.IOException;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class ImageFilterChainTest extends TestCase {
+public class ImageOperationChainTest extends TestCase {
     public void testSomeTransformations() throws IOException {
 
-        final ImageFilterChain<StringFilterParameterStrategy> filterChain = new ImageFilterChain<StringFilterParameterStrategy>();
-        final ClasspathImageLoader<StringFilterParameterStrategy> loader = new ClasspathImageLoader<StringFilterParameterStrategy>();
+        final ImageOperationChain<StringParameterStrategy> filterChain = new ImageOperationChain<StringParameterStrategy>();
+        final ClasspathImageLoader<StringParameterStrategy> loader = new ClasspathImageLoader<StringParameterStrategy>();
         loader.setSrc("/IMG_1937.JPG");
-        filterChain.addFilter(loader);
+        filterChain.addOperation(loader);
 
 
 //        final RGBAdjustFilter rgb = new RGBAdjustFilter();
 //        rgb.setBFactor(0.9f);
         //filterChain.addFilter(new BufferedImageOpDelegate(rgb));
-        final GivenText textOverlay = new GivenText();
+        final FixedText textOverlay = new FixedText();
         final TextStyle txtStyle = new TextStyle();
         txtStyle.setFontName("Arial");
         txtStyle.setColor(Color.red);
         txtStyle.setFontSize(40);
         txtStyle.setFontStyle(1);
         textOverlay.setTextStyle(txtStyle);
-        filterChain.addFilter(textOverlay);
+        textOverlay.setText("heyyyyyy");
+        filterChain.addOperation(textOverlay);
 
 
-        final StringFilterParameterStrategy p = new StringFilterParameterStrategy();
+        final StringParameterStrategy p = new StringParameterStrategy();
 
         final BufferedImage result = filterChain.apply(null, p);
         ImageIO.write(result, "jpg", new File("test-result.jpg"));
@@ -65,11 +67,11 @@ public class ImageFilterChainTest extends TestCase {
         final Opacity opacity = new Opacity();
         opacity.setOpacity(40);
 
-        final ImageFilterChain overlay = new ImageFilterChain();
+        final ImageOperationChain overlay = new ImageOperationChain();
         overlay.addFilter(overlayLoad);
 
         overlay.addFilter(opacity);
-        overlay.addFilter(new ImageFilter() {
+        overlay.addFilter(new ImageOperation() {
             public BufferedImage apply(BufferedImage src, Object filterParams, Content dialogControlConfigNode) {
                 final ColorModel cm = src.getColorModel();
                 final WritableRaster raster = cm.createCompatibleWritableRaster(src.getWidth(), src.getHeight());
@@ -108,7 +110,7 @@ public class ImageFilterChainTest extends TestCase {
 
     /*
 
-    overlay.addFilter(new ImageFilter() {
+    overlay.addFilter(new ImageOperation() {
             public BufferedImage apply(BufferedImage src, Object filterParams, Content dialogControlConfigNode) {
                 final ColorModel cm = src.getColorModel();
                 final WritableRaster raster = cm.createCompatibleWritableRaster(src.getWidth(), src.getHeight());

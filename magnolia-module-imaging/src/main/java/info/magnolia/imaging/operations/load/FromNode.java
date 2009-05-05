@@ -12,12 +12,12 @@
  * intact.
  *
  */
-package info.magnolia.imaging.filters.load;
+package info.magnolia.imaging.operations.load;
 
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.NodeData;
-import info.magnolia.imaging.filters.ImageFilter;
-import info.magnolia.imaging.filters.NodeFilterParameterStrategy;
+import info.magnolia.imaging.ImageOperation;
+import info.magnolia.imaging.NodeBasedParameterStrategy;
 
 import javax.imageio.ImageIO;
 import javax.jcr.RepositoryException;
@@ -31,9 +31,9 @@ import java.io.InputStream;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class FromNode implements ImageFilter<NodeFilterParameterStrategy> {
+public class FromNode implements ImageOperation<NodeBasedParameterStrategy> {
 
-    public BufferedImage apply(BufferedImage source, NodeFilterParameterStrategy filterParams) {
+    public BufferedImage apply(BufferedImage source, NodeBasedParameterStrategy filterParams) {
         try {
             // TODO - ensure this is an appropriate node/property
             final Content node = filterParams.getParameter();

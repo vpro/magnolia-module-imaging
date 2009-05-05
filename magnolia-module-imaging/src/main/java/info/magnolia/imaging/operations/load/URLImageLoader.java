@@ -12,9 +12,9 @@
  * intact.
  *
  */
-package info.magnolia.imaging.filters.load;
+package info.magnolia.imaging.operations.load;
 
-import info.magnolia.imaging.filters.FilterParameterStrategy;
+import info.magnolia.imaging.ParameterStrategy;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -24,7 +24,7 @@ import java.net.URL;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class URLImageLoader<P extends FilterParameterStrategy<?>> extends AbstractURLImageLoader<P> {
+public class URLImageLoader<P extends ParameterStrategy<?>> extends AbstractURLImageLoader<P> {
     private String url;
 
     protected URL getAndValidateUrl() {

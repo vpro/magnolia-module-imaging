@@ -12,7 +12,7 @@
  * intact.
  *
  */
-package info.magnolia.imaging.filters;
+package info.magnolia.imaging;
 
 import junit.framework.TestCase;
 
@@ -21,14 +21,12 @@ import javax.imageio.plugins.bmp.BMPImageWriteParam;
 import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
 import java.util.Locale;
 
-import info.magnolia.imaging.OuputFormat;
-
 /**
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class ImageFormatTest extends TestCase {
+public class OutputFormatTest extends TestCase {
 
     public void testQualityIsProperlyConvertedToOneZeroRangeAndSetsCompressionModeToExplicit() {
         final ImageWriteParam param = new JPEGImageWriteParam(Locale.getDefault());

@@ -12,25 +12,30 @@
  * intact.
  *
  */
-package info.magnolia.imaging.filters.text;
+package info.magnolia.imaging.operations.text;
 
 import info.magnolia.cms.core.Content;
-import info.magnolia.imaging.filters.NodeFilterParameterStrategy;
-
-import java.awt.image.BufferedImage;
+import info.magnolia.imaging.NodeBasedParameterStrategy;
 
 /**
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class TextFromNode extends TextOverlayImageFilter<NodeFilterParameterStrategy> {
-    public BufferedImage apply(BufferedImage source, NodeFilterParameterStrategy filterParams) {
+public class TextFromNode extends AbstractTextOverlay<NodeBasedParameterStrategy> {
+    private String propertyName = "text";
 
+    protected String getText(NodeBasedParameterStrategy filterParams) {
         final Content node = filterParams.getParameter();
-        final String txt = node.getNodeData("text").getString();
-        renderText(source, txt, 10, 10);
+        final String txt = node.getNodeData(propertyName).getString();
+        return txt;
+    }
 
-        return source;
+    public String getPropertyName() {
+        return propertyName;
+    }
+
+    public void setPropertyName(String propertyName) {
+        this.propertyName = propertyName;
     }
 }

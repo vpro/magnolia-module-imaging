@@ -12,10 +12,10 @@
  * intact.
  *
  */
-package info.magnolia.imaging.filters.text;
+package info.magnolia.imaging.operations.text;
 
-import info.magnolia.imaging.filters.FilterParameterStrategy;
-import info.magnolia.imaging.filters.ImageFilter;
+import info.magnolia.imaging.ImageOperation;
+import info.magnolia.imaging.ParameterStrategy;
 
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -29,8 +29,17 @@ import java.awt.image.BufferedImage;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public abstract class TextOverlayImageFilter<P extends FilterParameterStrategy<?>> implements ImageFilter<P> {
+public abstract class AbstractTextOverlay<P extends ParameterStrategy<?>> implements ImageOperation<P> {
     private TextStyle textStyle;
+
+    public BufferedImage apply(BufferedImage source, P filterParams) {
+        final String txt = getText(filterParams);
+        renderText(source, txt, 10, 10);
+
+        return source;
+    }
+
+    protected abstract String getText(P params);
 
     // roughly copied from texticons-BackgroundImageRenderer
     protected void renderText(final BufferedImage src, final String txt, final int txtPositionX, final int txtPositionY) {

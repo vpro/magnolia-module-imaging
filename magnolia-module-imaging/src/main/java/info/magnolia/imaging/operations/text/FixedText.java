@@ -12,18 +12,28 @@
  * intact.
  *
  */
-package info.magnolia.imaging.filters;
+package info.magnolia.imaging.operations.text;
 
-import info.magnolia.cms.core.Content;
-import info.magnolia.context.MgnlContext;
+import info.magnolia.imaging.ParameterStrategy;
 
 /**
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class NodeFilterParameterStrategy implements FilterParameterStrategy<Content> {
-    public Content getParameter() {
-        return MgnlContext.getAggregationState().getCurrentContent();
+public class FixedText<P extends ParameterStrategy<?>> extends AbstractTextOverlay<P> {
+    private String text;
+
+    protected String getText(P params) {
+        // TODO : i18n
+        return getText();
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 }

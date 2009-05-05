@@ -3,7 +3,7 @@
 <module>
   <name>imaging</name>
   <displayName>${project.name}</displayName>
-  <class>info.magnolia.imaging.Config</class>
+  <class>info.magnolia.imaging.ImagingModuleConfig</class>
   <versionHandler>info.magnolia.imaging.setup.ImagingModuleVersionHandler</versionHandler>
   <version>${project.version}</version>
 
