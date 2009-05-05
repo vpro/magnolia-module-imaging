@@ -12,10 +12,11 @@
  * intact.
  *
  */
-package info.magnolia.imaging.filters;
+package info.magnolia.imaging;
 
 import info.magnolia.cms.filters.AbstractMgnlFilter;
-import info.magnolia.imaging.Config;
+import info.magnolia.imaging.filters.NodeFilterParameterStrategy;
+import info.magnolia.imaging.filters.ImageFilter;
 import info.magnolia.module.ModuleRegistry;
 
 import javax.imageio.ImageIO;
@@ -38,9 +39,11 @@ public class ImageGenerator extends AbstractMgnlFilter {
     public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         final String filterName = "chain";
 
-        final Config config = (Config) ModuleRegistry.Factory.getInstance().getModuleInstance("imaging");
-        final ImageFilter<?> filter = config.getFilters().get(filterName);
-        final BufferedImage result = filter.apply(null, null);
+        final Config<NodeFilterParameterStrategy> config = (Config<NodeFilterParameterStrategy>) ModuleRegistry.Factory.getInstance().getModuleInstance("imaging");
+        final ImageFilter<NodeFilterParameterStrategy> filter = config.getFilters().get(filterName);
+
+        final NodeFilterParameterStrategy p = new NodeFilterParameterStrategy();
+        final BufferedImage result = filter.apply(null, p);
 
         // TODO -- mimetype etc.
         ImageIO.write(result, "jpg", response.getOutputStream());

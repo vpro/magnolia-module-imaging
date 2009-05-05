@@ -14,6 +14,7 @@
  */
 package info.magnolia.imaging;
 
+import info.magnolia.imaging.filters.FilterParameterStrategy;
 import info.magnolia.imaging.filters.ImageFilter;
 
 import java.util.LinkedHashMap;
@@ -24,14 +25,14 @@ import java.util.Map;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class Config {
-    private final Map<String, ImageFilter<?>> filters = new LinkedHashMap<String, ImageFilter<?>>();
+public class Config<P extends FilterParameterStrategy<?>> {
+    private final Map<String, ImageFilter<P>> filters = new LinkedHashMap<String, ImageFilter<P>>();
 
-    public void addFilter(String name, ImageFilter<?> filter) {
+    public void addFilter(String name, ImageFilter<P> filter) {
         filters.put(name, filter);
     }
 
-    public Map<String, ImageFilter<?>> getFilters() {
+    public Map<String, ImageFilter<P>> getFilters() {
         return filters;
     }
 

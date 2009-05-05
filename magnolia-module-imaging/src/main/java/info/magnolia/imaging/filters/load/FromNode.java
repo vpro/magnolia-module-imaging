@@ -14,28 +14,38 @@
  */
 package info.magnolia.imaging.filters.load;
 
+import info.magnolia.cms.core.Content;
+import info.magnolia.cms.core.NodeData;
 import info.magnolia.imaging.filters.ImageFilter;
-import info.magnolia.imaging.filters.FilterParameterStrategy;
+import info.magnolia.imaging.filters.NodeFilterParameterStrategy;
 
 import javax.imageio.ImageIO;
+import javax.jcr.RepositoryException;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
+
 
 /**
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public abstract class AbstractURLImageLoader<P extends FilterParameterStrategy<?>> implements ImageFilter<P> {
-    public BufferedImage apply(BufferedImage source, P filterParams) {
+public class FromNode implements ImageFilter<NodeFilterParameterStrategy> {
+
+    public BufferedImage apply(BufferedImage source, NodeFilterParameterStrategy filterParams) {
         try {
-            final URL url = getAndValidateUrl();
-            return ImageIO.read(url);
+            // TODO - ensure this is an appropriate node/property
+            final Content node = filterParams.getParameter();
+            final NodeData data = node.getNodeData("binary");
+            final InputStream in = data.getValue().getStream();
+            return ImageIO.read(in);
         } catch (IOException e) {
             throw new RuntimeException(e); // TODO
+        } catch (RepositoryException e) {
+            throw new RuntimeException(e); // TODO
         }
-    }
 
-    protected abstract URL getAndValidateUrl();
+
+    }
 }

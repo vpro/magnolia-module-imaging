@@ -14,20 +14,16 @@
  */
 package info.magnolia.imaging.filters;
 
-import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
+import info.magnolia.cms.core.Content;
+import info.magnolia.context.MgnlContext;
 
 /**
- * An implementation of ImageFilter which delegates to a java.awt.image.BufferedImageOp.
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public abstract class BufferedImageOpDelegate<P extends FilterParameterStrategy<?>> implements ImageFilter<P> {
-
-    public BufferedImage apply(BufferedImage source, P filterParams) {
-        return getDelegate().filter(source, null);
+public class NodeFilterParameterStrategy implements FilterParameterStrategy<Content> {
+    public Content getParameter() {
+        return MgnlContext.getAggregationState().getCurrentContent();
     }
-
-    protected abstract BufferedImageOp getDelegate();
 }

@@ -24,7 +24,7 @@ import java.util.List;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class ImageFilterChain<P> implements ImageFilter<P> {
+public class ImageFilterChain<P extends FilterParameterStrategy<?>> implements ImageFilter<P> {
     private final List<ImageFilter<P>> filters;
 
     public ImageFilterChain() {

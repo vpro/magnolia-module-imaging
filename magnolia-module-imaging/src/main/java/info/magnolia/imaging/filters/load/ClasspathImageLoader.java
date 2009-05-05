@@ -14,6 +14,8 @@
  */
 package info.magnolia.imaging.filters.load;
 
+import info.magnolia.imaging.filters.FilterParameterStrategy;
+
 import java.net.URL;
 
 /**
@@ -22,7 +24,7 @@ import java.net.URL;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class ClasspathImageLoader extends AbstractURLImageLoader {
+public class ClasspathImageLoader<P extends FilterParameterStrategy<?>> extends AbstractURLImageLoader<P> {
     private String src;
 
     protected URL getAndValidateUrl() {

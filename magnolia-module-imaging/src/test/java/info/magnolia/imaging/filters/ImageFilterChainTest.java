@@ -16,8 +16,8 @@ package info.magnolia.imaging.filters;
 
 import com.jhlabs.image.PointFilter;
 import info.magnolia.imaging.filters.load.ClasspathImageLoader;
-import info.magnolia.imaging.filters.text.TextOverlayImageFilter;
 import info.magnolia.imaging.filters.text.TextStyle;
+import info.magnolia.imaging.filters.text.GivenText;
 import junit.framework.TestCase;
 
 import javax.imageio.ImageIO;
@@ -27,15 +27,15 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- *
+ * .
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
 public class ImageFilterChainTest extends TestCase {
     public void testSomeTransformations() throws IOException {
 
-        final ImageFilterChain filterChain = new ImageFilterChain();
-        final ClasspathImageLoader loader = new ClasspathImageLoader();
+        final ImageFilterChain<StringFilterParameterStrategy> filterChain = new ImageFilterChain<StringFilterParameterStrategy>();
+        final ClasspathImageLoader<StringFilterParameterStrategy> loader = new ClasspathImageLoader<StringFilterParameterStrategy>();
         loader.setSrc("/IMG_1937.JPG");
         filterChain.addFilter(loader);
 
@@ -43,7 +43,7 @@ public class ImageFilterChainTest extends TestCase {
 //        final RGBAdjustFilter rgb = new RGBAdjustFilter();
 //        rgb.setBFactor(0.9f);
         //filterChain.addFilter(new BufferedImageOpDelegate(rgb));
-        final TextOverlayImageFilter textOverlay = new TextOverlayImageFilter();
+        final GivenText textOverlay = new GivenText();
         final TextStyle txtStyle = new TextStyle();
         txtStyle.setFontName("Arial");
         txtStyle.setColor(Color.red);
@@ -53,7 +53,9 @@ public class ImageFilterChainTest extends TestCase {
         filterChain.addFilter(textOverlay);
 
 
-        final BufferedImage result = filterChain.apply(null, null);
+        final StringFilterParameterStrategy p = new StringFilterParameterStrategy();
+
+        final BufferedImage result = filterChain.apply(null, p);
         ImageIO.write(result, "jpg", new File("test-result.jpg"));
         Runtime.getRuntime().exec("open test-result.jpg");
 

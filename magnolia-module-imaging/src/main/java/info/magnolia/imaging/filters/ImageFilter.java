@@ -39,7 +39,7 @@ import java.awt.image.BufferedImage;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public interface ImageFilter<P> {
+public interface ImageFilter<P extends FilterParameterStrategy<?>> {
 
     BufferedImage apply(BufferedImage source, P filterParams);
 

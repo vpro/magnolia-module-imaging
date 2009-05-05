@@ -12,22 +12,20 @@
  * intact.
  *
  */
-package info.magnolia.imaging.filters;
+package info.magnolia.imaging.filters.text;
+
+import info.magnolia.imaging.filters.StringFilterParameterStrategy;
 
 import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
 
 /**
- * An implementation of ImageFilter which delegates to a java.awt.image.BufferedImageOp.
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public abstract class BufferedImageOpDelegate<P extends FilterParameterStrategy<?>> implements ImageFilter<P> {
-
-    public BufferedImage apply(BufferedImage source, P filterParams) {
-        return getDelegate().filter(source, null);
+public class GivenText extends TextOverlayImageFilter<StringFilterParameterStrategy>{
+    public BufferedImage apply(BufferedImage source, StringFilterParameterStrategy filterParams) {
+        renderText(source, filterParams.getParameter(), 10, 10);
+        return source;
     }
-
-    protected abstract BufferedImageOp getDelegate();
 }

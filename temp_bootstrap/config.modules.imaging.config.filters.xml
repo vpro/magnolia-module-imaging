@@ -148,7 +148,7 @@
           <sv:value>3c29d6e1-e2a4-4bc3-8e61-ae47062a5f85</sv:value>
         </sv:property>
         <sv:property sv:name="class" sv:type="String">
-          <sv:value>info.magnolia.imaging.filters.text.TextOverlayImageFilter</sv:value>
+          <sv:value>info.magnolia.imaging.filters.text.TextFromNode</sv:value>
         </sv:property>
         <sv:node sv:name="MetaData">
           <sv:property sv:name="jcr:primaryType" sv:type="Name">
@@ -164,7 +164,7 @@
             <sv:value>2009-04-30T20:15:18.901+02:00</sv:value>
           </sv:property>
           <sv:property sv:name="mgnl:lastmodified" sv:type="Date">
-            <sv:value>2009-04-30T20:16:25.267+02:00</sv:value>
+            <sv:value>2009-05-05T15:50:03.574+02:00</sv:value>
           </sv:property>
         </sv:node>
         <sv:node sv:name="textStyle">
@@ -178,10 +178,10 @@
             <sv:value>9cde9880-7e7e-4935-9d88-7abae1c3e2c5</sv:value>
           </sv:property>
           <sv:property sv:name="color" sv:type="String">
-            <sv:value>cyan</sv:value>
+            <sv:value>yellow</sv:value>
           </sv:property>
           <sv:property sv:name="fontName" sv:type="String">
-            <sv:value>Arial</sv:value>
+            <sv:value>Tahoma</sv:value>
           </sv:property>
           <sv:property sv:name="fontSize" sv:type="String">
             <sv:value>30</sv:value>
@@ -200,7 +200,7 @@
               <sv:value>2009-05-04T17:42:32.892+02:00</sv:value>
             </sv:property>
             <sv:property sv:name="mgnl:lastmodified" sv:type="Date">
-              <sv:value>2009-05-04T22:10:05.929+02:00</sv:value>
+              <sv:value>2009-05-05T15:48:21.701+02:00</sv:value>
             </sv:property>
           </sv:node>
         </sv:node>

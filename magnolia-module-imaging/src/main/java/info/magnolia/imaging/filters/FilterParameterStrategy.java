@@ -14,20 +14,11 @@
  */
 package info.magnolia.imaging.filters;
 
-import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
-
 /**
- * An implementation of ImageFilter which delegates to a java.awt.image.BufferedImageOp.
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public abstract class BufferedImageOpDelegate<P extends FilterParameterStrategy<?>> implements ImageFilter<P> {
-
-    public BufferedImage apply(BufferedImage source, P filterParams) {
-        return getDelegate().filter(source, null);
-    }
-
-    protected abstract BufferedImageOp getDelegate();
+public interface FilterParameterStrategy<T> {
+    T getParameter();
 }

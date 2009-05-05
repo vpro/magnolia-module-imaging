@@ -12,22 +12,25 @@
  * intact.
  *
  */
-package info.magnolia.imaging.filters;
+package info.magnolia.imaging.filters.text;
+
+import info.magnolia.cms.core.Content;
+import info.magnolia.imaging.filters.NodeFilterParameterStrategy;
 
 import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
 
 /**
- * An implementation of ImageFilter which delegates to a java.awt.image.BufferedImageOp.
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public abstract class BufferedImageOpDelegate<P extends FilterParameterStrategy<?>> implements ImageFilter<P> {
+public class TextFromNode extends TextOverlayImageFilter<NodeFilterParameterStrategy> {
+    public BufferedImage apply(BufferedImage source, NodeFilterParameterStrategy filterParams) {
 
-    public BufferedImage apply(BufferedImage source, P filterParams) {
-        return getDelegate().filter(source, null);
+        final Content node = filterParams.getParameter();
+        final String txt = node.getNodeData("text").getString();
+        renderText(source, txt, 10, 10);
+
+        return source;
     }
-
-    protected abstract BufferedImageOp getDelegate();
 }

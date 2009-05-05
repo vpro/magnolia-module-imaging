@@ -14,7 +14,7 @@
  */
 package info.magnolia.imaging.filters.text;
 
-import info.magnolia.imaging.ColorConverter;
+import info.magnolia.imaging.filters.FilterParameterStrategy;
 import info.magnolia.imaging.filters.ImageFilter;
 
 import java.awt.Font;
@@ -29,16 +29,12 @@ import java.awt.image.BufferedImage;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class TextOverlayImageFilter implements ImageFilter<TextStyle> {
+public abstract class TextOverlayImageFilter<P extends FilterParameterStrategy<?>> implements ImageFilter<P> {
     private TextStyle textStyle;
 
-    public BufferedImage apply(BufferedImage src, TextStyle filterParams) {
-        renderText(src.createGraphics(), "Hello world", 10, 10);
-        return src;
-    }
-
     // roughly copied from texticons-BackgroundImageRenderer
-    protected void renderText(final Graphics2D g, final String txt, final int txtPositionX, final int txtPositionY) {
+    protected void renderText(final BufferedImage src, final String txt, final int txtPositionX, final int txtPositionY) {
+        final Graphics2D g = src.createGraphics();
         // shear(g, style.getShearingValue());
 //        FontMetrics fontMetrics = g.getFontMetrics();
 //        int lineHeight = fontMetrics.getHeight();
