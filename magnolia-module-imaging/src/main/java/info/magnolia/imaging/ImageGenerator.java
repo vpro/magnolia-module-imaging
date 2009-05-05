@@ -27,8 +27,8 @@ import java.io.IOException;
 
 /**
  * Filter responsible for the actual generation of the images.
- * This is totally temporary code.
- *
+ * TODO This is totally temporary code.
+ * TODO And please find a decent name for this.
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
