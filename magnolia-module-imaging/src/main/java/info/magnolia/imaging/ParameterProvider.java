@@ -19,8 +19,6 @@ package info.magnolia.imaging;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class StringParameterStrategy implements ParameterStrategy<String> {
-    public String getParameter() {
-        return "hello";
-    }
+public interface ParameterProvider<T> {
+    T getParameter();
 }

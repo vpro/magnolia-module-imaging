@@ -16,8 +16,8 @@ package info.magnolia.imaging.operations.load;
 
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.NodeData;
-import info.magnolia.imaging.ImageOperation;
-import info.magnolia.imaging.NodeBasedParameterStrategy;
+import info.magnolia.imaging.operations.ImageOperation;
+import info.magnolia.imaging.NodeParameterProvider;
 
 import javax.imageio.ImageIO;
 import javax.jcr.RepositoryException;
@@ -31,10 +31,10 @@ import java.io.InputStream;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class FromNode implements ImageOperation<NodeBasedParameterStrategy> {
+public class FromNode implements ImageOperation<NodeParameterProvider> {
     private String propertyName = "binary";
 
-    public BufferedImage apply(BufferedImage source, NodeBasedParameterStrategy filterParams) {
+    public BufferedImage apply(BufferedImage source, NodeParameterProvider filterParams) {
         try {
             // TODO - ensure this is an appropriate node/property
 

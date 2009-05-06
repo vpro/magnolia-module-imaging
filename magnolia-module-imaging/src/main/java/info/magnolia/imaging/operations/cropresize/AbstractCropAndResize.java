@@ -14,8 +14,8 @@
  */
 package info.magnolia.imaging.operations.cropresize;
 
-import info.magnolia.imaging.ImageOperation;
-import info.magnolia.imaging.ParameterStrategy;
+import info.magnolia.imaging.operations.ImageOperation;
+import info.magnolia.imaging.ParameterProvider;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -40,7 +40,7 @@ public abstract class AbstractCropAndResize implements ImageOperation {
     // TODO -      * user selected a cropping zone through a gui
     // TODO -      * we just do a best guess and crop from the center of the image
 
-    public BufferedImage apply(BufferedImage source, ParameterStrategy params) {
+    public BufferedImage apply(BufferedImage source, ParameterProvider params) {
         final Coords coords = getCroopCoords(source, targetWidth, targetHeight);
         return resize(source, coords);
     }

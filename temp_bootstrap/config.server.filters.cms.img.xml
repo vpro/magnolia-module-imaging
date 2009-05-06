@@ -14,7 +14,7 @@
     <sv:value>f60a39c2-7721-4c4b-aaf4-a0c668c20732</sv:value>
   </sv:property>
   <sv:property sv:name="class" sv:type="String">
-    <sv:value>info.magnolia.imaging.ImageGenerator</sv:value>
+    <sv:value>info.magnolia.imaging.ImagingFilter</sv:value>
   </sv:property>
   <sv:property sv:name="enabled" sv:type="String">
     <sv:value>true</sv:value>

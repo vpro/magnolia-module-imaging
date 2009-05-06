@@ -12,7 +12,7 @@
  * intact.
  *
  */
-package info.magnolia.imaging;
+package info.magnolia.imaging.util;
 
 import junit.framework.TestCase;
 

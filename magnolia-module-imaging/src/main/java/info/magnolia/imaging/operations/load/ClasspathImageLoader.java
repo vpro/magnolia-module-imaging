@@ -14,7 +14,7 @@
  */
 package info.magnolia.imaging.operations.load;
 
-import info.magnolia.imaging.ParameterStrategy;
+import info.magnolia.imaging.ParameterProvider;
 
 import java.net.URL;
 
@@ -24,7 +24,7 @@ import java.net.URL;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class ClasspathImageLoader<P extends ParameterStrategy<?>> extends AbstractURLImageLoader<P> {
+public class ClasspathImageLoader<P extends ParameterProvider<?>> extends AbstractURLImageLoader<P> {
     private String src;
 
     protected URL getAndValidateUrl() {

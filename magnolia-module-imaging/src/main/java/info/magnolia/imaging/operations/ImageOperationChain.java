@@ -14,20 +14,22 @@
  */
 package info.magnolia.imaging.operations;
 
-import info.magnolia.imaging.ImageOperation;
-import info.magnolia.imaging.ParameterStrategy;
+import info.magnolia.imaging.ImageGenerator;
+import info.magnolia.imaging.operations.ImageOperation;
+import info.magnolia.imaging.ParameterProvider;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * An implementation of ImageOperation which delegates to a list of other ImageOperations.
+ * An implementation of ImageOperation and ImageGenerator which delegates
+ * to a list of other ImageOperation instances.
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class ImageOperationChain<P extends ParameterStrategy<?>> implements ImageOperation<P> {
+public class ImageOperationChain<P extends ParameterProvider<?>> implements ImageOperation<P>, ImageGenerator<P> {
     private final List<ImageOperation<P>> operations;
 
     public ImageOperationChain() {
@@ -40,6 +42,12 @@ public class ImageOperationChain<P extends ParameterStrategy<?>> implements Imag
 
     public void addOperation(ImageOperation<P> operation) {
         operations.add(operation);
+    }
+
+    public BufferedImage generate(P params) {
+        // TODO : create base empty Image instance with appropriate settings (raster, colormodel, ...) ?
+
+        return apply(null, params);
     }
 
     public BufferedImage apply(BufferedImage source, P params) {

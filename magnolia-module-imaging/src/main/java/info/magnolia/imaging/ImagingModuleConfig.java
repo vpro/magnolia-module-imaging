@@ -22,15 +22,15 @@ import java.util.Map;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class ImagingModuleConfig<P extends ParameterStrategy<?>> {
-    private final Map<String, ImageOperation<P>> operations = new LinkedHashMap<String, ImageOperation<P>>();
+public class ImagingModuleConfig<P extends ParameterProvider<?>> {
+    private final Map<String, ImageGenerator<P>> generators = new LinkedHashMap<String, ImageGenerator<P>>();
 
-    public void addOperation(String name, ImageOperation<P> operation) {
-        operations.put(name, operation);
+    public void addGenerator(String name, ImageGenerator<P> generator) {
+        generators.put(name, generator);
     }
 
-    public Map<String, ImageOperation<P>> getOperations() {
-        return operations;
+    public Map<String, ImageGenerator<P>> getGenerators() {
+        return generators;
     }
 
 }

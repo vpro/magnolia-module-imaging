@@ -15,17 +15,17 @@
 package info.magnolia.imaging.operations.text;
 
 import info.magnolia.cms.core.Content;
-import info.magnolia.imaging.NodeBasedParameterStrategy;
+import info.magnolia.imaging.NodeParameterProvider;
 
 /**
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class TextFromNode extends AbstractTextOverlay<NodeBasedParameterStrategy> {
+public class TextFromNode extends AbstractTextOverlay<NodeParameterProvider> {
     private String propertyName = "text";
 
-    protected String getText(NodeBasedParameterStrategy filterParams) {
+    protected String getText(NodeParameterProvider filterParams) {
         final Content node = filterParams.getParameter();
         return node.getNodeData(propertyName).getString();
     }

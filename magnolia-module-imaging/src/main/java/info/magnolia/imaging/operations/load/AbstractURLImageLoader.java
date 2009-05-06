@@ -14,8 +14,8 @@
  */
 package info.magnolia.imaging.operations.load;
 
-import info.magnolia.imaging.ImageOperation;
-import info.magnolia.imaging.ParameterStrategy;
+import info.magnolia.imaging.operations.ImageOperation;
+import info.magnolia.imaging.ParameterProvider;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -27,7 +27,7 @@ import java.net.URL;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public abstract class AbstractURLImageLoader<P extends ParameterStrategy<?>> implements ImageOperation<P> {
+public abstract class AbstractURLImageLoader<P extends ParameterProvider<?>> implements ImageOperation<P> {
     public BufferedImage apply(BufferedImage source, P filterParams) {
         try {
             final URL url = getAndValidateUrl();

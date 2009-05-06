@@ -14,8 +14,8 @@
  */
 package info.magnolia.imaging.operations;
 
-import info.magnolia.imaging.ImageOperation;
-import info.magnolia.imaging.ParameterStrategy;
+import info.magnolia.imaging.operations.ImageOperation;
+import info.magnolia.imaging.ParameterProvider;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
@@ -26,7 +26,10 @@ import java.awt.image.BufferedImageOp;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public abstract class BufferedImageOpDelegate<P extends ParameterStrategy<?>> implements ImageOperation<P> {
+public abstract class BufferedImageOpDelegate<P extends ParameterProvider<?>> implements ImageOperation<P> {
+
+    // TODO -- some content2bean magic to automatically wrap BufferedImageOp into ImageOperation ?
+    // -- or vice-versa ...
 
     public BufferedImage apply(BufferedImage source, P filterParams) {
         return getDelegate().filter(source, null);

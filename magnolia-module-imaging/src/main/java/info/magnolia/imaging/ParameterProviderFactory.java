@@ -14,16 +14,10 @@
  */
 package info.magnolia.imaging;
 
-import info.magnolia.cms.core.Content;
-import info.magnolia.context.MgnlContext;
-
 /**
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class NodeBasedParameterStrategy implements ParameterStrategy<Content> {
-    public Content getParameter() {
-        return MgnlContext.getAggregationState().getCurrentContent();
-    }
+public class ParameterProviderFactory {
 }

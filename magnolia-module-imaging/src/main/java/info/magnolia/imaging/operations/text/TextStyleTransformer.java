@@ -16,7 +16,7 @@ package info.magnolia.imaging.operations.text;
 
 import info.magnolia.content2bean.Content2BeanException;
 import info.magnolia.content2bean.impl.Content2BeanTransformerImpl;
-import info.magnolia.imaging.ColorConverter;
+import info.magnolia.imaging.util.ColorConverter;
 
 import java.awt.Color;
 

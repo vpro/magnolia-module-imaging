@@ -29,14 +29,18 @@ public class TextStyle {
 
     private String fontName;
     private int fontStyle = Font.PLAIN;
+    private int fontSize;
     private Color color;
     private Color bgColor;
     private double charSpacing;
-    private int fontSize;
     private int shearingValue;
 
     public double calculateShearingValue() {
         return (-1.0D * (new Double(shearingValue)).doubleValue()) / SHEARING_DIV_FACTOR;
+    }
+
+    public float calculateCharSpacing() {
+        return (float) ((double) getCharSpacing() / TextStyle.CHARSPACING_DIV_FACTOR);
     }
 
     //    public Font deriveFont() {
@@ -46,44 +50,12 @@ public class TextStyle {
     }
 
     // ---generated getters and setters
-    public double getCharSpacing() {
-        return charSpacing;
-    }
-
-    public void setCharSpacing(double charSpacing) {
-        this.charSpacing = charSpacing;
-    }
-
     public String getFontName() {
         return fontName;
     }
 
     public void setFontName(String fontName) {
         this.fontName = fontName;
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
-    }
-
-    public int getFontSize() {
-        return fontSize;
-    }
-
-    public void setFontSize(int fontSize) {
-        this.fontSize = fontSize;
-    }
-
-    public int getShearingValue() {
-        return shearingValue;
-    }
-
-    public void setShearingValue(int shearingValue) {
-        this.shearingValue = shearingValue;
     }
 
     public int getFontStyle() {
@@ -94,11 +66,43 @@ public class TextStyle {
         this.fontStyle = fontStyle;
     }
 
+    public int getFontSize() {
+        return fontSize;
+    }
+
+    public void setFontSize(int fontSize) {
+        this.fontSize = fontSize;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
     public Color getBgColor() {
         return bgColor;
     }
 
     public void setBgColor(Color bgColor) {
         this.bgColor = bgColor;
+    }
+
+    public double getCharSpacing() {
+        return charSpacing;
+    }
+
+    public void setCharSpacing(double charSpacing) {
+        this.charSpacing = charSpacing;
+    }
+
+    public int getShearingValue() {
+        return shearingValue;
+    }
+
+    public void setShearingValue(int shearingValue) {
+        this.shearingValue = shearingValue;
     }
 }

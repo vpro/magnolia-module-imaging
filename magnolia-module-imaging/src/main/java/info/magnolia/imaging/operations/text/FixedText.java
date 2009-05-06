@@ -14,14 +14,14 @@
  */
 package info.magnolia.imaging.operations.text;
 
-import info.magnolia.imaging.ParameterStrategy;
+import info.magnolia.imaging.ParameterProvider;
 
 /**
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class FixedText<P extends ParameterStrategy<?>> extends AbstractTextOverlay<P> {
+public class FixedText<P extends ParameterProvider<?>> extends AbstractTextOverlay<P> {
     private String text;
 
     protected String getText(P params) {

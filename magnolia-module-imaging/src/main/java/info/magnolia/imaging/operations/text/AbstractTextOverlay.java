@@ -14,8 +14,8 @@
  */
 package info.magnolia.imaging.operations.text;
 
-import info.magnolia.imaging.ImageOperation;
-import info.magnolia.imaging.ParameterStrategy;
+import info.magnolia.imaging.operations.ImageOperation;
+import info.magnolia.imaging.ParameterProvider;
 
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -29,7 +29,7 @@ import java.awt.image.BufferedImage;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public abstract class AbstractTextOverlay<P extends ParameterStrategy<?>> implements ImageOperation<P> {
+public abstract class AbstractTextOverlay<P extends ParameterProvider<?>> implements ImageOperation<P> {
     private TextStyle textStyle;
 
     public BufferedImage apply(BufferedImage source, P filterParams) {
@@ -53,6 +53,7 @@ public abstract class AbstractTextOverlay<P extends ParameterStrategy<?>> implem
         // undo transformation (pseudo-italic)
         // shear(g, -1 * style.getShearingValue());
 
+        // TODO -- name all those variables appropriately ...
         float f = 0.0F;
         final Font font = textStyle.getFont();
         g.setFont(font);
@@ -62,14 +63,15 @@ public abstract class AbstractTextOverlay<P extends ParameterStrategy<?>> implem
         final FontRenderContext fontRenderContext = new FontRenderContext(null, false, false);
         final GlyphVector glyphvector = font.createGlyphVector(fontRenderContext, txt);
 
-        float f1 = (float) ((double) textStyle.getCharSpacing() / TextStyle.CHARSPACING_DIV_FACTOR);
+        // TODO -- why do we need to print glyph by glyph, remind me ?
+        final float charSpacing = textStyle.calculateCharSpacing();
         for (int k = 0; k < txt.length(); k++) {
             final char c = txt.charAt(k);
             final int l = fontMetrics.charWidth(c);
             final Point2D point2d = glyphvector.getGlyphPosition(k);
             point2d.setLocation(f, point2d.getY());
             glyphvector.setGlyphPosition(k, point2d);
-            f += (new Float((float) l + f1)).floatValue();
+            f += (new Float((float) l + charSpacing)).floatValue();
         }
         g.drawGlyphVector(glyphvector, (float) txtPositionX, (float) txtPositionY + textStyle.getFontSize());
     }

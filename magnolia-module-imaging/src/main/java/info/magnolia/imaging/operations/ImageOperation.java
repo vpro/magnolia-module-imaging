@@ -12,7 +12,9 @@
  * intact.
  *
  */
-package info.magnolia.imaging;
+package info.magnolia.imaging.operations;
+
+import info.magnolia.imaging.ParameterProvider;
 
 import java.awt.image.BufferedImage;
 
@@ -39,8 +41,8 @@ import java.awt.image.BufferedImage;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public interface ImageOperation<P extends ParameterStrategy<?>> {
+public interface ImageOperation<P extends ParameterProvider<?>> {
 
-    BufferedImage apply(BufferedImage source, P filterParams);
+    BufferedImage apply(BufferedImage source, P params);
 
 }
