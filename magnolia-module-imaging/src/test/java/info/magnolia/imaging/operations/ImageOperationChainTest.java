@@ -36,7 +36,7 @@ import java.io.IOException;
 public class ImageOperationChainTest extends TestCase {
     //TODO - test that nests chains on several level
 
-    public void testSomeTransformations() throws IOException {
+    public void testSomeTransformations() throws Exception {
 
         final ImageOperationChain<StringParameterProvider> filterChain = new ImageOperationChain<StringParameterProvider>();
         final ClasspathImageLoader<StringParameterProvider> loader = new ClasspathImageLoader<StringParameterProvider>();

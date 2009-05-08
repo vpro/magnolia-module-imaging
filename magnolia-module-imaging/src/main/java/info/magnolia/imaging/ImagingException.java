@@ -14,23 +14,17 @@
  */
 package info.magnolia.imaging;
 
-import java.awt.image.BufferedImage;
-
 /**
- * The entry point for generating images.
- *
- * @see info.magnolia.imaging.operations.ImageOperationChain
- * @see info.magnolia.imaging.operations.ImageOperation
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public interface ImageGenerator<P extends ParameterProvider<?>> {
+public class ImagingException extends Exception {
+    public ImagingException(String message) {
+        super(message);
+    }
 
-    // TODO -- maybe this is where the ParameterProvider will be constructed
-    // TODO -- instead of passed to the generate() method
-
-    BufferedImage generate(P params) throws ImagingException;
-
-    ParameterProviderFactory getParameterProviderFactory();
+    public ImagingException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

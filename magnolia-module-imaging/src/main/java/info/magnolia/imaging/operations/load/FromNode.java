@@ -16,15 +16,15 @@ package info.magnolia.imaging.operations.load;
 
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.NodeData;
+import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.operations.ImageOperation;
 import info.magnolia.imaging.parameters.NodeParameterProvider;
 
 import javax.imageio.ImageIO;
-import javax.jcr.RepositoryException;
+import javax.jcr.PropertyType;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-
 
 /**
  *
@@ -34,20 +34,21 @@ import java.io.InputStream;
 public class FromNode implements ImageOperation<NodeParameterProvider> {
     private String propertyName = "binary";
 
-    public BufferedImage apply(BufferedImage source, NodeParameterProvider filterParams) {
+    public BufferedImage apply(BufferedImage source, NodeParameterProvider filterParams) throws ImagingException {
+        final Content node = filterParams.getParameter();
+        final NodeData data = node.getNodeData(propertyName);
+        if (!data.isExist() || data.getType() != PropertyType.BINARY) {
+            throw new ImagingException("Property " + propertyName + " for " + node + " doesn't exist or is not of type binary.");
+        }
+        final InputStream in = data.getStream();
+        if (in == null) {
+            throw new ImagingException("Can't get InputStream from " + data.getHandle());
+        }
         try {
             // TODO - ensure this is an appropriate node/property
-
-            // TODO -- AggregationFilter is not playing well here when using DMS.
-            // TODO --- It's tied too tightly to page rendering.
-            final Content node = filterParams.getParameter();
-            final NodeData data = node.getNodeData(propertyName);
-            final InputStream in = data.getValue().getStream();
             return ImageIO.read(in);
         } catch (IOException e) {
-            throw new RuntimeException(e); // TODO
-        } catch (RepositoryException e) {
-            throw new RuntimeException(e); // TODO
+            throw new ImagingException("Can't load image from " + data.getHandle());
         }
     }
 

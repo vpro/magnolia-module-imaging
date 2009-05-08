@@ -14,8 +14,8 @@
  */
 package info.magnolia.imaging;
 
-import info.magnolia.module.ModuleRegistry;
 import info.magnolia.imaging.util.PathSplitter;
+import info.magnolia.module.ModuleRegistry;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
@@ -44,11 +44,15 @@ public class ImagingServlet extends HttpServlet {
 
         final ParameterProviderFactory parameterProviderFactory = generator.getParameterProviderFactory();
         final ParameterProvider p = parameterProviderFactory.newParameterProviderFor(request);
-        final BufferedImage result = generator.generate(p);
 
-        // TODO -- mimetype etc.
-        // TODO use OutputFormat
-        ImageIO.write(result, "jpg", response.getOutputStream());
+        try {
+            final BufferedImage result = generator.generate(p);
+            // TODO -- mimetype etc.
+            // TODO use OutputFormat
+            ImageIO.write(result, "jpg", response.getOutputStream());
+        } catch (ImagingException e) {
+            throw new ServletException(e); // TODO
+        }
     }
 
     /**

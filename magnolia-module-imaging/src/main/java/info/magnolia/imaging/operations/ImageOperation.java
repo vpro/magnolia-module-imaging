@@ -14,6 +14,7 @@
  */
 package info.magnolia.imaging.operations;
 
+import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.ParameterProvider;
 
 import java.awt.image.BufferedImage;
@@ -43,6 +44,6 @@ import java.awt.image.BufferedImage;
  */
 public interface ImageOperation<P extends ParameterProvider<?>> {
 
-    BufferedImage apply(BufferedImage source, P params);
+    BufferedImage apply(BufferedImage source, P params) throws ImagingException;
 
 }

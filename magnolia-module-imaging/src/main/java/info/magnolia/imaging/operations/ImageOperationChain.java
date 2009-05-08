@@ -15,6 +15,7 @@
 package info.magnolia.imaging.operations;
 
 import info.magnolia.imaging.ImageGenerator;
+import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.ParameterProviderFactory;
 
@@ -37,13 +38,13 @@ public class ImageOperationChain<P extends ParameterProvider<?>> implements Imag
         this.operations = new ArrayList<ImageOperation<P>>();
     }
 
-    public BufferedImage generate(P params) {
+    public BufferedImage generate(P params) throws ImagingException {
         // TODO : create base empty Image instance with appropriate settings (raster, colormodel, ...) ?
 
         return apply(null, params);
     }
 
-    public BufferedImage apply(BufferedImage source, P params) {
+    public BufferedImage apply(BufferedImage source, P params) throws ImagingException {
         BufferedImage result = source;
         for (ImageOperation<P> op : operations) {
             result = op.apply(result, params);
