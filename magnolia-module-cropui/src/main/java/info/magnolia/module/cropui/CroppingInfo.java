@@ -12,7 +12,9 @@
  * intact.
  *
  */
-package info.magnolia.imaging.operations.cropresize;
+package info.magnolia.module.cropui;
+
+import info.magnolia.imaging.operations.cropresize.Coords;
 
 /**
  * Holds the result of a human selection in a cropping ui.

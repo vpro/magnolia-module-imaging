@@ -35,9 +35,7 @@ import java.io.IOException;
  */
 public class ImagingServletTest extends TestCase {
 
-    //TODO -- test getting the ImageGenerator, its name and its instance
-
-    public void testRequestToFactoryToImage() throws Exception {
+    public void testRequestToFactoryToGeneratorToImage() throws Exception {
         final ByteArrayOutputStream fakedOut = new ByteArrayOutputStream();
         final ServletOutputStream servletOut = new ServletOutputStream() {
             public void write(int b) throws IOException {
@@ -91,7 +89,6 @@ public class ImagingServletTest extends TestCase {
         }
 
         public BufferedImage generate(P params) {
-            // TODO -- assertions on params
             assertEquals("dummyUri", params.getParameter());
             imageGeneratorWasCalled = true;
             return new BufferedImage(10, 10, BufferedImage.TYPE_INT_RGB);

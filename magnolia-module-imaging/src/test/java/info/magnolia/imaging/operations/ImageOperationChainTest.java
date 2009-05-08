@@ -26,7 +26,6 @@ import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
 /**
  * .
@@ -34,7 +33,7 @@ import java.io.IOException;
  * @version $Revision: $ ($Author: $)
  */
 public class ImageOperationChainTest extends TestCase {
-    //TODO - test that nests chains on several level
+    //TODO - test that nested chains on several level work too
 
     public void testSomeTransformations() throws Exception {
 

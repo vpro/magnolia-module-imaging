@@ -15,6 +15,7 @@
 package info.magnolia.imaging.operations.cropresize;
 
 import info.magnolia.imaging.ParameterProvider;
+import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.operations.ImageOperation;
 
 import java.awt.Graphics2D;
@@ -23,10 +24,11 @@ import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 
 /**
- * TODO -- fix javadoc
- * If targetWidth and targetHeight are <=0, no resizing will happen. (ie the CropperInfo will be used to determine targetWidth and targetHeight)
- * If targetWidth or targetHeight is <=0, the other side will be sized proportionally, using the given CropperInfo.
- * If both targetWidth and targetHeight are >0, we will use them even if they don't match the original ratio.
+ * Subclasses of this determine which portion of the source image is taken into account.
+ *
+ * If targetWidth and targetHeight are <=0, no resizing will happen. (ie cropping only)
+ * If either targetWidth or targetHeight is <=0, the ratio of the cropped image will be preserved.
+ * If both targetWidth and targetHeight are >0, both will be used, even if they don't match the ratio of the cropped image.
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
@@ -35,17 +37,16 @@ public abstract class AbstractCropAndResize implements ImageOperation {
     private int targetWidth;
     private int targetHeight;
 
-    // TODO - this currently just resizes !
-    // TODO - it should work for 2 cases:
-    // TODO -      * user selected a cropping zone through a gui
-    // TODO -      * we just do a best guess and crop from the center of the image
-
-    public BufferedImage apply(BufferedImage source, ParameterProvider params) {
+    public BufferedImage apply(BufferedImage source, ParameterProvider params) throws ImagingException {
         final Coords coords = getCroopCoords(source, targetWidth, targetHeight);
         return resize(source, coords);
     }
 
-    protected abstract Coords getCroopCoords(BufferedImage source, int targetWidth, int targetHeight);
+    /**
+     * Determines the coordinates of the cropping to apply on the source image.
+     * If no cropping needs to happen, return new Coords(0, 0, source.getWidth(), source.getHeight()). 
+     */
+    protected abstract Coords getCroopCoords(BufferedImage source, int targetWidth, int targetHeight) throws ImagingException;
 
     protected BufferedImage resize(BufferedImage src, Coords cropCoords) {
         final int effectiveTargetWidth, effectiveTargetHeight;

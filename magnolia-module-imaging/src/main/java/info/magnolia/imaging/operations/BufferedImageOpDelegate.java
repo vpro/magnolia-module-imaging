@@ -26,7 +26,7 @@ import java.awt.image.BufferedImageOp;
  * @version $Revision: $ ($Author: $)
  */
 public abstract class BufferedImageOpDelegate<P extends ParameterProvider<?>> implements ImageOperation<P> {
-
+    private BufferedImageOp delegate;
     // TODO -- some content2bean magic to automatically wrap BufferedImageOp into ImageOperation ?
     // -- or vice-versa ...
 
@@ -34,5 +34,11 @@ public abstract class BufferedImageOpDelegate<P extends ParameterProvider<?>> im
         return getDelegate().filter(source, null);
     }
 
-    protected abstract BufferedImageOp getDelegate();
+    public BufferedImageOp getDelegate() {
+        return delegate;
+    }
+
+    public void setDelegate(BufferedImageOp delegate) {
+        this.delegate = delegate;
+    }
 }

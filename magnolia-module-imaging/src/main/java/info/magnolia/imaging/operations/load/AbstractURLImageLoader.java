@@ -14,6 +14,7 @@
  */
 package info.magnolia.imaging.operations.load;
 
+import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.operations.ImageOperation;
 
@@ -28,14 +29,17 @@ import java.net.URL;
  * @version $Revision: $ ($Author: $)
  */
 public abstract class AbstractURLImageLoader<P extends ParameterProvider<?>> implements ImageOperation<P> {
-    public BufferedImage apply(BufferedImage source, P filterParams) {
+    public BufferedImage apply(BufferedImage source, P filterParams) throws ImagingException {
         try {
             final URL url = getAndValidateUrl();
             return ImageIO.read(url);
         } catch (IOException e) {
-            throw new RuntimeException(e); // TODO
+            throw new ImagingException("Can't load image: " + e.getMessage(), e);
         }
     }
 
-    protected abstract URL getAndValidateUrl();
+    /**
+     * @throws ImagingException where the message should be the invalid URL
+     */
+    protected abstract URL getAndValidateUrl() throws ImagingException;
 }

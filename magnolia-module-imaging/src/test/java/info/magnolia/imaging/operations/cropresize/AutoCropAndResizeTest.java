@@ -19,15 +19,15 @@ import junit.framework.TestCase;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 /**
- *
+ * TODO - this test is extremely slow
+ * 
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
 public class AutoCropAndResizeTest extends TestCase {
-    public void testJustResizeIfRatioIsEquivalent() throws IOException {
+    public void testJustResizeIfRatioIsEquivalent() throws Exception {
         final AutoCropAndResize op = new AutoCropAndResize();
         op.setTargetWidth(400);
         op.setTargetHeight(300);
@@ -45,7 +45,7 @@ public class AutoCropAndResizeTest extends TestCase {
         assertEquals(300, res.getHeight());
     }
 
-    public void testRespectsRatioOfTargetSizeIfCroppingIsNeededAndCropFromTheCenter() throws IOException {
+    public void testRespectsRatioOfTargetSizeIfCroppingIsNeededAndCropFromTheCenter() throws Exception {
         final AutoCropAndResize op = new AutoCropAndResize();
         op.setTargetWidth(400);
         op.setTargetHeight(225);
@@ -63,7 +63,7 @@ public class AutoCropAndResizeTest extends TestCase {
         assertEquals(225, res.getHeight());
     }
 
-    public void testVerticalRatiosAlsoWork() throws IOException {
+    public void testVerticalRatiosAlsoWork() throws Exception {
         final AutoCropAndResize op = new AutoCropAndResize();
         op.setTargetWidth(200);
         op.setTargetHeight(600);
@@ -81,7 +81,7 @@ public class AutoCropAndResizeTest extends TestCase {
         assertEquals(600, res.getHeight());
     }
 
-    public void testDoesNotCropIfOnlyTargetHeightIsSpecifiedAndRespectsOriginalRatio() throws IOException {
+    public void testDoesNotCropIfOnlyTargetHeightIsSpecifiedAndRespectsOriginalRatio() throws Exception {
         final AutoCropAndResize op = new AutoCropAndResize();
         op.setTargetWidth(0);
         op.setTargetHeight(300);
@@ -100,7 +100,7 @@ public class AutoCropAndResizeTest extends TestCase {
 
     }
 
-    public void testDoesNotCropIfOnlyTargetWidthIsSpecifiedAndRespectsOriginalRatio() throws IOException {
+    public void testDoesNotCropIfOnlyTargetWidthIsSpecifiedAndRespectsOriginalRatio() throws Exception {
         final AutoCropAndResize op = new AutoCropAndResize();
         op.setTargetWidth(400);
         op.setTargetHeight(0);
@@ -118,9 +118,8 @@ public class AutoCropAndResizeTest extends TestCase {
         assertEquals(300, res.getHeight());
     }
 
-    // TODO more tests..
     // tests with 1:1 ratio
-    public void testSquareTargetUsesLargestPossibleZoneForHorizontalSource() throws IOException {
+    public void testSquareTargetUsesLargestPossibleZoneForHorizontalSource() throws Exception {
         final AutoCropAndResize op = new AutoCropAndResize();
         op.setTargetWidth(400);
         op.setTargetHeight(400);
@@ -138,7 +137,7 @@ public class AutoCropAndResizeTest extends TestCase {
         assertEquals(400, res.getHeight());
     }
 
-    public void testSquareTargetUsesLargestPossibleZoneForVerticalSourceToo() throws IOException {
+    public void testSquareTargetUsesLargestPossibleZoneForVerticalSourceToo() throws Exception {
         final AutoCropAndResize op = new AutoCropAndResize();
         op.setTargetWidth(400);
         op.setTargetHeight(400);
@@ -157,7 +156,7 @@ public class AutoCropAndResizeTest extends TestCase {
     }
 
     // tests with vertical source
-    public void testVerticalSourceIsHandledJustAsWell() throws IOException {
+    public void testVerticalSourceIsHandledJustAsWell() throws Exception {
         final AutoCropAndResize op = new AutoCropAndResize();
         op.setTargetWidth(400);
         op.setTargetHeight(300);
@@ -175,7 +174,7 @@ public class AutoCropAndResizeTest extends TestCase {
         assertEquals(300, res.getHeight());
     }
 
-    public void testVerticalSourceWithVerticalRatioIsAlsoSwell() throws IOException {
+    public void testVerticalSourceWithVerticalRatioIsAlsoSwell() throws Exception {
         final AutoCropAndResize op = new AutoCropAndResize();
         op.setTargetWidth(150);
         op.setTargetHeight(600);
@@ -198,14 +197,14 @@ public class AutoCropAndResizeTest extends TestCase {
     /**
      * Loads a well-known image, ensuring its dimensions haven't changed since the test was written.
      */
-    private BufferedImage getTestImage() throws IOException {
+    private BufferedImage getTestImage() throws Exception {
         final BufferedImage img = ImageIO.read(getClass().getResource("/IMG_2463.JPG"));
         assertEquals(1600, img.getWidth());
         assertEquals(1200, img.getHeight());
         return img;
     }
 
-    private BufferedImage getVerticalTestImage() throws IOException {
+    private BufferedImage getVerticalTestImage() throws Exception {
         final BufferedImage img = getTestImage();
         final FlipFilter f = new FlipFilter(FlipFilter.FLIP_90CW);
         final BufferedImage v = f.filter(img, null);

@@ -14,6 +14,7 @@
  */
 package info.magnolia.imaging.operations.load;
 
+import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.ParameterProvider;
 
 import java.net.URL;
@@ -27,10 +28,10 @@ import java.net.URL;
 public class ClasspathImageLoader<P extends ParameterProvider<?>> extends AbstractURLImageLoader<P> {
     private String src;
 
-    protected URL getAndValidateUrl() {
+    protected URL getAndValidateUrl() throws ImagingException {
         final URL url = getClass().getResource(src);
         if (url == null) {
-            throw new IllegalArgumentException("Can't find image at " + src);
+            throw new ImagingException("Can't find image at " + src);
         }
         return url;
     }

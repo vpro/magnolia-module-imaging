@@ -40,7 +40,8 @@ public class WorkspaceAndNodeParameterProviderFactory implements ParameterProvid
             throw new IllegalArgumentException("Can't determine node, no pathInfo is available for uri " + req.getRequestURI());
         }
 
-        // TODO - here we assume that the first path element is the ImageGenerator name. Can we do better ?
+        // TODO - here we assume that the first path element is the ImageGenerator name, which is in fact something that is currently the business of the ImagingServlet.
+        // Can we do better ?
         final PathSplitter pathSplitter = new PathSplitter(pathInfo, true);
         if (pathSplitter.count() < 2) {
             throw new IllegalArgumentException("Can't determine node from pathInfo: " + pathInfo);

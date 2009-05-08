@@ -14,12 +14,15 @@
  */
 package info.magnolia.imaging.operations.load;
 
+import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.ParameterProvider;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
+ * Loads an image off an arbitrary URL. So, yes, this can load images off the internet, and yes, it could be
+ * painfully slow.
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
@@ -27,11 +30,11 @@ import java.net.URL;
 public class URLImageLoader<P extends ParameterProvider<?>> extends AbstractURLImageLoader<P> {
     private String url;
 
-    protected URL getAndValidateUrl() {
+    protected URL getAndValidateUrl() throws ImagingException {
         try {
             return new URL(url);
         } catch (MalformedURLException e) {
-            throw new RuntimeException(e); // TODO
+            throw new ImagingException("Can't load image from url" + e.getMessage());
         }
     }
 
