@@ -19,14 +19,28 @@ import junit.framework.TestCase;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 /**
- * TODO - this test is extremely slow
- * 
+ *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
 public class AutoCropAndResizeTest extends TestCase {
+    // having these images as static constant is a mediocre attempt at making this test run faster (it was using around 7 seconds...)
+    private static final BufferedImage horizontalImage;
+    private static final BufferedImage verticalImage;
+
+    static {
+        try {
+            final FlipFilter f = new FlipFilter(FlipFilter.FLIP_90CW);
+            horizontalImage = ImageIO.read(AutoCropAndResizeTest.class.getResource("/IMG_2463.JPG"));
+            verticalImage = f.filter(horizontalImage, null);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void testJustResizeIfRatioIsEquivalent() throws Exception {
         final AutoCropAndResize op = new AutoCropAndResize();
         op.setTargetWidth(400);
@@ -195,21 +209,17 @@ public class AutoCropAndResizeTest extends TestCase {
     // TODO tests where source is smaller than target
 
     /**
-     * Loads a well-known image, ensuring its dimensions haven't changed since the test was written.
+     * Gets a well-known image, ensuring its dimensions haven't changed since the test was written and started.
      */
     private BufferedImage getTestImage() throws Exception {
-        final BufferedImage img = ImageIO.read(getClass().getResource("/IMG_2463.JPG"));
-        assertEquals(1600, img.getWidth());
-        assertEquals(1200, img.getHeight());
-        return img;
+        assertEquals(1600, horizontalImage.getWidth());
+        assertEquals(1200, horizontalImage.getHeight());
+        return horizontalImage;
     }
 
     private BufferedImage getVerticalTestImage() throws Exception {
-        final BufferedImage img = getTestImage();
-        final FlipFilter f = new FlipFilter(FlipFilter.FLIP_90CW);
-        final BufferedImage v = f.filter(img, null);
-        assertEquals(1200, v.getWidth());
-        assertEquals(1600, v.getHeight());
-        return v;
+        assertEquals(1200, verticalImage.getWidth());
+        assertEquals(1600, verticalImage.getHeight());
+        return verticalImage;
     }
 }
