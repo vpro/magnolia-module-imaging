@@ -15,6 +15,7 @@
 package info.magnolia.imaging;
 
 import info.magnolia.module.ModuleRegistry;
+import info.magnolia.imaging.util.PathSplitter;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
@@ -51,11 +52,11 @@ public class ImagingServlet extends HttpServlet {
     }
 
     /**
-     * Determines the ImageGenerator to use from the servletPath.
+     * Determines the ImageGenerator to use, using the first path element of the pathInfo.
      */
     protected String getImageGeneratorName(HttpServletRequest request) {
-        final String servletPath = request.getServletPath();
-        return servletPath.substring(1); // servlet path starts with a slash
+        final String pathInfo = request.getPathInfo();
+        return new PathSplitter(pathInfo).skipTo(0);
     }
 
     protected ImageGenerator getGenerator(String generatorName) {

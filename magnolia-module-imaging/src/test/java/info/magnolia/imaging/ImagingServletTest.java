@@ -46,7 +46,7 @@ public class ImagingServletTest extends TestCase {
         };
         final HttpServletRequest req = createStrictMock(HttpServletRequest.class);
         final HttpServletResponse res = createStrictMock(HttpServletResponse.class);
-        expect(req.getServletPath()).andReturn("myGenerator");
+        expect(req.getPathInfo()).andReturn("/myGenerator/someWorkspace/some/path/to/a/node");
         expect(req.getRequestURI()).andReturn("dummyUri");
         expect(res.getOutputStream()).andReturn(servletOut);
 
@@ -59,8 +59,11 @@ public class ImagingServletTest extends TestCase {
         final TestImageGenerator<StringParameterProvider> generator = new TestImageGenerator<StringParameterProvider>(ppFactory);
 
         final ImagingServlet imagingServlet = new ImagingServlet() {
-            protected ImageGenerator<StringParameterProvider> getGenerator(String generatorName) {
-                return generator;
+            @Override
+            protected ImagingModuleConfig getImagingConfiguration() {
+                final ImagingModuleConfig cfg = new ImagingModuleConfig();
+                cfg.addGenerator("myGenerator", generator);
+                return cfg;
             }
         };
 

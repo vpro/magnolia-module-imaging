@@ -18,7 +18,7 @@ import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.HierarchyManager;
 import info.magnolia.context.MgnlContext;
 import info.magnolia.imaging.ParameterProviderFactory;
-import org.apache.commons.lang.StringUtils;
+import info.magnolia.imaging.util.PathSplitter;
 
 import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
@@ -40,20 +40,14 @@ public class WorkspaceAndNodeParameterProviderFactory implements ParameterProvid
             throw new IllegalArgumentException("Can't determine node, no pathInfo is available for uri " + req.getRequestURI());
         }
 
-        // trim extension
-        final int dot = pathInfo.lastIndexOf('.');
-        if (dot >= 0) {
-            pathInfo = pathInfo.substring(0, dot);
-        }
-
         // TODO - here we assume that the first path element is the ImageGenerator name. Can we do better ?
-        final String[] pathElements = StringUtils.split(pathInfo, "/", 3);
-        if (pathElements.length < 2) {
+        final PathSplitter pathSplitter = new PathSplitter(pathInfo, true);
+        if (pathSplitter.count() < 2) {
             throw new IllegalArgumentException("Can't determine node from pathInfo: " + pathInfo);
 
         }
-        final String workspaceName = pathElements[1];
-        final String nodePath = "/" + (pathElements.length > 2 ? pathElements[2] : "");
+        final String workspaceName = pathSplitter.skipTo(1);
+        final String nodePath = "/" + pathSplitter.remaining();
 
         try {
             final HierarchyManager hm = MgnlContext.getHierarchyManager(workspaceName);
