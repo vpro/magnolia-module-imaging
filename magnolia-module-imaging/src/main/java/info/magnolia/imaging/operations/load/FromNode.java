@@ -17,7 +17,7 @@ package info.magnolia.imaging.operations.load;
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.NodeData;
 import info.magnolia.imaging.operations.ImageOperation;
-import info.magnolia.imaging.NodeParameterProvider;
+import info.magnolia.imaging.parameters.NodeParameterProvider;
 
 import javax.imageio.ImageIO;
 import javax.jcr.RepositoryException;

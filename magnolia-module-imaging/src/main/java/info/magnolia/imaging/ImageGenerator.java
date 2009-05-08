@@ -30,6 +30,7 @@ public interface ImageGenerator<P extends ParameterProvider<?>> {
     // TODO -- maybe this is where the ParameterProvider will be constructed
     // TODO -- instead of passed to the generate() method
 
-    BufferedImage generate(P filterParams);
+    BufferedImage generate(P params);
 
+    ParameterProviderFactory getParameterProviderFactory();
 }

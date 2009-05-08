@@ -14,8 +14,8 @@
  */
 package info.magnolia.imaging.operations.cropresize;
 
-import info.magnolia.imaging.operations.ImageOperation;
 import info.magnolia.imaging.ParameterProvider;
+import info.magnolia.imaging.operations.ImageOperation;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;

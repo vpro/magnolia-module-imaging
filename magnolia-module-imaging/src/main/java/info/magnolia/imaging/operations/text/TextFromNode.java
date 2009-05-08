@@ -15,7 +15,7 @@
 package info.magnolia.imaging.operations.text;
 
 import info.magnolia.cms.core.Content;
-import info.magnolia.imaging.NodeParameterProvider;
+import info.magnolia.imaging.parameters.NodeParameterProvider;
 
 /**
  *

@@ -12,25 +12,21 @@
  * intact.
  *
  */
-package info.magnolia.imaging;
+package info.magnolia.imaging.parameters;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import info.magnolia.cms.core.AggregationState;
+import info.magnolia.context.MgnlContext;
+import info.magnolia.imaging.ParameterProvider;
 
 /**
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class ImagingModuleConfig {
-    private final Map<String, ImageGenerator> generators = new LinkedHashMap<String, ImageGenerator>();
+public class AggregationStateParameterProvider implements ParameterProvider<AggregationState> {
 
-    public void addGenerator(String name, ImageGenerator generator) {
-        generators.put(name, generator);
-    }
-
-    public Map<String, ImageGenerator> getGenerators() {
-        return generators;
+    public AggregationState getParameter() {
+        return MgnlContext.getAggregationState();
     }
 
 }

@@ -12,7 +12,9 @@
  * intact.
  *
  */
-package info.magnolia.imaging;
+package info.magnolia.imaging.parameters;
+
+import info.magnolia.imaging.ParameterProvider;
 
 /**
  *
@@ -20,7 +22,13 @@ package info.magnolia.imaging;
  * @version $Revision: $ ($Author: $)
  */
 public class StringParameterProvider implements ParameterProvider<String> {
+    private final String string;
+
+    public StringParameterProvider(final String string) {
+        this.string = string;
+    }
+
     public String getParameter() {
-        return "hello";
+        return string;
     }
 }

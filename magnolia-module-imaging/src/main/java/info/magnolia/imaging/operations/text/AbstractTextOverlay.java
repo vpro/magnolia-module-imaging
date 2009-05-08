@@ -14,8 +14,8 @@
  */
 package info.magnolia.imaging.operations.text;
 
-import info.magnolia.imaging.operations.ImageOperation;
 import info.magnolia.imaging.ParameterProvider;
+import info.magnolia.imaging.operations.ImageOperation;
 
 import java.awt.Font;
 import java.awt.FontMetrics;

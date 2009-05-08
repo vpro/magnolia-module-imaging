@@ -15,11 +15,11 @@
 package info.magnolia.imaging.operations;
 
 import com.jhlabs.image.PointFilter;
-import info.magnolia.imaging.StringParameterProvider;
 import info.magnolia.imaging.operations.cropresize.AutoCropAndResize;
 import info.magnolia.imaging.operations.load.ClasspathImageLoader;
 import info.magnolia.imaging.operations.text.FixedText;
 import info.magnolia.imaging.operations.text.TextStyle;
+import info.magnolia.imaging.parameters.StringParameterProvider;
 import junit.framework.TestCase;
 
 import javax.imageio.ImageIO;
@@ -35,7 +35,7 @@ import java.io.IOException;
  */
 public class ImageOperationChainTest extends TestCase {
     //TODO - test that nests chains on several level
-    
+
     public void testSomeTransformations() throws IOException {
 
         final ImageOperationChain<StringParameterProvider> filterChain = new ImageOperationChain<StringParameterProvider>();
@@ -48,7 +48,7 @@ public class ImageOperationChainTest extends TestCase {
         cropAndResize.setTargetHeight(200);
         cropAndResize.setTargetWidth(600);
         filterChain.addOperation(cropAndResize);
-        
+
 //        final RGBAdjustFilter rgb = new RGBAdjustFilter();
 //        rgb.setBFactor(0.9f);
         //filterChain.addFilter(new BufferedImageOpDelegate(rgb));
@@ -62,7 +62,7 @@ public class ImageOperationChainTest extends TestCase {
         textOverlay.setText("heyyyyyy");
         filterChain.addOperation(textOverlay);
 
-        final StringParameterProvider p = new StringParameterProvider();
+        final StringParameterProvider p = new StringParameterProvider("hello");
 
         final BufferedImage result = filterChain.apply(null, p);
         ImageIO.write(result, "jpg", new File("test-result.jpg"));

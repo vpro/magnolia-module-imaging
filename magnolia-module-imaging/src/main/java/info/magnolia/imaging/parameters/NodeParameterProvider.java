@@ -12,9 +12,10 @@
  * intact.
  *
  */
-package info.magnolia.imaging;
+package info.magnolia.imaging.parameters;
 
 import info.magnolia.cms.core.Content;
+import info.magnolia.imaging.ParameterProvider;
 
 /**
  *
@@ -24,19 +25,11 @@ import info.magnolia.cms.core.Content;
 public class NodeParameterProvider implements ParameterProvider<Content> {
     private final Content node;
 
-    // TODO subclass or other impl that uses the AggCtx
-
-    // TODO -- if we have specific constructors, either our simple factory isn't extensible,
-    // or we need a factory per strategy
-    // or the ctor of the strategy acts as factory 
-    // -- how do we determine/decide which strategy to use ?
-    // --> the ImagingFilter (root of chain)
     public NodeParameterProvider(Content node) {
         this.node = node;
     }
 
     public Content getParameter() {
         return node;
-//        return MgnlContext.getAggregationState().getCurrentContent();
     }
 }

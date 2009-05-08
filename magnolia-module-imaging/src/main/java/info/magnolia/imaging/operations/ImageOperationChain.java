@@ -15,8 +15,8 @@
 package info.magnolia.imaging.operations;
 
 import info.magnolia.imaging.ImageGenerator;
-import info.magnolia.imaging.operations.ImageOperation;
 import info.magnolia.imaging.ParameterProvider;
+import info.magnolia.imaging.ParameterProviderFactory;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -31,17 +31,10 @@ import java.util.List;
  */
 public class ImageOperationChain<P extends ParameterProvider<?>> implements ImageOperation<P>, ImageGenerator<P> {
     private final List<ImageOperation<P>> operations;
+    private ParameterProviderFactory parameterProviderFactory;
 
     public ImageOperationChain() {
         this.operations = new ArrayList<ImageOperation<P>>();
-    }
-
-    public List<ImageOperation<P>> getOperations() {
-        return operations;
-    }
-
-    public void addOperation(ImageOperation<P> operation) {
-        operations.add(operation);
     }
 
     public BufferedImage generate(P params) {
@@ -58,4 +51,19 @@ public class ImageOperationChain<P extends ParameterProvider<?>> implements Imag
         return result;
     }
 
+    public ParameterProviderFactory getParameterProviderFactory() {
+        return parameterProviderFactory;
+    }
+
+    public void setParameterProviderFactory(ParameterProviderFactory parameterProviderFactory) {
+        this.parameterProviderFactory = parameterProviderFactory;
+    }
+
+    public List<ImageOperation<P>> getOperations() {
+        return operations;
+    }
+
+    public void addOperation(ImageOperation<P> operation) {
+        operations.add(operation);
+    }
 }

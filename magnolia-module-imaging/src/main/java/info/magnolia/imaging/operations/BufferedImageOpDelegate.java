@@ -14,7 +14,6 @@
  */
 package info.magnolia.imaging.operations;
 
-import info.magnolia.imaging.operations.ImageOperation;
 import info.magnolia.imaging.ParameterProvider;
 
 import java.awt.image.BufferedImage;

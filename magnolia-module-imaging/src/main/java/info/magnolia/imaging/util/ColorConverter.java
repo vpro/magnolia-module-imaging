@@ -24,7 +24,7 @@ import java.util.TreeMap;
  * A class that is able to convert java.lang.String instances to java.awt.Color instances.
  * It recognizes multiple String representations, such as named colors (using the java.awt.Color constants),
  * hexadecimal, TODO -- "r:100,g:100,b:100,a:80", "100, 100, 100, 80", ...
- * 
+ *
  * TODO - and vice-versa.
  *
  * @author gjoseph

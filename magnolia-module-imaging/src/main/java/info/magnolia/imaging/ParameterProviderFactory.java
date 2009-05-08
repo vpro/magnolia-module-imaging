@@ -15,9 +15,24 @@
 package info.magnolia.imaging;
 
 /**
+ * A ParameterProviderFactory is responsible for instanciating a ParameterProviderFactory
+ * for a given context. Implementations know what concrete context they expect and what
+ * concrete type of ParameterProvider they generate.
+ * TODO -- verify, validate, fix the following :
+ * TODO -- The type of context basically depends on the caller. In most cases, the context (C)
+ * TODO -- will be an HttpServletRequest or a Magnolia Context instance.
+ * TODO -- Since the ParameterProviderFactory is provided by
+ * TODO -- the ImageGenerator, this might means that a particular ImageGenerator is tied
+ * TODO -- to a specific context. 
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class ParameterProviderFactory {
+public interface ParameterProviderFactory<C, PT> {
+
+    /**
+     * Instanciates a new ParameterProvider for the given context.
+     */
+    ParameterProvider<PT> newParameterProviderFor(C context);
+
 }
