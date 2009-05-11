@@ -30,4 +30,6 @@ public interface ImageGenerator<P extends ParameterProvider<?>> {
     BufferedImage generate(P params) throws ImagingException;
 
     ParameterProviderFactory getParameterProviderFactory();
+
+    OutputFormat getOutputFormat();
 }

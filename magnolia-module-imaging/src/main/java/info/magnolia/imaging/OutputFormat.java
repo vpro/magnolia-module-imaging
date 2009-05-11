@@ -50,6 +50,11 @@ public class OutputFormat {
         }
     }
 
+    // there's probably a better way ...
+    public boolean supportsTransparency() {
+        return !"jpg".equalsIgnoreCase(formatName) && !"jpeg".equalsIgnoreCase(formatName);
+    }
+
     // -- generated getters and setters
     public String getFormatName() {
         return formatName;
@@ -82,4 +87,5 @@ public class OutputFormat {
     public void setCompressionType(String compressionType) {
         this.compressionType = compressionType;
     }
+
 }

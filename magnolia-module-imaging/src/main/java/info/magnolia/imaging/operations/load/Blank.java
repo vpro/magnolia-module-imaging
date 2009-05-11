@@ -14,33 +14,39 @@
  */
 package info.magnolia.imaging.operations.load;
 
-import info.magnolia.imaging.operations.ImageOperation;
-import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.ImagingException;
+import info.magnolia.imaging.ParameterProvider;
+import info.magnolia.imaging.operations.ImageOperation;
 
-import java.awt.image.BufferedImage;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 
 /**
- * Just generates an empty BufferedImage canvas, fills it with specified color.
+ * Just generates an empty BufferedImage canvas, fills it with the specified color if any.
  * Use this if you don't use an image background.
+ *
+ * TODO -- maybe merge this into ImageGenerator. At least provide a simpler way for non-transparent images...
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
 public class Blank implements ImageOperation {
     private int type = BufferedImage.TYPE_INT_ARGB_PRE;
-    private Color color = Color.white;
+    private Color color;
     private int width;
     private int height;
 
     public BufferedImage apply(BufferedImage source, ParameterProvider params) throws ImagingException {
         final BufferedImage img = new BufferedImage(width, height, type);
-//        final Graphics2D g = img.createGraphics();
-//        g.setBackground(color);
-        //g.setc
-//        g.drawRect(0, 0, width, height);
+
+        if (color != null) {
+            final Graphics2D g = img.createGraphics();
+            g.setColor(new Color(1f, 1f, 1f, 1f));
+            g.fill(new Rectangle(0, 0, width, height));
+        }
+
         return img;
     }
 

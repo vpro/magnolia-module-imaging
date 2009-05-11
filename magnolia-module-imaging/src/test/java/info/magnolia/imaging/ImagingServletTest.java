@@ -47,6 +47,7 @@ public class ImagingServletTest extends TestCase {
         expect(req.getPathInfo()).andReturn("/myGenerator/someWorkspace/some/path/to/a/node");
         expect(req.getRequestURI()).andReturn("dummyUri");
         expect(res.getOutputStream()).andReturn(servletOut);
+        res.flushBuffer();
 
         final ParameterProviderFactory<HttpServletRequest, String> ppFactory = new ParameterProviderFactory<HttpServletRequest, String>() {
             public ParameterProvider<String> newParameterProviderFor(HttpServletRequest context) {
@@ -54,7 +55,9 @@ public class ImagingServletTest extends TestCase {
             }
         };
 
-        final TestImageGenerator<StringParameterProvider> generator = new TestImageGenerator<StringParameterProvider>(ppFactory);
+        final OutputFormat outputFormat = new OutputFormat();
+        outputFormat.setFormatName("png");
+        final TestImageGenerator<StringParameterProvider> generator = new TestImageGenerator<StringParameterProvider>(ppFactory, outputFormat);
 
         final ImagingServlet imagingServlet = new ImagingServlet() {
             @Override
@@ -81,10 +84,12 @@ public class ImagingServletTest extends TestCase {
 
     private static class TestImageGenerator<P extends ParameterProvider<?>> implements ImageGenerator<P> {
         private final ParameterProviderFactory ppFactory;
+        private final OutputFormat outputFormat;
         boolean imageGeneratorWasCalled;
 
-        public TestImageGenerator(ParameterProviderFactory ppFactory) {
+        public TestImageGenerator(ParameterProviderFactory ppFactory, OutputFormat outputFormat) {
             this.ppFactory = ppFactory;
+            this.outputFormat = outputFormat;
             imageGeneratorWasCalled = false;
         }
 
@@ -98,5 +103,8 @@ public class ImagingServletTest extends TestCase {
             return ppFactory;
         }
 
+        public OutputFormat getOutputFormat() {
+            return outputFormat;
+        }
     }
 }

@@ -15,17 +15,20 @@
 package info.magnolia.imaging.operations;
 
 import com.jhlabs.image.PointFilter;
+import com.jhlabs.image.WoodFilter;
 import info.magnolia.imaging.operations.cropresize.AutoCropAndResize;
 import info.magnolia.imaging.operations.load.ClasspathImageLoader;
+import info.magnolia.imaging.operations.load.Blank;
 import info.magnolia.imaging.operations.text.FixedText;
 import info.magnolia.imaging.operations.text.TextStyle;
 import info.magnolia.imaging.parameters.StringParameterProvider;
+import info.magnolia.imaging.ImagingServlet;
+import info.magnolia.imaging.OutputFormat;
 import junit.framework.TestCase;
 
-import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.File;
+import java.io.FileOutputStream;
 
 /**
  * .
@@ -34,6 +37,43 @@ import java.io.File;
  */
 public class ImageOperationChainTest extends TestCase {
     //TODO - test that nested chains on several level work too
+
+    public void testBlankAndWood() throws Exception {
+        final ImageOperationChain<StringParameterProvider> filterChain = new ImageOperationChain<StringParameterProvider>();
+
+        final Blank blank = new Blank();
+        blank.setWidth(600);
+        blank.setHeight(400);
+        blank.setColor(Color.red);
+        filterChain.addOperation(blank);
+
+        final WoodFilter wood = new WoodFilter();
+//        wood.setAngle(1.3f);
+        wood.setRings(0.3f);
+        wood.setFibres(0.1f);
+//        wood.setTurbulence(1f);
+//        wood.setgain(0.8f);
+//        wood.setScale(200f);
+        wood.setStretch(4f);
+
+        final BufferedImageOpDelegate woodW = new BufferedImageOpDelegate();
+        woodW.setDelegate(wood);
+        filterChain.addOperation(woodW);
+
+        final StringParameterProvider p = new StringParameterProvider("hello");
+
+        final BufferedImage result = filterChain.generate(p);
+
+        final ImagingServlet servlet = new ImagingServlet();
+        final OutputFormat of = new OutputFormat();
+        of.setFormatName("jpg");
+        servlet.write(result, new FileOutputStream("test-blank.jpg"), of);
+        final OutputFormat of2 = new OutputFormat();
+        of2.setFormatName("png");
+        servlet.write(result, new FileOutputStream("test-blank.png"), of2);
+
+        Runtime.getRuntime().exec("open test-blank.jpg test-blank.png");
+    }
 
     public void testSomeTransformations() throws Exception {
 
@@ -63,9 +103,14 @@ public class ImageOperationChainTest extends TestCase {
 
         final StringParameterProvider p = new StringParameterProvider("hello");
 
-        final BufferedImage result = filterChain.apply(null, p);
-        ImageIO.write(result, "jpg", new File("test-result.jpg"));
-        Runtime.getRuntime().exec("open test-result.jpg");
+        final BufferedImage result = filterChain.generate( p);
+
+        final ImagingServlet servlet = new ImagingServlet();
+        final OutputFormat of = new OutputFormat();
+        of.setFormatName("jpg");
+        servlet.write(result, new FileOutputStream("test-result.jpg"), of);
+
+//        Runtime.getRuntime().exec("open test-result.jpg");
 
 /*
         final ClasspathImageLoader overlayLoad = new ClasspathImageLoader();
