@@ -25,7 +25,7 @@ import java.awt.image.BufferedImageOp;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public abstract class BufferedImageOpDelegate<P extends ParameterProvider<?>> implements ImageOperation<P> {
+public class BufferedImageOpDelegate<P extends ParameterProvider<?>> implements ImageOperation<P> {
     private BufferedImageOp delegate;
     // TODO -- some content2bean magic to automatically wrap BufferedImageOp into ImageOperation ?
     // -- or vice-versa ...
