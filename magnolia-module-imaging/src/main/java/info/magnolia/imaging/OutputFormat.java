@@ -24,7 +24,7 @@ import javax.imageio.ImageWriteParam;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class OuputFormat {
+public class OutputFormat {
     private String formatName;
     private boolean progressive;
     private int quality;

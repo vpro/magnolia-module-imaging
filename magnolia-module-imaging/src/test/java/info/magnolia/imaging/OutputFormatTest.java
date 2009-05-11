@@ -30,7 +30,7 @@ public class OutputFormatTest extends TestCase {
 
     public void testQualityIsProperlyConvertedToOneZeroRangeAndSetsCompressionModeToExplicit() {
         final ImageWriteParam param = new JPEGImageWriteParam(Locale.getDefault());
-        final OuputFormat f = new OuputFormat();
+        final OutputFormat f = new OutputFormat();
         f.setQuality(63);
         f.applyTo(param);
 
@@ -40,7 +40,7 @@ public class OutputFormatTest extends TestCase {
 
     public void testCompressionTypeIsProperlyConvertedToOneZeroRangeAndSetsCompressionModeToExplicit() {
         final ImageWriteParam param = new JPEGImageWriteParam(Locale.getDefault());
-        final OuputFormat f = new OuputFormat();
+        final OutputFormat f = new OutputFormat();
         f.setCompressionType("JPEG");
         f.applyTo(param);
 
@@ -50,7 +50,7 @@ public class OutputFormatTest extends TestCase {
 
     public void testProgressiveFlagIsSetProperlyWhenTrue() {
         final ImageWriteParam param = new JPEGImageWriteParam(Locale.getDefault());
-        final OuputFormat f = new OuputFormat();
+        final OutputFormat f = new OutputFormat();
         f.setProgressive(true);
         f.applyTo(param);
 
@@ -59,7 +59,7 @@ public class OutputFormatTest extends TestCase {
 
     public void testProgressiveFlagIsSetProperlyWhenFalse() {
         final ImageWriteParam param = new JPEGImageWriteParam(Locale.getDefault());
-        final OuputFormat f = new OuputFormat();
+        final OutputFormat f = new OutputFormat();
         f.setProgressive(false);
         f.applyTo(param);
 
@@ -68,7 +68,7 @@ public class OutputFormatTest extends TestCase {
 
     public void testCompressionSettingsAreNotResetWhenBothTypeAndQualityAreApplied() {
         final ImageWriteParam param = new BMPImageWriteParam(Locale.getDefault());
-        final OuputFormat f = new OuputFormat();
+        final OutputFormat f = new OutputFormat();
         f.setCompressionType("BI_JPEG");
         f.setQuality(42);
         f.applyTo(param);
