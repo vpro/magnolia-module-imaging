@@ -59,6 +59,9 @@ public class CachingAndStoringImageGenerator<P> {
     }
 
     public void serveImage(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> params, OutputStream out) throws IOException, ImagingException {
+        // TODO -- this is assuming that a generated node's path is retrievable from the params.
+        // TODO -- since there might be querying involved, it might be more efficient and clear if this method would instead
+        // TODO -- return the node instance directly
         final String nodePath = getGeneratedImageNodePath(generator, params);
         InputStream imgStream = fromCache(nodePath, params);
         if (imgStream == null) {
