@@ -14,4 +14,12 @@
     </dependency>
   </dependencies>
 
+  <repositories>
+    <repository>
+      <name>magnolia</name>
+      <workspaces>
+        <workspace>imaging</workspace>
+      </workspaces>
+    </repository>
+  </repositories>
 </module>

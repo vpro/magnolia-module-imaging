@@ -37,4 +37,11 @@ public interface ParameterProviderFactory<E, PT> {
      */
     ParameterProvider<PT> newParameterProviderFor(E environment);
 
+    /**
+     * Returns a unique path pertinent to the given parameter. Note that this is *not* the final
+     * path to the generated image's node, as the CachingAndStoringImageGenerator will augment
+     * this path, for instance by prefixing it with the generator name.
+     */
+    String getGeneratedImageNodePath(PT p);
+
 }

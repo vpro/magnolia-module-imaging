@@ -14,6 +14,11 @@
  */
 package info.magnolia.imaging;
 
+import info.magnolia.cms.core.Content;
+import info.magnolia.cms.core.HierarchyManager;
+import info.magnolia.cms.core.NodeData;
+import info.magnolia.context.Context;
+import info.magnolia.context.MgnlContext;
 import junit.framework.TestCase;
 import static org.easymock.EasyMock.*;
 
@@ -26,6 +31,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  *
@@ -34,6 +40,11 @@ import java.io.IOException;
  */
 public class ImagingServletTest extends TestCase {
 
+    protected void tearDown() throws Exception {
+        MgnlContext.setInstance(null);
+        super.tearDown();
+    }
+
     public void testRequestToFactoryToGeneratorToImage() throws Exception {
         final ByteArrayOutputStream fakedOut = new ByteArrayOutputStream();
         final ServletOutputStream servletOut = new ServletOutputStream() {
@@ -41,8 +52,22 @@ public class ImagingServletTest extends TestCase {
                 fakedOut.write(b);
             }
         };
+        final Context ctx = createStrictMock(Context.class);
+        final HierarchyManager hm = createStrictMock(HierarchyManager.class);
+        final Content node = createStrictMock(Content.class);
+        final NodeData prop = createStrictMock(NodeData.class);
         final HttpServletRequest req = createStrictMock(HttpServletRequest.class);
         final HttpServletResponse res = createStrictMock(HttpServletResponse.class);
+        expect(ctx.getHierarchyManager("imaging")).andReturn(hm);
+        // TODO -- test should substitute another implementation of CachingAndStoringImageGenerator
+        // TODO -- either extract an interface, or make it an ImageGenerator
+        expect(hm.isExist("/myGenerator/path-to/dummyUri/generated")).andReturn(true);
+        expect(hm.getContent("/myGenerator/path-to/dummyUri/generated")).andReturn(node);
+
+        expect(node.getNodeData("generated-image")).andReturn(prop);
+        expect(prop.isExist()).andReturn(true);
+        expect(prop.getStream()).andReturn(new ByteArrayInputStream(new byte[]{1,2,3}));
+//        expect(node.hasNodeData("generated-image")).andReturn(false);
         expect(req.getPathInfo()).andReturn("/myGenerator/someWorkspace/some/path/to/a/node");
         expect(req.getRequestURI()).andReturn("dummyUri");
         expect(res.getOutputStream()).andReturn(servletOut);
@@ -51,6 +76,10 @@ public class ImagingServletTest extends TestCase {
         final ParameterProviderFactory<HttpServletRequest, String> ppFactory = new ParameterProviderFactory<HttpServletRequest, String>() {
             public ParameterProvider<String> newParameterProviderFor(HttpServletRequest context) {
                 return new StringParameterProvider(context.getRequestURI());
+            }
+
+            public String getGeneratedImageNodePath(String p) {
+                return "/path-to/" + p + "/generated";
             }
         };
 
@@ -62,23 +91,32 @@ public class ImagingServletTest extends TestCase {
             @Override
             protected ImagingModuleConfig getImagingConfiguration() {
                 final ImagingModuleConfig cfg = new ImagingModuleConfig();
-                cfg.addGenerator("myGenerator", generator);
+                cfg.addGenerator(generator.getName(), generator);
                 return cfg;
             }
         };
 
-        replay(req, res);
+        replay(ctx, hm, node, prop, req, res);
+        MgnlContext.setInstance(ctx);
         imagingServlet.doGet(req, res);
-        verify(req, res);
+        verify(ctx, hm, node, prop, req, res);
 
-        assertTrue("ImageGenerator.generate() wasn't called !", generator.imageGeneratorWasCalled);
+        // TODO - disabled for now
+        // assertTrue("ImageGenerator.generate() wasn't called !", generator.imageGeneratorWasCalled);
 
+        // TODO - instead we're checking we've output what was given by the cache
+        assertEquals(3, fakedOut.toByteArray().length);
+        assertEquals(1, fakedOut.toByteArray()[0]);
+        assertEquals(2, fakedOut.toByteArray()[1]);
+        assertEquals(3, fakedOut.toByteArray()[2]);
+
+        // TODO - disabled for now
         // yes, we could instead feed the test with a FileOutputStream instead of doing the shenanigans of reading/saving, but this piece below shouldn't stay here
         // it just generates a small black jpeg...
-        final BufferedImage img = ImageIO.read(new ByteArrayInputStream(fakedOut.toByteArray()));
-        final String filename = getClass().getSimpleName() + ".jpg";
-        ImageIO.write(img, "jpg", new File(filename));
-        Runtime.getRuntime().exec("open " + filename);
+//        final BufferedImage img = ImageIO.read(new ByteArrayInputStream(fakedOut.toByteArray()));
+//        final String filename = getClass().getSimpleName() + ".jpg";
+//        ImageIO.write(img, "jpg", new File(filename));
+        // Runtime.getRuntime().exec("open " + filename);
     }
 
     private static class TestImageGenerator<P extends ParameterProvider<?>> implements ImageGenerator<P> {
@@ -104,6 +142,10 @@ public class ImagingServletTest extends TestCase {
 
         public OutputFormat getOutputFormat() {
             return outputFormat;
+        }
+
+        public String getName() {
+            return "myGenerator";
         }
     }
 }

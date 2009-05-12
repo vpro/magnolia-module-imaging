@@ -16,9 +16,9 @@ package info.magnolia.imaging.operations;
 
 import info.magnolia.imaging.ImageGenerator;
 import info.magnolia.imaging.ImagingException;
+import info.magnolia.imaging.OutputFormat;
 import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.ParameterProviderFactory;
-import info.magnolia.imaging.OutputFormat;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -35,6 +35,7 @@ public class ImageOperationChain<P extends ParameterProvider<?>> implements Imag
     private final List<ImageOperation<P>> operations;
     private ParameterProviderFactory parameterProviderFactory;
     private OutputFormat outputFormat;
+    private String name;
 
     public ImageOperationChain() {
         this.operations = new ArrayList<ImageOperation<P>>();
@@ -52,6 +53,14 @@ public class ImageOperationChain<P extends ParameterProvider<?>> implements Imag
             result = op.apply(result, params);
         }
         return result;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public ParameterProviderFactory getParameterProviderFactory() {

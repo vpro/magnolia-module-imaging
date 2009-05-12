@@ -22,8 +22,8 @@ import info.magnolia.imaging.operations.load.Blank;
 import info.magnolia.imaging.operations.text.FixedText;
 import info.magnolia.imaging.operations.text.TextStyle;
 import info.magnolia.imaging.StringParameterProvider;
-import info.magnolia.imaging.ImagingServlet;
 import info.magnolia.imaging.OutputFormat;
+import info.magnolia.imaging.CachingAndStoringImageGenerator;
 import junit.framework.TestCase;
 
 import java.awt.Color;
@@ -64,15 +64,15 @@ public class ImageOperationChainTest extends TestCase {
 
         final BufferedImage result = filterChain.generate(p);
 
-        final ImagingServlet servlet = new ImagingServlet();
+        final CachingAndStoringImageGenerator outputter = new CachingAndStoringImageGenerator(null);
         final OutputFormat of = new OutputFormat();
         of.setFormatName("jpg");
-        servlet.write(result, new FileOutputStream("test-blank.jpg"), of);
+        outputter.write(result, new FileOutputStream("test-blank.jpg"), of);
         final OutputFormat of2 = new OutputFormat();
         of2.setFormatName("png");
-        servlet.write(result, new FileOutputStream("test-blank.png"), of2);
+        outputter.write(result, new FileOutputStream("test-blank.png"), of2);
 
-        Runtime.getRuntime().exec("open test-blank.jpg test-blank.png");
+        // Runtime.getRuntime().exec("open test-blank.jpg test-blank.png");
     }
 
     public void testSomeTransformations() throws Exception {
@@ -105,10 +105,10 @@ public class ImageOperationChainTest extends TestCase {
 
         final BufferedImage result = filterChain.generate( p);
 
-        final ImagingServlet servlet = new ImagingServlet();
+        final CachingAndStoringImageGenerator outputter = new CachingAndStoringImageGenerator(null);
         final OutputFormat of = new OutputFormat();
         of.setFormatName("jpg");
-        servlet.write(result, new FileOutputStream("test-result.jpg"), of);
+        outputter.write(result, new FileOutputStream("test-result.jpg"), of);
 
 //        Runtime.getRuntime().exec("open test-result.jpg");
 

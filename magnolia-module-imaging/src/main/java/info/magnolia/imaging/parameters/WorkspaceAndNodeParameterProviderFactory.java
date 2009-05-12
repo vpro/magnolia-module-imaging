@@ -56,7 +56,9 @@ public class WorkspaceAndNodeParameterProviderFactory implements ParameterProvid
         } catch (RepositoryException e) {
             throw new RuntimeException(e); // TODO
         }
-
     }
 
+    public String getGeneratedImageNodePath(Content p) {
+        return "/" + p.getHierarchyManager().getName() + p.getHandle();
+    }
 }
