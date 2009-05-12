@@ -21,7 +21,7 @@ import info.magnolia.imaging.operations.load.ClasspathImageLoader;
 import info.magnolia.imaging.operations.load.Blank;
 import info.magnolia.imaging.operations.text.FixedText;
 import info.magnolia.imaging.operations.text.TextStyle;
-import info.magnolia.imaging.parameters.StringParameterProvider;
+import info.magnolia.imaging.StringParameterProvider;
 import info.magnolia.imaging.ImagingServlet;
 import info.magnolia.imaging.OutputFormat;
 import junit.framework.TestCase;

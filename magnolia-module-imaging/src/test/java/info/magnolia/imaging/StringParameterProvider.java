@@ -12,9 +12,7 @@
  * intact.
  *
  */
-package info.magnolia.imaging.parameters;
-
-import info.magnolia.imaging.ParameterProvider;
+package info.magnolia.imaging;
 
 /**
  *

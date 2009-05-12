@@ -14,7 +14,6 @@
  */
 package info.magnolia.imaging;
 
-import info.magnolia.imaging.parameters.StringParameterProvider;
 import junit.framework.TestCase;
 import static org.easymock.EasyMock.*;
 

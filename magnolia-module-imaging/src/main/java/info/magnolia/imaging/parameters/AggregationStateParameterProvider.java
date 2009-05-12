@@ -19,7 +19,9 @@ import info.magnolia.context.MgnlContext;
 import info.magnolia.imaging.ParameterProvider;
 
 /**
- *
+ * A ParameterProvider which provides the AggregationState as a parameter; TODO -currently not used nor having
+ * a corresponding ParameterProviderFactory.
+ * 
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
