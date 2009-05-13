@@ -47,9 +47,8 @@ public class ImagingServlet extends HttpServlet {
 
         try {
             // TODO -- mimetype etc.
-            final HierarchyManager hm = MgnlContext.getHierarchyManager("imaging");
-            final CachingAndStoringImageGenerator cachingAndStoringImageGenerator = new CachingAndStoringImageGenerator(hm);
-            cachingAndStoringImageGenerator.serveImage(generator, p, response.getOutputStream());
+            final ImageStreamer streamer = getStreamer();
+            streamer.serveImage(generator, p, response.getOutputStream());
 
             response.flushBuffer();
             // IOUtils.closeQuietly(response.getOutputStream());
@@ -69,6 +68,11 @@ public class ImagingServlet extends HttpServlet {
     protected ImageGenerator getGenerator(String generatorName) {
         final ImagingModuleConfig config = getImagingConfiguration();
         return config.getGenerators().get(generatorName);
+    }
+
+    protected ImageStreamer getStreamer() {
+        final HierarchyManager hm = MgnlContext.getHierarchyManager("imaging");
+        return new CachingImageStreamer(hm, new DefaultImageStreamer());
     }
 
     protected ImagingModuleConfig getImagingConfiguration() {

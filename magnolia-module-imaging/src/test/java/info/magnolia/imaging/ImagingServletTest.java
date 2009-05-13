@@ -22,16 +22,13 @@ import info.magnolia.context.MgnlContext;
 import junit.framework.TestCase;
 import static org.easymock.EasyMock.*;
 
-import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 
 /**
  *
@@ -59,7 +56,7 @@ public class ImagingServletTest extends TestCase {
         final HttpServletRequest req = createStrictMock(HttpServletRequest.class);
         final HttpServletResponse res = createStrictMock(HttpServletResponse.class);
         expect(ctx.getHierarchyManager("imaging")).andReturn(hm);
-        // TODO -- test should substitute another implementation of CachingAndStoringImageGenerator
+        // TODO -- test should substitute another implementation of CachingImageStreamer
         // TODO -- either extract an interface, or make it an ImageGenerator
         expect(hm.isExist("/myGenerator/path-to/dummyUri/generated")).andReturn(true);
         expect(hm.getContent("/myGenerator/path-to/dummyUri/generated")).andReturn(node);

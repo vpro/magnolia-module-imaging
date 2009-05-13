@@ -12,8 +12,9 @@
  * intact.
  *
  */
-package info.magnolia.imaging;
+package info.magnolia.imaging.util;
 
+import info.magnolia.imaging.OutputFormat;
 import junit.framework.TestCase;
 
 import javax.imageio.ImageIO;
@@ -29,12 +30,14 @@ import java.io.IOException;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class SelfTest extends TestCase {
+public class ImageUtilTest extends TestCase {
     /**
      * A test case that shows something odd with the jpeg encoder when saving a transparent image.
-     * @see info.magnolia.imaging.CachingAndStoringImageGenerator#flattenTransparentImageForOpaqueFormat(java.awt.image.BufferedImage, OutputFormat) 
      */
     public void testJpegOddity() throws IOException {
+        final OutputFormat jpg = new OutputFormat();
+        jpg.setFormatName("jpg");
+
         // create a transparent image of 300x300 pixels
         final BufferedImage img = new BufferedImage(300, 300, BufferedImage.TYPE_INT_ARGB);
 
@@ -46,6 +49,18 @@ public class SelfTest extends TestCase {
         // save it - that the background is pinkish, well, why not, but our small square is .. black !?
         final String filename = getClass().getSimpleName() + "-testJpegOddity.jpg";
         ImageIO.write(img, "jpg", new FileOutputStream(filename));
-        Runtime.getRuntime().exec("open " + filename);
+
+        // now use our workaround and compare results !
+        final BufferedImage flattened = ImageUtil.flattenTransparentImageForOpaqueFormat(img, jpg);
+        final String filename2 = getClass().getSimpleName() + "-testJpegOddity-flattenTransparentImageForOpaqueFormat.jpg";
+        ImageIO.write(flattened, "jpg", new FileOutputStream(filename2));
+
+        // use other workaround to see
+        final BufferedImage filled = ImageUtil.fillTransparentPixels(img, Color.green);
+        final String filename3 = getClass().getSimpleName() + "-testJpegOddity-fillTransparentPixels.jpg";
+        ImageIO.write(filled, "jpg", new FileOutputStream(filename3));
+
+        Runtime.getRuntime().exec("open " + filename + " " + filename2 + " " + filename3);
+
     }
 }

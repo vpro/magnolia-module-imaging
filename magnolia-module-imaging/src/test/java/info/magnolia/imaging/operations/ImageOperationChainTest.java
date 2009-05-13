@@ -16,16 +16,15 @@ package info.magnolia.imaging.operations;
 
 import com.jhlabs.image.PointFilter;
 import com.jhlabs.image.WoodFilter;
+import info.magnolia.imaging.StringParameterProvider;
 import info.magnolia.imaging.operations.cropresize.AutoCropAndResize;
-import info.magnolia.imaging.operations.load.ClasspathImageLoader;
 import info.magnolia.imaging.operations.load.Blank;
+import info.magnolia.imaging.operations.load.ClasspathImageLoader;
 import info.magnolia.imaging.operations.text.FixedText;
 import info.magnolia.imaging.operations.text.TextStyle;
-import info.magnolia.imaging.StringParameterProvider;
-import info.magnolia.imaging.OutputFormat;
-import info.magnolia.imaging.CachingAndStoringImageGenerator;
 import junit.framework.TestCase;
 
+import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.FileOutputStream;
@@ -64,13 +63,8 @@ public class ImageOperationChainTest extends TestCase {
 
         final BufferedImage result = filterChain.generate(p);
 
-        final CachingAndStoringImageGenerator outputter = new CachingAndStoringImageGenerator(null);
-        final OutputFormat of = new OutputFormat();
-        of.setFormatName("jpg");
-        outputter.write(result, new FileOutputStream("test-blank.jpg"), of);
-        final OutputFormat of2 = new OutputFormat();
-        of2.setFormatName("png");
-        outputter.write(result, new FileOutputStream("test-blank.png"), of2);
+        ImageIO.write(result, "jpg", new FileOutputStream("test-blank.jpg"));
+        ImageIO.write(result, "png", new FileOutputStream("test-blank.png"));
 
         // Runtime.getRuntime().exec("open test-blank.jpg test-blank.png");
     }
@@ -103,12 +97,9 @@ public class ImageOperationChainTest extends TestCase {
 
         final StringParameterProvider p = new StringParameterProvider("hello");
 
-        final BufferedImage result = filterChain.generate( p);
+        final BufferedImage result = filterChain.generate(p);
 
-        final CachingAndStoringImageGenerator outputter = new CachingAndStoringImageGenerator(null);
-        final OutputFormat of = new OutputFormat();
-        of.setFormatName("jpg");
-        outputter.write(result, new FileOutputStream("test-result.jpg"), of);
+        ImageIO.write(result, "jpg", new FileOutputStream("test-result.jpg"));
 
 //        Runtime.getRuntime().exec("open test-result.jpg");
 

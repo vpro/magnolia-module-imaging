@@ -22,40 +22,30 @@ import info.magnolia.cms.util.ContentUtil;
 import info.magnolia.cms.util.NodeDataUtil;
 import org.apache.commons.io.IOUtils;
 
-import javax.imageio.IIOImage;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageTypeSpecifier;
-import javax.imageio.ImageWriteParam;
-import javax.imageio.ImageWriter;
-import javax.imageio.stream.ImageOutputStream;
 import javax.jcr.PropertyType;
 import javax.jcr.RepositoryException;
-import java.awt.Transparency;
-import java.awt.image.BufferedImage;
-import java.awt.image.DirectColorModel;
-import java.awt.image.WritableRaster;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Calendar;
-import java.util.Iterator;
 
 /**
- *
- * TODO : cleanup API, this is proof-of-concept / temp
+ * An ImageStreamer which stores and serves generated images to/from a specific workspace.
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class CachingAndStoringImageGenerator<P> {
+public class CachingImageStreamer<P> implements ImageStreamer<P> {
     private static final String GENERATED_IMAGE_PROPERTY = "generated-image";
 
     private final HierarchyManager hm;
+    private final ImageStreamer<P> delegate;
 
-    public CachingAndStoringImageGenerator(HierarchyManager hm) {
+    public CachingImageStreamer(HierarchyManager hm, ImageStreamer<P> delegate) {
         this.hm = hm;
+        this.delegate = delegate;
     }
 
     public void serveImage(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> params, OutputStream out) throws IOException, ImagingException {
@@ -65,9 +55,7 @@ public class CachingAndStoringImageGenerator<P> {
         final String nodePath = getGeneratedImageNodePath(generator, params);
         InputStream imgStream = fromCache(nodePath, params);
         if (imgStream == null) {
-            final BufferedImage img = generator.generate(params);
-
-            imgStream = store(img, nodePath, generator.getOutputFormat());
+            imgStream = store(generator, params, nodePath);
         }
         IOUtils.copy(imgStream, out);
     }
@@ -81,7 +69,7 @@ public class CachingAndStoringImageGenerator<P> {
     /**
      * Gets an InputStream with data for the appropriate image, or null if the image should be regenerated.
      */
-    private InputStream fromCache(String nodePath, ParameterProvider<P> p) {
+    protected InputStream fromCache(String nodePath, ParameterProvider<P> p) {
         try {
             if (!hm.isExist(nodePath)) {
                 return null;
@@ -105,75 +93,36 @@ public class CachingAndStoringImageGenerator<P> {
         }
     }
 
-    private boolean shouldRegenerate(NodeData nodeData, ParameterProvider p) {
+    protected boolean shouldRegenerate(NodeData nodeData, ParameterProvider p) {
         // TODO
         return false;
     }
 
+
     /**
      * Store the given image under the given path, and returns an InputStream to read the image back.
      */
-    private InputStream store(BufferedImage img, String nodePath, OutputFormat outputFormat) throws IOException {
+    protected InputStream store(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> params, String nodePath) throws IOException, ImagingException {
         try {
             final Content imageNode = ContentUtil.createPath(hm, nodePath, false);
             final NodeData imageData = NodeDataUtil.getOrCreate(imageNode, GENERATED_IMAGE_PROPERTY, PropertyType.BINARY);
 
             final ByteArrayOutputStream tempOut = new ByteArrayOutputStream();
-            write(img, tempOut, outputFormat);
+            delegate.serveImage(generator, params, tempOut);
 
             final ByteArrayInputStream tempIn = new ByteArrayInputStream(tempOut.toByteArray());
             imageData.setValue(tempIn);
-            // TODO
-            imageData.setAttribute(FileProperties.PROPERTY_CONTENTTYPE, "image/" + outputFormat.getFormatName());
+            // TODO mimetype, lastmod, and other attributes ?
+            imageData.setAttribute(FileProperties.PROPERTY_CONTENTTYPE, "image/" + generator.getOutputFormat().getFormatName());
             imageData.setAttribute(FileProperties.PROPERTY_LASTMODIFIED, Calendar.getInstance());
 
             hm.save();
 
             return imageData.getStream();
         } catch (RepositoryException e) {
-            throw new RuntimeException(e); // TODO
+            throw new ImagingException("Can't store rendered image: " + e.getMessage(), e);
         }
     }
 
-    // todo : moved this method out of ImagingServlet - used by tests but should not be public
-    // TODO : move this to yet another more appropriate place ?
-    public void write(BufferedImage img, final OutputStream out, final OutputFormat outputFormat) throws IOException {
-        // if source is transparent and format doesn't support transparency, we have to do some handy work
-        img = flattenTransparentImageForOpaqueFormat(img, outputFormat);
-
-        // this is factored out of ImageIO.write() to allow customization of the ImageWriteParam
-        final ImageOutputStream imgOut = ImageIO.createImageOutputStream(out);
-        final ImageTypeSpecifier imgType = ImageTypeSpecifier.createFromRenderedImage(img);
-        final Iterator<ImageWriter> iter = ImageIO.getImageWriters(imgType, outputFormat.getFormatName());
-        if (!iter.hasNext()) {
-            throw new IllegalStateException("Can't find ImageWriter for " + outputFormat.getFormatName());
-        }
-        final ImageWriter imageWriter = iter.next();
-        final ImageWriteParam params = imageWriter.getDefaultWriteParam();
-
-        outputFormat.applyTo(params);
-        imageWriter.setOutput(imgOut);
-
-        imageWriter.write(null, new IIOImage(img, null, null), params);
-        imageWriter.dispose();
-    }
-
-    /**
-     * @see info.magnolia.imaging.SelfTest#testJpegOddity()
-     */
-    protected BufferedImage flattenTransparentImageForOpaqueFormat(BufferedImage img, OutputFormat outputFormat) {
-        if (img.getTransparency() != Transparency.OPAQUE && !outputFormat.supportsTransparency()) {
-            final WritableRaster raster = img.getRaster();
-            final WritableRaster newRaster = raster.createWritableChild(0, 0, img.getWidth(), img.getHeight(), 0, 0, new int[]{0, 1, 2});
-
-            // create a ColorModel that represents the one of the ARGB except the alpha channel
-            final DirectColorModel cm = (DirectColorModel) img.getColorModel();
-            final DirectColorModel newCM = new DirectColorModel(cm.getPixelSize(), cm.getRedMask(), cm.getGreenMask(), cm.getBlueMask());
-
-            // now create the new buffer that we'll use to write the image
-            img = new BufferedImage(newCM, newRaster, false, null);
-        }
-        return img;
-    }
 
 }
