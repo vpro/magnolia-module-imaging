@@ -19,7 +19,7 @@ package info.magnolia.imaging;
  * for a given environment. Implementations know what concrete environment they expect and what
  * concrete type of ParameterProvider they generate. The "environment" is likely to be
  * an HttpServletRequest, but could also be a WorkItemContext, for instance.
- * 
+ *
  * TODO -- verify, validate, fix the following :
  * TODO -- The type of context basically depends on the caller. In most cases, the context (C)
  * TODO -- will be an HttpServletRequest or a Magnolia Context instance.

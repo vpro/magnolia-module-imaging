@@ -14,10 +14,10 @@
  */
 package info.magnolia.imaging;
 
+import info.magnolia.cms.core.HierarchyManager;
+import info.magnolia.context.MgnlContext;
 import info.magnolia.imaging.util.PathSplitter;
 import info.magnolia.module.ModuleRegistry;
-import info.magnolia.context.MgnlContext;
-import info.magnolia.cms.core.HierarchyManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
