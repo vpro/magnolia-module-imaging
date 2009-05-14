@@ -49,27 +49,20 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
     }
 
     public void serveImage(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> params, OutputStream out) throws IOException, ImagingException {
-        // TODO -- this is assuming that a generated node's path is retrievable from the params.
-        // TODO -- since there might be querying involved, it might be more efficient and clear if this method would instead
-        // TODO -- return the node instance directly
-        final String nodePath = getGeneratedImageNodePath(generator, params);
-        InputStream imgStream = fromCache(nodePath, params);
+        InputStream imgStream = fetchFromCache(generator, params);
         if (imgStream == null) {
-            imgStream = store(generator, params, nodePath);
+            // image is not in cache or should be regenerated
+            // TODO - lock/wait on requests for the same image
+           imgStream = generateAndStore(generator, params);
         }
         IOUtils.copy(imgStream, out);
-    }
-
-    protected String getGeneratedImageNodePath(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> params) {
-        final ParameterProviderFactory<?, P> factory = generator.getParameterProviderFactory();
-        final String nodePathSuffix = factory.getGeneratedImageNodePath(params.getParameter());
-        return "/" + generator.getName() + nodePathSuffix;
     }
 
     /**
      * Gets an InputStream with data for the appropriate image, or null if the image should be regenerated.
      */
-    protected InputStream fromCache(String nodePath, ParameterProvider<P> p) {
+    protected InputStream fetchFromCache(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> parameterProvider) {
+        final String nodePath = getGeneratedImageNodePath(generator, parameterProvider);
         try {
             if (!hm.isExist(nodePath)) {
                 return null;
@@ -79,7 +72,7 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
             if (!nodeData.isExist()) {
                 return null;
             }
-            if (shouldRegenerate(nodeData, p)) {
+            if (shouldRegenerate(nodeData, parameterProvider)) {
                 return null;
             }
             final InputStream in = nodeData.getStream();
@@ -93,7 +86,16 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
         }
     }
 
-    protected boolean shouldRegenerate(NodeData nodeData, ParameterProvider p) {
+    // TODO -- this is assuming that a generated node's path is retrievable from the params.
+    // TODO -- since there might be querying involved, it might be more efficient and clear if this method would instead
+    // TODO -- return the node instance directly
+    protected String getGeneratedImageNodePath(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> params) {
+        final ParameterProviderFactory<?, P> factory = generator.getParameterProviderFactory();
+        final String nodePathSuffix = factory.getGeneratedImageNodePath(params.getParameter());
+        return "/" + generator.getName() + nodePathSuffix;
+    }
+
+    protected boolean shouldRegenerate(NodeData cachedBinary, ParameterProvider parameterProvider) {
         // TODO
         return false;
     }
@@ -102,13 +104,14 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
     /**
      * Store the given image under the given path, and returns an InputStream to read the image back.
      */
-    protected InputStream store(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> params, String nodePath) throws IOException, ImagingException {
+    protected InputStream generateAndStore(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> parameterProvider) throws IOException, ImagingException {
+        final String nodePath = getGeneratedImageNodePath(generator, parameterProvider);
         try {
             final Content imageNode = ContentUtil.createPath(hm, nodePath, false);
             final NodeData imageData = NodeDataUtil.getOrCreate(imageNode, GENERATED_IMAGE_PROPERTY, PropertyType.BINARY);
 
             final ByteArrayOutputStream tempOut = new ByteArrayOutputStream();
-            delegate.serveImage(generator, params, tempOut);
+            delegate.serveImage(generator, parameterProvider, tempOut);
 
             final ByteArrayInputStream tempIn = new ByteArrayInputStream(tempOut.toByteArray());
             imageData.setValue(tempIn);
@@ -123,6 +126,5 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
             throw new ImagingException("Can't store rendered image: " + e.getMessage(), e);
         }
     }
-
 
 }
