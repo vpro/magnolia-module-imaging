@@ -61,6 +61,8 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
      * This Map implementation is written as such that the first call to get(K) will
      * generate the value (by calling <V> Function.apply(<K>). Further calls are
      * blocked until the value is generated, and they all retrieve the same value.
+     *
+     * TODO : exception handling. see ComputationException
      */
     final ConcurrentMap<ImageGenerationJob<P>, NodeData> currentJobs = new MapMaker()
 //                    .concurrencyLevel(32)
