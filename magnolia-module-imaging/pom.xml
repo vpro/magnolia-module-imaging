@@ -20,6 +20,10 @@
       <groupId>com.jhlabs</groupId>
       <artifactId>filters</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.google.collections</groupId>
+      <artifactId>google-collections</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>junit</groupId>
@@ -32,6 +36,11 @@
     <dependency>
       <groupId>org.easymock</groupId>
       <artifactId>easymockclassextension</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>info.magnolia</groupId>
+      <artifactId>magnolia-core</artifactId>
+      <type>test-jar</type>
     </dependency>
   </dependencies>
 </project>

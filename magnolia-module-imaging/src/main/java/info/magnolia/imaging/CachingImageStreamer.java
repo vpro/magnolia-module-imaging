@@ -14,6 +14,8 @@
  */
 package info.magnolia.imaging;
 
+import com.google.common.base.Function;
+import com.google.common.collect.MapMaker;
 import info.magnolia.cms.beans.runtime.FileProperties;
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.HierarchyManager;
@@ -30,6 +32,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * An ImageStreamer which stores and serves generated images to/from a specific workspace.
@@ -48,20 +53,54 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
         this.delegate = delegate;
     }
 
+    /** TODO: make static if we don't use the exact same instance for all threads ? */
+    /**
+     * This Map is the key to understanding how this class works.
+     * By using a computing map, we are essentially locking all requests
+     * coming in for the same image (ImageGenerationJob) except one.
+     * This Map implementation is written as such that the first call to get(K) will
+     * generate the value (by calling <V> Function.apply(<K>). Further calls are
+     * blocked until the value is generated, and they all retrieve the same value.
+     */
+    final ConcurrentMap<ImageGenerationJob<P>, NodeData> currentJobs = new MapMaker()
+//                    .concurrencyLevel(32)
+//                    .softKeys()
+//                    .weakValues()
+            // entries from the map will be removed 500ms after their creation
+            // TODO - is this correct ? or will it fail if the image generation takes longer ? (seemed to work with 3ms but then again the generation wasn't heavy)
+            .expiration(500, TimeUnit.MILLISECONDS)
+
+            .makeComputingMap(new Function<ImageGenerationJob<P>, NodeData>() {
+                public NodeData apply(ImageGenerationJob<P> job) {
+                    try {
+                        System.out.println(new Date() + " Generating and storing for = " + job.params + " with " + job.generator);
+                        return generateAndStore(job.generator, job.params);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e); // TODO
+                    } catch (ImagingException e) {
+                        throw new RuntimeException(e); // TODO
+                    }
+                }
+            });
+
     public void serveImage(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> params, OutputStream out) throws IOException, ImagingException {
-        InputStream imgStream = fetchFromCache(generator, params);
-        if (imgStream == null) {
+        NodeData imgProp = fetchFromCache(generator, params);
+        if (imgProp == null) {
             // image is not in cache or should be regenerated
-            // TODO - lock/wait on requests for the same image
-           imgStream = generateAndStore(generator, params);
+            System.out.println(new Date() + " not found in cache for = " + params + " with " + generator);
+            imgProp = currentJobs.get(new ImageGenerationJob(generator, params));
+            System.out.println(new Date() + " served from current jobs - currentJobs.size() = " + currentJobs.size());
+        } else {
+            System.out.println(new Date() + " found in cache - currentJobs.size() = " + currentJobs.size());
         }
-        IOUtils.copy(imgStream, out);
+        serve(imgProp, out);
     }
 
     /**
-     * Gets an InputStream with data for the appropriate image, or null if the image should be regenerated.
+     * Gets the binary property (NodeData) for the appropriate image, ready to be served,
+     * or null if the image should be regenerated.
      */
-    protected InputStream fetchFromCache(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> parameterProvider) {
+    protected NodeData fetchFromCache(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> parameterProvider) {
         final String nodePath = getGeneratedImageNodePath(generator, parameterProvider);
         try {
             if (!hm.isExist(nodePath)) {
@@ -75,15 +114,18 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
             if (shouldRegenerate(nodeData, parameterProvider)) {
                 return null;
             }
-            final InputStream in = nodeData.getStream();
-            if (in == null) {
-                throw new IllegalStateException("Can't get InputStream from " + nodeData.getHandle());
-            }
-
-            return in;
+            return nodeData;
         } catch (RepositoryException e) {
             throw new RuntimeException(e); // TODO
         }
+    }
+
+    protected void serve(NodeData binary, OutputStream out) throws IOException {
+        final InputStream in = binary.getStream();
+        if (in == null) {
+            throw new IllegalStateException("Can't get InputStream from " + binary.getHandle());
+        }
+        IOUtils.copy(in, out);
     }
 
     // TODO -- this is assuming that a generated node's path is retrievable from the params.
@@ -100,11 +142,7 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
         return false;
     }
 
-
-    /**
-     * Store the given image under the given path, and returns an InputStream to read the image back.
-     */
-    protected InputStream generateAndStore(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> parameterProvider) throws IOException, ImagingException {
+    protected NodeData generateAndStore(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> parameterProvider) throws IOException, ImagingException {
         final String nodePath = getGeneratedImageNodePath(generator, parameterProvider);
         try {
             final Content imageNode = ContentUtil.createPath(hm, nodePath, false);
@@ -121,10 +159,44 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
 
             hm.save();
 
-            return imageData.getStream();
+            return imageData;
         } catch (RepositoryException e) {
             throw new ImagingException("Can't store rendered image: " + e.getMessage(), e);
         }
     }
 
+    // the IMPORTANT bit here is that we compare params.getParameter() and not params !
+    // same thing for calculating the hash
+    // we're assuming that whatever parameter is used provides a valid equals/hashCode() pair
+    // TODO - and ... DefaultContent does not.
+    protected static final class ImageGenerationJob<P> {
+        private final ImageGenerator generator;
+        private final ParameterProvider<P> params;
+
+        private ImageGenerationJob(ImageGenerator generator, ParameterProvider<P> params) {
+            this.generator = generator;
+            this.params = params;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            ImageGenerationJob that = (ImageGenerationJob) o;
+
+            if (!generator.equals(that.generator)) return false;
+            if (!params.getParameter().equals(that.params.getParameter())) return false;
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = generator.hashCode();
+            result = 31 * result + params.getParameter().hashCode();
+            return result;
+        }
+
+    }
 }
