@@ -169,6 +169,10 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
     // same thing for calculating the hash
     // we're assuming that whatever parameter is used provides a valid equals/hashCode() pair
     // TODO - and ... DefaultContent does not.
+    // TODO - and since there isn't one single/simple way of implementing equals() for a node
+    // (using just the uuid wouldn't be enough, it might have been modified, and here we might have the "same" node coming from 2 different sessions... etc etc)
+    // TODO - then we might want to have an equals/hash pair at ParameterProvider(Factory) level
+
     protected static final class ImageGenerationJob<P> {
         private final ImageGenerator generator;
         private final ParameterProvider<P> params;
