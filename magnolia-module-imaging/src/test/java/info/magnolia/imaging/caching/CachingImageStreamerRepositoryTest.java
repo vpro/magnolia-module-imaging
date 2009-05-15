@@ -141,8 +141,11 @@ public class CachingImageStreamerRepositoryTest extends RepositoryTestCase {
         // assert all outs are the same
         for (int i = 1; i < outs.length; i++) {
             // TODO assert they're all equals byte to byte to the source? or in size? can't as-is since we re-save..
-            assertTrue(outs[i - 1].toByteArray().length > 0);
-            assertTrue(Arrays.equals(outs[i - 1].toByteArray(), outs[i].toByteArray()));
+            final byte[] a = outs[i - 1].toByteArray();
+            final byte[] b = outs[i].toByteArray();
+            assertTrue(a.length > 0);
+            assertEquals("Different sizes (" + Math.abs(a.length - b.length) + " bytes diff.)", a.length, b.length);
+            assertTrue("not equals for outs/" + i, Arrays.equals(a, b));
             outs[i - 1] = null; // cleanup all those byte[], or we'll soon run out of memory
         }
         outs[outs.length - 1] = null;
