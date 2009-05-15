@@ -12,7 +12,7 @@
  * intact.
  *
  */
-package info.magnolia.imaging;
+package info.magnolia.imaging.caching;
 
 import com.google.common.base.Function;
 import com.google.common.collect.MapMaker;
@@ -22,6 +22,11 @@ import info.magnolia.cms.core.HierarchyManager;
 import info.magnolia.cms.core.NodeData;
 import info.magnolia.cms.util.ContentUtil;
 import info.magnolia.cms.util.NodeDataUtil;
+import info.magnolia.imaging.ImageStreamer;
+import info.magnolia.imaging.ImagingException;
+import info.magnolia.imaging.ImageGenerator;
+import info.magnolia.imaging.ParameterProvider;
+import info.magnolia.imaging.ParameterProviderFactory;
 import org.apache.commons.io.IOUtils;
 
 import javax.jcr.PropertyType;

@@ -12,7 +12,7 @@
  * intact.
  *
  */
-package info.magnolia.imaging;
+package info.magnolia.imaging.caching;
 
 import info.magnolia.cms.core.HierarchyManager;
 import info.magnolia.cms.util.FactoryUtil;
@@ -25,6 +25,14 @@ import info.magnolia.module.ModuleRegistry;
 import info.magnolia.module.model.ModuleDefinition;
 import info.magnolia.module.model.reader.ModuleDefinitionReader;
 import info.magnolia.test.RepositoryTestCase;
+import info.magnolia.imaging.ImageGenerator;
+import info.magnolia.imaging.ParameterProviderFactory;
+import info.magnolia.imaging.ParameterProvider;
+import info.magnolia.imaging.StringParameterProvider;
+import info.magnolia.imaging.OutputFormat;
+import info.magnolia.imaging.ImagingException;
+import info.magnolia.imaging.ImageStreamer;
+import info.magnolia.imaging.DefaultImageStreamer;
 import static org.easymock.EasyMock.createNiceMock;
 
 import javax.imageio.ImageIO;

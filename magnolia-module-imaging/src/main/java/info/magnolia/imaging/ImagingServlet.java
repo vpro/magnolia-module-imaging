@@ -17,6 +17,7 @@ package info.magnolia.imaging;
 import info.magnolia.cms.core.HierarchyManager;
 import info.magnolia.context.MgnlContext;
 import info.magnolia.imaging.util.PathSplitter;
+import info.magnolia.imaging.caching.CachingImageStreamer;
 import info.magnolia.module.ModuleRegistry;
 
 import javax.servlet.ServletException;
