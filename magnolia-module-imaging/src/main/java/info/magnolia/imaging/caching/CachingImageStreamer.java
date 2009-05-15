@@ -15,6 +15,7 @@
 package info.magnolia.imaging.caching;
 
 import com.google.common.base.Function;
+import com.google.common.collect.ComputationException;
 import com.google.common.collect.MapMaker;
 import info.magnolia.cms.beans.runtime.FileProperties;
 import info.magnolia.cms.core.Content;
@@ -58,11 +59,9 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
      * By using a ConcurrentMap, we are essentially locking all requests
      * coming in for the same image (ImageGenerationJob) except the first one.
      *
-     * This Map (MapMaker.makeComputingMap()) is implemented as such that the
+     * MapMaker.makeComputingMap() returns a Map implemented as such that the
      * first call to get(K) will generate the value (by calling <V> Function.apply(<K>).
      * Further calls are blocked until the value is generated, and they all retrieve the same value.
-     *
-     * TODO : exception handling. see ComputationException
      */
     private final ConcurrentMap<ImageGenerationJob<P>, NodeData> currentJobs;
 
@@ -81,7 +80,7 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
                 .makeComputingMap(new Function<ImageGenerationJob<P>, NodeData>() {
                     public NodeData apply(ImageGenerationJob<P> job) {
                         try {
-                            return generateAndStore(job.generator, job.params);
+                            return generateAndStore(job.getGenerator(), job.getParams());
                         } catch (IOException e) {
                             throw new RuntimeException(e); // TODO
                         } catch (ImagingException e) {
@@ -95,7 +94,12 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
         NodeData imgProp = fetchFromCache(generator, params);
         if (imgProp == null) {
             // image is not in cache or should be regenerated
-            imgProp = currentJobs.get(new ImageGenerationJob(generator, params));
+            try {
+                imgProp = currentJobs.get(new ImageGenerationJob<P>(generator, params));
+            } catch (ComputationException e) {
+                // thrown if the ComputingMap's Function failed
+                throw new ImagingException(e.getMessage(), e.getCause());
+            }
         }
         serve(imgProp, out);
     }
@@ -141,7 +145,7 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
         return "/" + generator.getName() + nodePathSuffix;
     }
 
-    protected boolean shouldRegenerate(NodeData cachedBinary, ParameterProvider parameterProvider) {
+    protected boolean shouldRegenerate(NodeData cachedBinary, ParameterProvider<P> parameterProvider) {
         // TODO
         return false;
     }
@@ -167,44 +171,5 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
         } catch (RepositoryException e) {
             throw new ImagingException("Can't store rendered image: " + e.getMessage(), e);
         }
-    }
-
-    // the IMPORTANT bit here is that we compare params.getParameter() and not params !
-    // same thing for calculating the hash
-    // we're assuming that whatever parameter is used provides a valid equals/hashCode() pair
-    // TODO - and ... DefaultContent does not.
-    // TODO - and since there isn't one single/simple way of implementing equals() for a node
-    // (using just the uuid wouldn't be enough, it might have been modified, and here we might have the "same" node coming from 2 different sessions... etc etc)
-    // TODO - then we might want to have an equals/hash pair at ParameterProvider(Factory) level
-
-    protected static final class ImageGenerationJob<P> {
-        private final ImageGenerator generator;
-        private final ParameterProvider<P> params;
-
-        private ImageGenerationJob(ImageGenerator generator, ParameterProvider<P> params) {
-            this.generator = generator;
-            this.params = params;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            ImageGenerationJob that = (ImageGenerationJob) o;
-
-            if (!generator.equals(that.generator)) return false;
-            if (!params.getParameter().equals(that.params.getParameter())) return false;
-
-            return true;
-        }
-
-        @Override
-        public int hashCode() {
-            int result = generator.hashCode();
-            result = 31 * result + params.getParameter().hashCode();
-            return result;
-        }
-
     }
 }
