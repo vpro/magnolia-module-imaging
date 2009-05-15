@@ -25,6 +25,7 @@ import info.magnolia.imaging.OutputFormat;
 import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.ParameterProviderFactory;
 import info.magnolia.imaging.StringParameterProvider;
+import info.magnolia.imaging.operations.ImageOperationChain;
 import info.magnolia.logging.AuditLoggingManager;
 import info.magnolia.module.ModuleManagementException;
 import info.magnolia.module.ModuleManager;
@@ -60,6 +61,8 @@ import java.util.concurrent.TimeUnit;
  * @version $Revision: $ ($Author: $)
  */
 public class CachingImageStreamerRepositoryTest extends RepositoryTestCase {
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(CachingImageStreamerRepositoryTest.class);
+
     @Override
     protected void setUp() throws Exception {
         setAutoStart(false);
@@ -71,31 +74,20 @@ public class CachingImageStreamerRepositoryTest extends RepositoryTestCase {
     }
 
     public void testRequestForSimilarUncachedImageOnlyGeneratesItOnce() throws Exception {
-        final ImageGenerator generator = new ImageGenerator() {
-            final ParameterProviderFactory<Object, String> ppf = new ParameterProviderFactory<Object, String>() {
-                public ParameterProvider newParameterProviderFor(Object environment) {
-                    return new StringParameterProvider("MY PARAM YO");
-                }
-
-                public String getGeneratedImageNodePath(String p) {
-                    return p.toLowerCase().replace(' ', '/');
-                }
-            };
-
-            public ParameterProviderFactory getParameterProviderFactory() {
-                return ppf;
+        final ParameterProviderFactory<Object, String> ppf = new ParameterProviderFactory<Object, String>() {
+            public ParameterProvider newParameterProviderFor(Object environment) {
+                return new StringParameterProvider("MY PARAM YO");
             }
 
-            public String getName() {
-                return "test";
+            public String getGeneratedImageNodePath(String p) {
+                return p.toLowerCase().replace(' ', '/');
             }
+        };
 
-            public OutputFormat getOutputFormat() {
-                final OutputFormat png = new OutputFormat();
-                png.setFormatName("png");
-                return png;
-            }
+        final OutputFormat png = new OutputFormat();
+        png.setFormatName("png");
 
+        final ImageOperationChain generator = new ImageOperationChain() {
             public BufferedImage generate(ParameterProvider params) throws ImagingException {
                 try {
                     System.out.println(new Date() + " Generating...");
@@ -107,15 +99,17 @@ public class CachingImageStreamerRepositoryTest extends RepositoryTestCase {
                 }
             }
         };
+        generator.setName("test");
+        generator.setOutputFormat(png);
+        generator.setParameterProviderFactory(ppf);
 
 
         final HierarchyManager hm = MgnlContext.getHierarchyManager("website");
         final ImageStreamer streamer = new CachingImageStreamer(hm, new DefaultImageStreamer());
 
-        System.out.println(new Date() + " -- ready");
-
-        // generator instances will always be the same (including paramProvFac) because instanciated by c2b
-        // ParamProv is a new instance everytime.
+        // Generator instances will always be the same (including paramProvFac)
+        // since they are instanciated with the module config and c2b.
+        // ParamProv is a new instance every time.
         // streamer can (must) be the same - once single HM, one cache.
 
         // thread pool of 10, launching 8 requests, can we hit some concurrency please ?
@@ -125,22 +119,12 @@ public class CachingImageStreamerRepositoryTest extends RepositoryTestCase {
             outs[i] = new ByteArrayOutputStream();
             executor.submit(new Job(generator, streamer, outs[i]));
         }
-//        Runtime.getRuntime().exec("open CachingImageStreamerRepositoryTest.png");
-
-        // TODO duh, don't kill the repo while stuff's running
-        // TimeUnit.MINUTES.sleep(2);
-//         TimeUnit.SECONDS.sleep(2);
-
-        System.out.println(new Date() + "-- shutting down");
-        // executor.shutdown();
-        System.out.println(new Date() + "-- awaiting termination");
+        executor.shutdown();
         executor.awaitTermination(30, TimeUnit.SECONDS);
-        System.out.println("executor.isShutdown() = " + executor.isShutdown());
-        System.out.println("executor.isTerminated() = " + executor.isTerminated());
 
         // assert all outs are the same
         for (int i = 1; i < outs.length; i++) {
-            // TODO assert they're all equals byte to byte to the source? or in size? can't as-is since we re-save..
+            // TODO assert they're all equals byte to byte to the source? or in size? can't as-is since we convert...
             final byte[] a = outs[i - 1].toByteArray();
             final byte[] b = outs[i].toByteArray();
             assertTrue(a.length > 0);
@@ -151,19 +135,14 @@ public class CachingImageStreamerRepositoryTest extends RepositoryTestCase {
         outs[outs.length - 1] = null;
 
         // now start again another bunch of requests... they should ALL get their results from the cache
-        System.out.println("\n\n" + new Date() + " ----- new bunch of requests\n\n");
-
+        final ExecutorService executor2 = Executors.newFixedThreadPool(10);
         final ByteArrayOutputStream[] outs2 = new ByteArrayOutputStream[8];
         for (int i = 0; i < outs2.length; i++) {
             outs2[i] = new ByteArrayOutputStream();
-            executor.submit(new Job(generator, streamer, outs2[i]));
+            executor2.submit(new Job(generator, streamer, outs2[i]));
         }
-        System.out.println(new Date() + "-- shutting down");
-        executor.shutdown();
-        System.out.println(new Date() + "-- awaiting termination");
-        executor.awaitTermination(30, TimeUnit.SECONDS);
-        System.out.println("executor.isShutdown() = " + executor.isShutdown());
-        System.out.println("executor.isTerminated() = " + executor.isTerminated());
+        executor2.shutdown();
+        executor2.awaitTermination(30, TimeUnit.SECONDS);
         // assert all outs are the same
         for (int i = 1; i < outs2.length; i++) {
             // TODO assert they're all equals byte to byte to the source? or in size? can't as-is since we re-save..
@@ -182,7 +161,7 @@ public class CachingImageStreamerRepositoryTest extends RepositoryTestCase {
         streamer.serveImage(generator, p, out);
     }
 
-
+    // just a generation job for tests
     private class Job implements Runnable {
         private final ImageGenerator generator;
         private final ImageStreamer streamer;

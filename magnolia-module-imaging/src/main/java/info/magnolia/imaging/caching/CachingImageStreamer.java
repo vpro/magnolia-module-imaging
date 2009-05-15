@@ -22,9 +22,9 @@ import info.magnolia.cms.core.HierarchyManager;
 import info.magnolia.cms.core.NodeData;
 import info.magnolia.cms.util.ContentUtil;
 import info.magnolia.cms.util.NodeDataUtil;
+import info.magnolia.imaging.ImageGenerator;
 import info.magnolia.imaging.ImageStreamer;
 import info.magnolia.imaging.ImagingException;
-import info.magnolia.imaging.ImageGenerator;
 import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.ParameterProviderFactory;
 import org.apache.commons.io.IOUtils;
@@ -37,7 +37,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
@@ -53,52 +52,50 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
     private final HierarchyManager hm;
     private final ImageStreamer<P> delegate;
 
-    public CachingImageStreamer(HierarchyManager hm, ImageStreamer<P> delegate) {
-        this.hm = hm;
-        this.delegate = delegate;
-    }
-
     /** TODO: make static if we don't use the exact same instance for all threads ? */
     /**
      * This Map is the key to understanding how this class works.
-     * By using a computing map, we are essentially locking all requests
-     * coming in for the same image (ImageGenerationJob) except one.
-     * This Map implementation is written as such that the first call to get(K) will
-     * generate the value (by calling <V> Function.apply(<K>). Further calls are
-     * blocked until the value is generated, and they all retrieve the same value.
+     * By using a ConcurrentMap, we are essentially locking all requests
+     * coming in for the same image (ImageGenerationJob) except the first one.
+     *
+     * This Map (MapMaker.makeComputingMap()) is implemented as such that the
+     * first call to get(K) will generate the value (by calling <V> Function.apply(<K>).
+     * Further calls are blocked until the value is generated, and they all retrieve the same value.
      *
      * TODO : exception handling. see ComputationException
      */
-    final ConcurrentMap<ImageGenerationJob<P>, NodeData> currentJobs = new MapMaker()
-//                    .concurrencyLevel(32)
-//                    .softKeys()
-//                    .weakValues()
-            // entries from the map will be removed 500ms after their creation
-            // TODO - is this correct ? or will it fail if the image generation takes longer ? (seemed to work with 3ms but then again the generation wasn't heavy)
-            .expiration(500, TimeUnit.MILLISECONDS)
+    private final ConcurrentMap<ImageGenerationJob<P>, NodeData> currentJobs;
 
-            .makeComputingMap(new Function<ImageGenerationJob<P>, NodeData>() {
-                public NodeData apply(ImageGenerationJob<P> job) {
-                    try {
-                        System.out.println(new Date() + " Generating and storing for = " + job.params + " with " + job.generator);
-                        return generateAndStore(job.generator, job.params);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e); // TODO
-                    } catch (ImagingException e) {
-                        throw new RuntimeException(e); // TODO
+    public CachingImageStreamer(HierarchyManager hm, ImageStreamer<P> delegate) {
+        this.hm = hm;
+        this.delegate = delegate;
+
+        this.currentJobs = new MapMaker()
+//                    .concurrencyLevel(32)
+//                    .softKeys() weakKeys()
+//                    .softValues() weakValues()
+                // entries from the map will be removed 500ms after their creation
+                // TODO - is this correct ? or will it fail if the image generation takes longer ? (seemed to work with 3ms but then again the generation wasn't heavy)
+                .expiration(500, TimeUnit.MILLISECONDS)
+
+                .makeComputingMap(new Function<ImageGenerationJob<P>, NodeData>() {
+                    public NodeData apply(ImageGenerationJob<P> job) {
+                        try {
+                            return generateAndStore(job.generator, job.params);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e); // TODO
+                        } catch (ImagingException e) {
+                            throw new RuntimeException(e); // TODO
+                        }
                     }
-                }
-            });
+                });
+    }
 
     public void serveImage(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> params, OutputStream out) throws IOException, ImagingException {
         NodeData imgProp = fetchFromCache(generator, params);
         if (imgProp == null) {
             // image is not in cache or should be regenerated
-            System.out.println(new Date() + " not found in cache for = " + params + " with " + generator);
             imgProp = currentJobs.get(new ImageGenerationJob(generator, params));
-            System.out.println(new Date() + " served from current jobs - currentJobs.size() = " + currentJobs.size());
-        } else {
-            System.out.println(new Date() + " found in cache - currentJobs.size() = " + currentJobs.size());
         }
         serve(imgProp, out);
     }
