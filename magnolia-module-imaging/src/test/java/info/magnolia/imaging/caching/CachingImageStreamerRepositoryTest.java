@@ -14,10 +14,12 @@
  */
 package info.magnolia.imaging.caching;
 
+import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.HierarchyManager;
+import info.magnolia.cms.core.ItemType;
+import info.magnolia.cms.core.NodeData;
 import info.magnolia.cms.util.FactoryUtil;
 import info.magnolia.cms.util.HierarchyManagerWrapper;
-import info.magnolia.context.MgnlContext;
 import info.magnolia.imaging.DefaultImageStreamer;
 import info.magnolia.imaging.ImageGenerator;
 import info.magnolia.imaging.ImageStreamer;
@@ -35,7 +37,10 @@ import info.magnolia.module.ModuleRegistry;
 import info.magnolia.module.model.ModuleDefinition;
 import info.magnolia.module.model.reader.ModuleDefinitionReader;
 import info.magnolia.test.RepositoryTestCase;
-import static org.easymock.EasyMock.createNiceMock;
+import info.magnolia.context.MgnlContext;
+import static org.easymock.EasyMock.*;
+import org.easymock.IMocksControl;
+import org.apache.commons.io.IOUtils;
 
 import javax.imageio.ImageIO;
 import javax.jcr.RepositoryException;
@@ -44,6 +49,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -83,7 +89,7 @@ public class CachingImageStreamerRepositoryTest extends RepositoryTestCase {
             }
 
             public String getGeneratedImageNodePath(String p) {
-                return p.toLowerCase().replace(' ', '/');
+                return '/' + p.toLowerCase().replace(' ', '/');
             }
         };
 
@@ -104,7 +110,6 @@ public class CachingImageStreamerRepositoryTest extends RepositoryTestCase {
         generator.setOutputFormat(png);
         generator.setParameterProviderFactory(ppf);
 
-
         final HierarchyManager hm = new HierarchyManagerWrapper(MgnlContext.getHierarchyManager("website")) {
             boolean saved = false;
 
@@ -117,6 +122,46 @@ public class CachingImageStreamerRepositoryTest extends RepositoryTestCase {
                 super.save();
             }
         };
+
+        /*
+        final IMocksControl iMocksControl = createStrictControl();
+        // can't be strict on method call order on hm, because we can't guarantee which of the 8 threads will create the node
+        iMocksControl.checkOrder(false);
+        // not exactly sure what this entails; hopefully it doesn't render the test useless...
+        iMocksControl.makeThreadSafe(true);
+        final HierarchyManager hm = iMocksControl.createMock(HierarchyManager.class);
+        final Content root = createStrictMock(Content.class);
+        final Content t = createStrictMock(Content.class);
+        final Content m = createStrictMock(Content.class);
+        final Content p = createStrictMock(Content.class);
+        final Content y = createStrictMock(Content.class);
+
+        // first 8 request: node doesn't exist.
+        for (int i = 0; i < 8; i++) {
+            // generator name + path provided by ParameterProviderFactory
+            expect(hm.isExist("/test/my/param/yo")).andReturn(false);
+        }
+
+        // one of these 8 threads creates the node
+        expect(hm.getRoot()).andReturn(root);
+        expect(root.hasContent("test")).andReturn(false);
+        expect(root.createContent("test", ItemType.CONTENT)).andReturn(t);
+        expect(t.hasContent("my")).andReturn(false);
+        expect(t.createContent("my", ItemType.CONTENT)).andReturn(m);
+        expect(m.hasContent("param")).andReturn(false);
+        expect(m.createContent("param", ItemType.CONTENT)).andReturn(p);
+        expect(p.hasContent("yo")).andReturn(false);
+        expect(p.createContent("yo", ItemType.CONTENT)).andReturn(y);
+        expect(y.hasNodeData("generated-image")).andReturn(false);
+
+        // 8 more requests, the node exists in the hm
+        for (int i = 0; i < 8; i++) {
+            expect(hm.isExist("/test/my/param/yo")).andReturn(true);
+        }
+
+        replay(hm, root, t, m, p, y);
+        */
+
         final ImageStreamer streamer = new CachingImageStreamer(hm, new DefaultImageStreamer());
 
         // Generator instances will always be the same (including paramProvFac)
@@ -143,6 +188,11 @@ public class CachingImageStreamerRepositoryTest extends RepositoryTestCase {
             future.get();
         }
 
+        final NodeData cachedNodeData = hm.getNodeData("/test/my/param/yo/generated-image");
+        final InputStream res = cachedNodeData.getStream();
+        final ByteArrayOutputStream cachedOut = new ByteArrayOutputStream();
+        IOUtils.copy(res, cachedOut);
+
         // assert all outs are the same
         for (int i = 1; i < outs.length; i++) {
             // TODO assert they're all equals byte to byte to the source? or in size? can't as-is since we convert...
@@ -153,6 +203,8 @@ public class CachingImageStreamerRepositoryTest extends RepositoryTestCase {
             assertTrue("not equals for outs/" + i, Arrays.equals(a, b));
             outs[i - 1] = null; // cleanup all those byte[], or we'll soon run out of memory
         }
+        assertTrue("failed comparing last thread's result with what we got from hierarchyManager",
+                Arrays.equals(outs[outs.length - 1].toByteArray(), cachedOut.toByteArray()));
         outs[outs.length - 1] = null;
 
         // now start again another bunch of requests... they should ALL get their results from the cache
@@ -174,6 +226,11 @@ public class CachingImageStreamerRepositoryTest extends RepositoryTestCase {
             future.get();
         }
 
+        final NodeData cachedNodeData2 = hm.getNodeData("/test/my/param/yo/generated-image");
+        final InputStream res2 = cachedNodeData2.getStream();
+        final ByteArrayOutputStream cachedOut2 = new ByteArrayOutputStream();
+        IOUtils.copy(res2, cachedOut2);
+
         // assert all outs are the same
         for (int i = 1; i < outs2.length; i++) {
             // TODO assert they're all equals byte to byte to the source? or in size? can't as-is since we re-save..
@@ -184,7 +241,13 @@ public class CachingImageStreamerRepositoryTest extends RepositoryTestCase {
             assertTrue("not equals for outs2/" + i, Arrays.equals(a, b));
             outs2[i - 1] = null;
         }
+        assertTrue("failed comparing last thread's result with what we got from hierarchyManager",
+                Arrays.equals(outs2[outs2.length - 1].toByteArray(), cachedOut2.toByteArray()));
+
         outs2[outs2.length - 1] = null;
+
+
+        /* verify(hm, root, t, m, p, y); */
     }
 
     // just a generation job for tests

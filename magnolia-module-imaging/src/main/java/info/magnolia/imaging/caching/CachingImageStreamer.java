@@ -82,9 +82,11 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
                         try {
                             return generateAndStore(job.getGenerator(), job.getParams());
                         } catch (IOException e) {
-                            throw new RuntimeException(e); // TODO
+                            // the map will further wrap these in ComputationExceptions, and we will, in turn, unwrap them ...
+                            throw new RuntimeException(e);
                         } catch (ImagingException e) {
-                            throw new RuntimeException(e); // TODO
+                            // the map will further wrap these in ComputationExceptions, and we will, in turn, unwrap them ...
+                            throw new ComputationException(e);
                         }
                     }
                 });
