@@ -17,6 +17,14 @@ package info.magnolia.imaging.caching;
 import info.magnolia.cms.core.HierarchyManager;
 import info.magnolia.cms.util.FactoryUtil;
 import info.magnolia.context.MgnlContext;
+import info.magnolia.imaging.DefaultImageStreamer;
+import info.magnolia.imaging.ImageGenerator;
+import info.magnolia.imaging.ImageStreamer;
+import info.magnolia.imaging.ImagingException;
+import info.magnolia.imaging.OutputFormat;
+import info.magnolia.imaging.ParameterProvider;
+import info.magnolia.imaging.ParameterProviderFactory;
+import info.magnolia.imaging.StringParameterProvider;
 import info.magnolia.logging.AuditLoggingManager;
 import info.magnolia.module.ModuleManagementException;
 import info.magnolia.module.ModuleManager;
@@ -25,14 +33,6 @@ import info.magnolia.module.ModuleRegistry;
 import info.magnolia.module.model.ModuleDefinition;
 import info.magnolia.module.model.reader.ModuleDefinitionReader;
 import info.magnolia.test.RepositoryTestCase;
-import info.magnolia.imaging.ImageGenerator;
-import info.magnolia.imaging.ParameterProviderFactory;
-import info.magnolia.imaging.ParameterProvider;
-import info.magnolia.imaging.StringParameterProvider;
-import info.magnolia.imaging.OutputFormat;
-import info.magnolia.imaging.ImagingException;
-import info.magnolia.imaging.ImageStreamer;
-import info.magnolia.imaging.DefaultImageStreamer;
 import static org.easymock.EasyMock.createNiceMock;
 
 import javax.imageio.ImageIO;
@@ -144,7 +144,7 @@ public class CachingImageStreamerRepositoryTest extends RepositoryTestCase {
             final byte[] a = outs[i - 1].toByteArray();
             final byte[] b = outs[i].toByteArray();
             assertTrue(a.length > 0);
-            assertEquals("Different sizes (" + Math.abs(a.length - b.length) + " bytes diff.)", a.length, b.length);
+            assertEquals("Different sizes (" + Math.abs(a.length - b.length) + " bytes diff.) with i=" + i, a.length, b.length);
             assertTrue("not equals for outs/" + i, Arrays.equals(a, b));
             outs[i - 1] = null; // cleanup all those byte[], or we'll soon run out of memory
         }
@@ -170,7 +170,7 @@ public class CachingImageStreamerRepositoryTest extends RepositoryTestCase {
             final byte[] a = outs2[i - 1].toByteArray();
             final byte[] b = outs2[i].toByteArray();
             assertTrue(a.length > 0);
-            assertEquals("Different sizes (" + Math.abs(a.length - b.length) + " bytes diff.)", a.length, b.length);
+            assertEquals("Different sizes (" + Math.abs(a.length - b.length) + " bytes diff.) with i=" + i, a.length, b.length);
             assertTrue("not equals for outs2/" + i, Arrays.equals(a, b));
             outs2[i - 1] = null;
         }
