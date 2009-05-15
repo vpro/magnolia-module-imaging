@@ -99,7 +99,7 @@ public class CachingImageStreamerRepositoryTest extends RepositoryTestCase {
             public BufferedImage generate(ParameterProvider params) throws ImagingException {
                 try {
                     System.out.println(new Date() + " Generating...");
-                    final BufferedImage img = ImageIO.read(getClass().getResourceAsStream("/IMG_2463.JPG"));
+                    final BufferedImage img = ImageIO.read(getClass().getResourceAsStream("/funnel.gif"));
                     System.out.println(new Date() + " ... generated.");
                     return img;
                 } catch (IOException e) {
