@@ -66,11 +66,15 @@ public abstract class AbstractCropAndResize implements ImageOperation {
             effectiveTargetHeight = targetHeight;
         }
 
+        return resize(src, cropCoords, effectiveTargetWidth, effectiveTargetHeight);
+    }
+
+    protected BufferedImage resize(BufferedImage src, Coords srcCoords, int targetWidth, int targetHeight) {
         final ColorModel cm = src.getColorModel();
-        final WritableRaster raster = cm.createCompatibleWritableRaster(effectiveTargetWidth, effectiveTargetHeight);
+        final WritableRaster raster = cm.createCompatibleWritableRaster(targetWidth, targetHeight);
         final BufferedImage dst = new BufferedImage(cm, raster, cm.isAlphaPremultiplied(), null);
-        Graphics2D g = dst.createGraphics();
-        g.drawImage(src, 0, 0, effectiveTargetWidth, effectiveTargetHeight, cropCoords.getX1(), cropCoords.getY1(), cropCoords.getX2(), cropCoords.getY2(), null);
+        final Graphics2D g = dst.createGraphics();
+        g.drawImage(src, 0, 0, targetWidth, targetHeight, srcCoords.getX1(), srcCoords.getY1(), srcCoords.getX2(), srcCoords.getY2(), null);
         g.dispose();
 
         return dst;
