@@ -28,7 +28,10 @@ import java.util.Map;
  * @version $Revision: $ ($Author: $)
  */
 public class BasicResizeTechnique implements ResizeTechnique {
-    static Map<String, Object> INTERPOLATION_HINTS = new HashMap<String, Object>() {{
+    /**
+     * Internal map mapping a name to a corresponding RenderingHints.VALUE_INTERPOLATION_* instance.
+     */
+    private static final Map<String, Object> INTERPOLATION_HINTS = new HashMap<String, Object>() {{
         put("nearest_neighbor", RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
         put("bilinear", RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         put("bicubic", RenderingHints.VALUE_INTERPOLATION_BICUBIC);
@@ -57,6 +60,10 @@ public class BasicResizeTechnique implements ResizeTechnique {
         return interpolation;
     }
 
+    /**
+     * One of "nearest_neighbor", "bilinear" or "bicubic".
+     * @see #INTERPOLATION_HINTS
+     */
     public void setInterpolation(String interpolation) {
         this.interpolation = interpolation;
     }
