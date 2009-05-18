@@ -77,13 +77,12 @@ public class CropAndResizeQualityTest extends TestCase {
 //        cropAndResize.setResizeTechnique(new TriLinearResizeTechnique());
 //        imageStreamer.serveImage(generator, null, new FileOutputStream(resFile4));
 
-        // originalCopy + " "
-        Runtime.getRuntime().exec("open " + expected
-                + " " + resFile
-                + " " + resFile2
-                + " " + resFile3
+//        Runtime.getRuntime().exec("open " + expected
+//                + " " + resFile
+//                + " " + resFile2
+//                + " " + resFile3
 //                + " " + resFile4
-        );
+//        );
 
     }
 

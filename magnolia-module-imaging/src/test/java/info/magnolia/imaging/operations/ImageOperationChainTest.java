@@ -14,12 +14,12 @@
  */
 package info.magnolia.imaging.operations;
 
-import com.jhlabs.image.PointFilter;
 import com.jhlabs.image.WoodFilter;
 import info.magnolia.imaging.StringParameterProvider;
 import info.magnolia.imaging.operations.cropresize.AutoCropAndResize;
 import info.magnolia.imaging.operations.load.Blank;
 import info.magnolia.imaging.operations.load.ClasspathImageLoader;
+import info.magnolia.imaging.operations.text.Alignment;
 import info.magnolia.imaging.operations.text.FixedText;
 import info.magnolia.imaging.operations.text.TextStyle;
 import junit.framework.TestCase;
@@ -85,23 +85,46 @@ public class ImageOperationChainTest extends TestCase {
 //        final RGBAdjustFilter rgb = new RGBAdjustFilter();
 //        rgb.setBFactor(0.9f);
         //filterChain.addFilter(new BufferedImageOpDelegate(rgb));
-        final FixedText textOverlay = new FixedText();
         final TextStyle txtStyle = new TextStyle();
         txtStyle.setFontName("Arial");
         txtStyle.setColor(Color.red);
         txtStyle.setFontSize(40);
         txtStyle.setFontStyle(1);
-        textOverlay.setTextStyle(txtStyle);
-        textOverlay.setText("heyyyyyy");
-        filterChain.addOperation(textOverlay);
+
+        final FixedText topLeft = new FixedText();
+        topLeft.setX(10);
+        topLeft.setY(10);
+        topLeft.setHorizontalAlign(Alignment.left);
+        topLeft.setVerticalAlign(Alignment.top);
+        topLeft.setTextStyle(txtStyle);
+        topLeft.setText("top left");
+        filterChain.addOperation(topLeft);
+
+        final FixedText center = new FixedText();
+        center.setX(10);
+        center.setY(10);
+        center.setHorizontalAlign(Alignment.center);
+        center.setVerticalAlign(Alignment.center);
+        center.setTextStyle(txtStyle);
+        center.setText("ceeeenter");
+        filterChain.addOperation(center);
+
+        final FixedText rightBottom = new FixedText();
+        rightBottom.setX(10);
+        rightBottom.setY(10);
+        rightBottom.setHorizontalAlign(Alignment.right);
+        rightBottom.setVerticalAlign(Alignment.bottom);
+        rightBottom.setTextStyle(txtStyle);
+        rightBottom.setText("right bottom");
+        filterChain.addOperation(rightBottom);
 
         final StringParameterProvider p = new StringParameterProvider("hello");
 
         final BufferedImage result = filterChain.generate(p);
 
-        ImageIO.write(result, "jpg", new FileOutputStream("test-result.jpg"));
+        ImageIO.write(result, "png", new FileOutputStream("test-result.png"));
 
-//        Runtime.getRuntime().exec("open test-result.jpg");
+//        Runtime.getRuntime().exec("open test-result.png");
 
 /*
         final ClasspathImageLoader overlayLoad = new ClasspathImageLoader();
@@ -128,41 +151,4 @@ public class ImageOperationChainTest extends TestCase {
 */
     }
 
-    public class PremultiplyFilter extends PointFilter {
-
-        public PremultiplyFilter() {
-        }
-
-        public int filterRGB(int x, int y, int rgb) {
-            int a = (rgb >> 24) & 0xff;
-            int r = (rgb >> 16) & 0xff;
-            int g = (rgb >> 8) & 0xff;
-            int b = rgb & 0xff;
-            float f = a * (1.0f / 255.0f);
-            r *= f;
-            g *= f;
-            b *= f;
-            return (a << 24) | (r << 16) | (g << 8) | b;
-        }
-
-        public String toString() {
-            return "Alpha/Premultiply";
-        }
-    }
-
-    /*
-
-    overlay.addFilter(new ImageOperation() {
-            public BufferedImage apply(BufferedImage src, Object filterParams, Content dialogControlConfigNode) {
-                final ColorModel cm = src.getColorModel();
-                final WritableRaster raster = cm.createCompatibleWritableRaster(src.getWidth(), src.getHeight());
-                final BufferedImage dest = new BufferedImage(cm, raster, cm.isAlphaPremultiplied(), null);
-                final ScaleFilter filter = new ScaleFilter(256, 256);
-                filter.filter(src, dest);
-                return dest;
-
-            }
-        });
-
-        */
 }

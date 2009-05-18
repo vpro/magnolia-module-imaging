@@ -31,7 +31,7 @@ public class TextStyle {
     private int fontStyle = Font.PLAIN;
     private int fontSize;
     private Color color;
-    private Color bgColor;
+    private Color backgroundColor;
     private double charSpacing;
     private int shearingValue;
 
@@ -82,12 +82,12 @@ public class TextStyle {
         this.color = color;
     }
 
-    public Color getBgColor() {
-        return bgColor;
+    public Color getBackgroundColor() {
+        return backgroundColor;
     }
 
-    public void setBgColor(Color bgColor) {
-        this.bgColor = bgColor;
+    public void setBackgroundColor(Color backgroundColor) {
+        this.backgroundColor = backgroundColor;
     }
 
     public double getCharSpacing() {
