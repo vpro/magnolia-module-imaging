@@ -19,9 +19,9 @@ import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.operations.ImageOperation;
 
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Transparency;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
-import java.awt.image.WritableRaster;
 
 /**
  * Subclasses of this determine which portion of the source image is taken into account.
@@ -34,6 +34,7 @@ import java.awt.image.WritableRaster;
  * @version $Revision: $ ($Author: $)
  */
 public abstract class AbstractCropAndResize implements ImageOperation {
+    private ResizeTechnique resizeTechnique = new BasicResizeTechnique();
     private int targetWidth;
     private int targetHeight;
 
@@ -70,14 +71,15 @@ public abstract class AbstractCropAndResize implements ImageOperation {
     }
 
     protected BufferedImage resize(BufferedImage src, Coords srcCoords, int targetWidth, int targetHeight) {
-        final ColorModel cm = src.getColorModel();
-        final WritableRaster raster = cm.createCompatibleWritableRaster(targetWidth, targetHeight);
-        final BufferedImage dst = new BufferedImage(cm, raster, cm.isAlphaPremultiplied(), null);
-        final Graphics2D g = dst.createGraphics();
-        g.drawImage(src, 0, 0, targetWidth, targetHeight, srcCoords.getX1(), srcCoords.getY1(), srcCoords.getX2(), srcCoords.getY2(), null);
-        g.dispose();
+        return getResizeTechnique().resize(src, srcCoords, targetWidth, targetHeight);
+    }
 
-        return dst;
+    public ResizeTechnique getResizeTechnique() {
+        return resizeTechnique;
+    }
+
+    public void setResizeTechnique(ResizeTechnique resizeTechnique) {
+        this.resizeTechnique = resizeTechnique;
     }
 
     public int getTargetWidth() {

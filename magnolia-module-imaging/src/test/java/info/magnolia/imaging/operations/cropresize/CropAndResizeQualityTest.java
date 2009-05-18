@@ -44,7 +44,6 @@ public class CropAndResizeQualityTest extends TestCase {
         outputFormat.setQuality(100);
         outputFormat.setProgressive(true);
 
-        final String resFile = "test-quality1-result.jpg";
         // resize to 298x169
 
         final ClasspathImageLoader loader = new ClasspathImageLoader();
@@ -61,10 +60,30 @@ public class CropAndResizeQualityTest extends TestCase {
         generator.setName("test");
 
         final DefaultImageStreamer imageStreamer = new DefaultImageStreamer();
+
+        final String resFile = getClass().getSimpleName() + "test-quality1-result-basic.jpg";
+        cropAndResize.setResizeTechnique(new BasicResizeTechnique());
         imageStreamer.serveImage(generator, null, new FileOutputStream(resFile));
 
+        final String resFile2 = getClass().getSimpleName() + "test-quality1-result-multistep.jpg";
+        cropAndResize.setResizeTechnique(new MultiStepResizeTechnique());
+        imageStreamer.serveImage(generator, null, new FileOutputStream(resFile2));
+
+        final String resFile3 = getClass().getSimpleName() + "test-quality1-result-scalearea-averaging.jpg";
+        cropAndResize.setResizeTechnique(new ScaleAreaAveragingResizeTechnique());
+        imageStreamer.serveImage(generator, null, new FileOutputStream(resFile3));
+
+//        final String resFile4 = "test-quality1-result-trilinear.jpg";
+//        cropAndResize.setResizeTechnique(new TriLinearResizeTechnique());
+//        imageStreamer.serveImage(generator, null, new FileOutputStream(resFile4));
+
         // originalCopy + " "
-        Runtime.getRuntime().exec("open " +  expected + " " + resFile);
+        Runtime.getRuntime().exec("open " + expected
+                + " " + resFile
+                + " " + resFile2
+                + " " + resFile3
+//                + " " + resFile4
+        );
 
     }
 
