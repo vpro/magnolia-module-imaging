@@ -18,14 +18,15 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
+ * An ImageStreamer is responsible for pushing a generated image (with the given
+ * generator and parameter) to an OutputStream.
+ *
+ * This isn't the best name, because really, it doesn't "stream" much.
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
 public interface ImageStreamer<P> {
-
-    // TODO or ImageStreamer
-    // TODO or ImageSender
 
     /**
      * Generates an image (if deemed necessary) with the given ImageGenerator and Parameters, streams it to
