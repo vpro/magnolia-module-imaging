@@ -39,6 +39,6 @@ public interface ParameterProviderFactory<E, PT> {
      */
     ParameterProvider<PT> newParameterProviderFor(E environment);
 
-    CachingStrategy getCachingStrategy();
+    CachingStrategy<PT> getCachingStrategy();
 
 }
