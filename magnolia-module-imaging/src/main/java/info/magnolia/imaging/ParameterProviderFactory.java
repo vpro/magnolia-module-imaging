@@ -14,6 +14,8 @@
  */
 package info.magnolia.imaging;
 
+import info.magnolia.imaging.caching.CachingStrategy;
+
 /**
  * A ParameterProviderFactory is responsible for instanciating a ParameterProvider
  * for a given environment. Implementations know what concrete environment they expect and what
@@ -37,11 +39,6 @@ public interface ParameterProviderFactory<E, PT> {
      */
     ParameterProvider<PT> newParameterProviderFor(E environment);
 
-    /**
-     * Returns a unique path pertinent to the given parameter. Note that this is *not* the final
-     * path to the generated image's node, as the CachingAndStoringImageGenerator will augment
-     * this path, for instance by prefixing it with the generator name.
-     */
-    String getGeneratedImageNodePath(PT p);
+    CachingStrategy getCachingStrategy();
 
 }

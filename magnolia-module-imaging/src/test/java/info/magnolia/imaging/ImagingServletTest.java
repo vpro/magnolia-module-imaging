@@ -19,6 +19,7 @@ import info.magnolia.cms.core.HierarchyManager;
 import info.magnolia.cms.core.NodeData;
 import info.magnolia.context.Context;
 import info.magnolia.context.MgnlContext;
+import info.magnolia.imaging.caching.CachingStrategy;
 import junit.framework.TestCase;
 import static org.easymock.EasyMock.*;
 
@@ -75,8 +76,8 @@ public class ImagingServletTest extends TestCase {
                 return new StringParameterProvider(context.getRequestURI());
             }
 
-            public String getGeneratedImageNodePath(String p) {
-                return "/path-to/" + p + "/generated";
+            public CachingStrategy<String> getCachingStrategy() {
+                return new StringBasedCachingStrategy();
             }
         };
 

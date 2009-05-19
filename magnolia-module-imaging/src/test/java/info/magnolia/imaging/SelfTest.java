@@ -22,6 +22,9 @@ import info.magnolia.cms.util.ContentUtil;
 import info.magnolia.cms.util.FactoryUtil;
 import info.magnolia.cms.util.NodeDataUtil;
 import info.magnolia.context.MgnlContext;
+import info.magnolia.imaging.parameters.NodeParameterProvider;
+import info.magnolia.imaging.caching.ContentBasedCachingStrategy;
+import info.magnolia.imaging.caching.CachingStrategy;
 import info.magnolia.logging.AuditLoggingManager;
 import info.magnolia.module.ModuleManagementException;
 import info.magnolia.module.ModuleManager;
@@ -44,6 +47,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -78,7 +82,37 @@ public class SelfTest extends RepositoryTestCase {
         IOUtils.copy(in2, out); // outputs "HELLO" a 2nd time
         IOUtils.copy(in1, out); // outputs nothing, the whole stream has already been read
         assertEquals("HELLOHELLO", out.toString());
+    }
 
+    public void testNodeParameterProviderHandlesTimestampsProperly() throws Exception {
+        final HierarchyManager hm = MgnlContext.getHierarchyManager("website");
+
+        final Content src = ContentUtil.createPath(hm, "/cha/lala", true);
+        src.getMetaData().setCreationDate();
+        src.getMetaData().setModificationDate();
+        System.out.println("src.getMetaData().getModificationDate() = " + src.getMetaData().getModificationDate());
+        TimeUnit.MILLISECONDS.sleep(3);
+
+        // fake cache 3ms later
+        final Content cachedNode = ContentUtil.createPath(hm, "/foo/bar", true);
+        cachedNode.getMetaData().setCreationDate();
+        cachedNode.getMetaData().setModificationDate();
+        final NodeData cachedBinaryProp = NodeDataUtil.getOrCreate(cachedNode, "test", PropertyType.BINARY);
+
+        final ByteArrayInputStream tempIn = new ByteArrayInputStream("HELLO".getBytes());
+        cachedBinaryProp.setValue(tempIn);
+        cachedBinaryProp.setAttribute(FileProperties.PROPERTY_CONTENTTYPE, "text/plain");
+        cachedBinaryProp.setAttribute(FileProperties.PROPERTY_LASTMODIFIED, Calendar.getInstance());
+        hm.save();
+
+        final NodeParameterProvider pp = new NodeParameterProvider(src);
+        final CachingStrategy<Content> cachingStrategy = new ContentBasedCachingStrategy();
+        assertFalse(cachingStrategy.shouldRegenerate(cachedBinaryProp, pp));
+
+        TimeUnit.MILLISECONDS.sleep(25);
+        // fake updating the src node
+        src.getMetaData().setModificationDate();
+        assertTrue(cachingStrategy.shouldRegenerate(cachedBinaryProp, pp));
     }
 
     // TODO - this is an ugly hack to workaround MAGNOLIA-2593 - we should review RepositoryTestCase

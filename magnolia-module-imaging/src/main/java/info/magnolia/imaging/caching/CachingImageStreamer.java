@@ -27,7 +27,6 @@ import info.magnolia.imaging.ImageGenerator;
 import info.magnolia.imaging.ImageStreamer;
 import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.ParameterProvider;
-import info.magnolia.imaging.ParameterProviderFactory;
 import org.apache.commons.io.IOUtils;
 
 import javax.jcr.PropertyType;
@@ -51,6 +50,7 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
     private static final String GENERATED_IMAGE_PROPERTY = "generated-image";
 
     private final HierarchyManager hm;
+    private final CachingStrategy<P> cachingStrategy;
     private final ImageStreamer<P> delegate;
 
     /** TODO: make static if we don't use the exact same instance for all threads ? */
@@ -65,8 +65,9 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
      */
     private final ConcurrentMap<ImageGenerationJob<P>, NodeData> currentJobs;
 
-    public CachingImageStreamer(HierarchyManager hm, ImageStreamer<P> delegate) {
+    public CachingImageStreamer(HierarchyManager hm, CachingStrategy<P> cachingStrategy, ImageStreamer<P> delegate) {
         this.hm = hm;
+        this.cachingStrategy = cachingStrategy;
         this.delegate = delegate;
 
         this.currentJobs = new MapMaker()
@@ -111,17 +112,21 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
      * or null if the image should be regenerated.
      */
     protected NodeData fetchFromCache(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> parameterProvider) {
-        final String nodePath = getGeneratedImageNodePath(generator, parameterProvider);
+        final String cachePath = cachingStrategy.getCachePath(generator, parameterProvider);
+        if (cachePath == null) {
+            // the CachingStrategy decided it doesn't want us to cache :(
+            return null;
+        }
         try {
-            if (!hm.isExist(nodePath)) {
+            if (!hm.isExist(cachePath)) {
                 return null;
             }
-            final Content imageNode = hm.getContent(nodePath);
+            final Content imageNode = hm.getContent(cachePath);
             final NodeData nodeData = imageNode.getNodeData(GENERATED_IMAGE_PROPERTY);
             if (!nodeData.isExist()) {
                 return null;
             }
-            if (shouldRegenerate(nodeData, parameterProvider)) {
+            if (cachingStrategy.shouldRegenerate(nodeData, parameterProvider)) {
                 return null;
             }
             return nodeData;
@@ -138,25 +143,11 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
         IOUtils.copy(in, out);
     }
 
-    // TODO -- this is assuming that a generated node's path is retrievable from the params.
-    // TODO -- since there might be querying involved, it might be more efficient and clear if this method would instead
-    // TODO -- return the node instance directly
-    protected String getGeneratedImageNodePath(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> params) {
-        final ParameterProviderFactory<?, P> factory = generator.getParameterProviderFactory();
-        final String nodePathSuffix = factory.getGeneratedImageNodePath(params.getParameter());
-        return "/" + generator.getName() + nodePathSuffix;
-    }
-
-    protected boolean shouldRegenerate(NodeData cachedBinary, ParameterProvider<P> parameterProvider) {
-        // TODO
-        return false;
-    }
-
     protected NodeData generateAndStore(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> parameterProvider) throws IOException, ImagingException {
-        final String nodePath = getGeneratedImageNodePath(generator, parameterProvider);
+        final String cachePath = cachingStrategy.getCachePath(generator, parameterProvider);
         try {
-            final Content imageNode = ContentUtil.createPath(hm, nodePath, false);
-            final NodeData imageData = NodeDataUtil.getOrCreate(imageNode, GENERATED_IMAGE_PROPERTY, PropertyType.BINARY);
+            final Content cacheNode = ContentUtil.createPath(hm, cachePath, false);
+            final NodeData imageData = NodeDataUtil.getOrCreate(cacheNode, GENERATED_IMAGE_PROPERTY, PropertyType.BINARY);
 
             final ByteArrayOutputStream tempOut = new ByteArrayOutputStream();
             delegate.serveImage(generator, parameterProvider, tempOut);
@@ -167,6 +158,10 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
             imageData.setAttribute(FileProperties.PROPERTY_CONTENTTYPE, "image/" + generator.getOutputFormat().getFormatName());
             imageData.setAttribute(FileProperties.PROPERTY_LASTMODIFIED, Calendar.getInstance());
 
+            // Update metadata of the cache *after* a succesfull image generation (creationDate has been set when creating
+            // Since this might be called from a different thread than the actual request, we can't call cacheNode.updateMetaData(), which by default tries to set the authorId by using the current context
+            cacheNode.getMetaData().setModificationDate();
+            
             hm.save();
 
             return imageData;

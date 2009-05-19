@@ -18,6 +18,8 @@ import info.magnolia.cms.core.HierarchyManager;
 import info.magnolia.context.MgnlContext;
 import info.magnolia.imaging.util.PathSplitter;
 import info.magnolia.imaging.caching.CachingImageStreamer;
+import info.magnolia.imaging.caching.CachingStrategy;
+import info.magnolia.imaging.caching.NullCachingStrategy;
 import info.magnolia.module.ModuleRegistry;
 
 import javax.servlet.ServletException;
@@ -27,7 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Filter responsible for the actual generation of the images.
+ * Servlet responsible for the actual generation of the images.
  * TODO This is totally temporary code.
  * TODO And please find a decent name for this.
  *
@@ -48,7 +50,7 @@ public class ImagingServlet extends HttpServlet {
 
         try {
             // TODO -- mimetype etc.
-            final ImageStreamer streamer = getStreamer();
+            final ImageStreamer streamer = getStreamer(parameterProviderFactory);
             streamer.serveImage(generator, p, response.getOutputStream());
 
             response.flushBuffer();
@@ -71,9 +73,10 @@ public class ImagingServlet extends HttpServlet {
         return config.getGenerators().get(generatorName);
     }
 
-    protected ImageStreamer getStreamer() {
+    protected ImageStreamer getStreamer(ParameterProviderFactory parameterProviderFactory) {
         final HierarchyManager hm = MgnlContext.getHierarchyManager("imaging");
-        return new CachingImageStreamer(hm, new DefaultImageStreamer());
+        final CachingStrategy cachingStrategy = parameterProviderFactory.getCachingStrategy();
+        return new CachingImageStreamer(hm, cachingStrategy, new DefaultImageStreamer());
     }
 
     protected ImagingModuleConfig getImagingConfiguration() {

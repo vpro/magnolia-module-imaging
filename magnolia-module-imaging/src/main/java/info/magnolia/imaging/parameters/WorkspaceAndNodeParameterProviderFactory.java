@@ -18,6 +18,8 @@ import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.HierarchyManager;
 import info.magnolia.context.MgnlContext;
 import info.magnolia.imaging.ParameterProviderFactory;
+import info.magnolia.imaging.caching.CachingStrategy;
+import info.magnolia.imaging.caching.ContentBasedCachingStrategy;
 import info.magnolia.imaging.util.PathSplitter;
 
 import javax.jcr.RepositoryException;
@@ -58,7 +60,8 @@ public class WorkspaceAndNodeParameterProviderFactory implements ParameterProvid
         }
     }
 
-    public String getGeneratedImageNodePath(Content p) {
-        return "/" + p.getHierarchyManager().getName() + p.getHandle();
+    public CachingStrategy<Content> getCachingStrategy() {
+        return new ContentBasedCachingStrategy();
     }
+
 }
