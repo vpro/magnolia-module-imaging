@@ -31,7 +31,7 @@ import java.awt.image.BufferedImage;
  */
 public class BasicTextRenderer implements TextRenderer {
     /** for debugging purposes. */
-    private boolean drawBoundingBox=true;
+    private boolean drawBoundingBox;
 
     // TODO this currently does not allow specifying text/character spacing
 

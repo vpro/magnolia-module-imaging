@@ -19,6 +19,6 @@ package info.magnolia.imaging.operations.text;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-interface AlignmentCalculator {
+interface Alignment {
     float getPositionFor(double content, double container, double delta);
 }

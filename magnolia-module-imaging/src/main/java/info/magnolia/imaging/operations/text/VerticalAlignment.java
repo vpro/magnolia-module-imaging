@@ -19,7 +19,7 @@ package info.magnolia.imaging.operations.text;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public enum VerticalAlignment implements AlignmentCalculator {
+public enum VerticalAlignment implements Alignment {
     top {
         public float getPositionFor(double content, double container, double delta) {
             return (float) content + (float) delta;
@@ -27,7 +27,7 @@ public enum VerticalAlignment implements AlignmentCalculator {
     /** delta is ignored for middle. */
     middle {
         public float getPositionFor(double content, double container, double delta) {
-            return (float) (container / 2)+ (float) (content / 2);
+            return (float) (container / 2) + (float) (content / 2);
         }},
     bottom {
         public float getPositionFor(double content, double container, double delta) {

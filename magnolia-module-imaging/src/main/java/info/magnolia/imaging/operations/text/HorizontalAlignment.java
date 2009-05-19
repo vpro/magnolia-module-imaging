@@ -19,7 +19,7 @@ package info.magnolia.imaging.operations.text;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public enum HorizontalAlignment implements AlignmentCalculator {
+public enum HorizontalAlignment implements Alignment {
     left {
         public float getPositionFor(double content, double container, double delta) {
             return (float) delta;
