@@ -30,12 +30,12 @@ import java.awt.image.BufferedImage;
  * @version $Revision: $ ($Author: $)
  */
 public class BasicTextRenderer implements TextRenderer {
-    /** for debugging purposes:*/
-    private boolean drawBoundingBox;
+    /** for debugging purposes. */
+    private boolean drawBoundingBox=true;
 
     // TODO this currently does not allow specifying text/character spacing
 
-    public void renderText(BufferedImage img, String txt, TextStyle style, Alignment horizontalAlignment, Alignment verticalAlignment, int txtPositionX, int txtPositionY) {
+    public void renderText(BufferedImage img, String txt, TextStyle style, HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment, int txtPositionX, int txtPositionY) {
         final Graphics2D g = img.createGraphics();
 
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -49,6 +49,9 @@ public class BasicTextRenderer implements TextRenderer {
         final float textWidth = (float) bounds.getWidth();
         final float textHeight = (float) bounds.getHeight();
 
+        // Could use ascent and descent for more precise positioning.
+        // As well as TextLayout, and add support for multi-line, etc.
+        // This is left as an exercise to the reader.
         final float x = horizontalAlignment.getPositionFor(textWidth, img.getWidth(), txtPositionX);
         final float y = verticalAlignment.getPositionFor(textHeight, img.getHeight(), txtPositionY);
         g.drawGlyphVector(glyph, x, y);
@@ -65,6 +68,9 @@ public class BasicTextRenderer implements TextRenderer {
         return drawBoundingBox;
     }
 
+    /**
+     * Enable this to draw a yellow box around the generated text, can be helpful to help positioning.
+     */
     public void setDrawBoundingBox(boolean drawBoundingBox) {
         this.drawBoundingBox = drawBoundingBox;
     }

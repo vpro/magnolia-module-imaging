@@ -26,8 +26,8 @@ import java.awt.image.BufferedImage;
 public abstract class AbstractTextOverlay<P extends ParameterProvider<?>> implements ImageOperation<P> {
     private TextRenderer textRenderer = new BasicTextRenderer();
     private TextStyle textStyle;
-    private Alignment horizontalAlign = Alignment.left;
-    private Alignment verticalAlign = Alignment.bottom;
+    private HorizontalAlignment horizontalAlign = HorizontalAlignment.left;
+    private VerticalAlignment verticalAlign = VerticalAlignment.bottom;
     private int x;
     private int y;
 
@@ -56,19 +56,19 @@ public abstract class AbstractTextOverlay<P extends ParameterProvider<?>> implem
         this.textRenderer = textRenderer;
     }
 
-    public Alignment getHorizontalAlign() {
+    public HorizontalAlignment getHorizontalAlign() {
         return horizontalAlign;
     }
 
-    public void setHorizontalAlign(Alignment horizontalAlign) {
+    public void setHorizontalAlign(HorizontalAlignment horizontalAlign) {
         this.horizontalAlign = horizontalAlign;
     }
 
-    public Alignment getVerticalAlign() {
+    public VerticalAlignment getVerticalAlign() {
         return verticalAlign;
     }
 
-    public void setVerticalAlign(Alignment verticalAlign) {
+    public void setVerticalAlign(VerticalAlignment verticalAlign) {
         this.verticalAlign = verticalAlign;
     }
 

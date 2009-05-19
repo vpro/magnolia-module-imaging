@@ -14,15 +14,11 @@
  */
 package info.magnolia.imaging.operations.text;
 
-import java.awt.image.BufferedImage;
-
 /**
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public interface TextRenderer {
-
-    void renderText(final BufferedImage img, final String txt, final TextStyle style, final HorizontalAlignment horizontalAlignment, final VerticalAlignment verticalAlignment, final int txtPositionX, final int txtPositionY);
-
+interface AlignmentCalculator {
+    float getPositionFor(double content, double container, double delta);
 }

@@ -19,28 +19,19 @@ package info.magnolia.imaging.operations.text;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public enum Alignment {
+public enum HorizontalAlignment implements AlignmentCalculator {
     left {
-        float getPositionFor(double content, double container, double delta) {
+        public float getPositionFor(double content, double container, double delta) {
             return (float) delta;
-        }},
-    top {
-        float getPositionFor(double content, double container, double delta) {
-            return (float) content + (float) delta;
         }},
     /** delta is ignored for center. */
     center {
-        float getPositionFor(double content, double container, double delta) {
+        public float getPositionFor(double content, double container, double delta) {
             return (float) (container / 2) - (float) (content / 2);
         }},
-    right {
-        float getPositionFor(double content, double container, double delta) {
-            return (float) (container - content - delta);
-        }},
-    bottom {
-        float getPositionFor(double content, double container, double delta) {
-            return (float) (container - delta);
-        }};
 
-    abstract float getPositionFor(double content, double container, double delta);
+    right {
+        public float getPositionFor(double content, double container, double delta) {
+            return (float) (container - content - delta);
+        }}
 }

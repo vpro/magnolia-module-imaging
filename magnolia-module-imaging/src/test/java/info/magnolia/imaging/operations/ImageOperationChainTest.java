@@ -19,9 +19,10 @@ import info.magnolia.imaging.StringParameterProvider;
 import info.magnolia.imaging.operations.cropresize.AutoCropAndResize;
 import info.magnolia.imaging.operations.load.Blank;
 import info.magnolia.imaging.operations.load.ClasspathImageLoader;
-import info.magnolia.imaging.operations.text.Alignment;
 import info.magnolia.imaging.operations.text.FixedText;
+import info.magnolia.imaging.operations.text.HorizontalAlignment;
 import info.magnolia.imaging.operations.text.TextStyle;
+import info.magnolia.imaging.operations.text.VerticalAlignment;
 import junit.framework.TestCase;
 
 import javax.imageio.ImageIO;
@@ -94,8 +95,8 @@ public class ImageOperationChainTest extends TestCase {
         final FixedText topLeft = new FixedText();
         topLeft.setX(10);
         topLeft.setY(10);
-        topLeft.setHorizontalAlign(Alignment.left);
-        topLeft.setVerticalAlign(Alignment.top);
+        topLeft.setHorizontalAlign(HorizontalAlignment.left);
+        topLeft.setVerticalAlign(VerticalAlignment.top);
         topLeft.setTextStyle(txtStyle);
         topLeft.setText("top left");
         filterChain.addOperation(topLeft);
@@ -103,8 +104,8 @@ public class ImageOperationChainTest extends TestCase {
         final FixedText center = new FixedText();
         center.setX(10);
         center.setY(10);
-        center.setHorizontalAlign(Alignment.center);
-        center.setVerticalAlign(Alignment.center);
+        center.setHorizontalAlign(HorizontalAlignment.center);
+        center.setVerticalAlign(VerticalAlignment.middle);
         center.setTextStyle(txtStyle);
         center.setText("ceeeenter");
         filterChain.addOperation(center);
@@ -112,8 +113,8 @@ public class ImageOperationChainTest extends TestCase {
         final FixedText rightBottom = new FixedText();
         rightBottom.setX(10);
         rightBottom.setY(10);
-        rightBottom.setHorizontalAlign(Alignment.right);
-        rightBottom.setVerticalAlign(Alignment.bottom);
+        rightBottom.setHorizontalAlign(HorizontalAlignment.right);
+        rightBottom.setVerticalAlign(VerticalAlignment.bottom);
         rightBottom.setTextStyle(txtStyle);
         rightBottom.setText("right bottom");
         filterChain.addOperation(rightBottom);
@@ -124,7 +125,7 @@ public class ImageOperationChainTest extends TestCase {
 
         ImageIO.write(result, "png", new FileOutputStream("test-result.png"));
 
-//        Runtime.getRuntime().exec("open test-result.png");
+        Runtime.getRuntime().exec("open test-result.png");
 
 /*
         final ClasspathImageLoader overlayLoad = new ClasspathImageLoader();
