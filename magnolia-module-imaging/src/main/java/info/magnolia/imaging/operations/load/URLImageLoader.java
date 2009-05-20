@@ -30,11 +30,11 @@ import java.net.URL;
 public class URLImageLoader<P extends ParameterProvider<?>> extends AbstractURLImageLoader<P> {
     private String url;
 
-    protected URL getAndValidateUrl() throws ImagingException {
+    protected URL getAndValidateUrl(P filterParams) throws ImagingException {
         try {
             return new URL(url);
         } catch (MalformedURLException e) {
-            throw new ImagingException("Can't load image from url" + e.getMessage());
+            throw new ImagingException("Can't load image from url " + e.getMessage());
         }
     }
 

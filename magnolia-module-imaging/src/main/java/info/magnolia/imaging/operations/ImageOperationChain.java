@@ -42,8 +42,10 @@ public class ImageOperationChain<P extends ParameterProvider<?>> implements Imag
     }
 
     public BufferedImage generate(P params) throws ImagingException {
-        // TODO : create base empty Image instance with appropriate settings (raster, colormodel, ...) ?
-        // (see info.magnolia.imaging.operations.load.Blank)
+        // We don't create an empty Image instance here, we're relying on operations
+        // from the info.magnolia.imaging.operations.load package to do so
+        // This might change in the future, especially if we want to overlay
+        // images, and even more so if those overlays need alpha blending.
 
         return apply(null, params);
     }

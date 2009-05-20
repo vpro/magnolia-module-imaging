@@ -32,19 +32,45 @@ import java.awt.image.BufferedImage;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class Blank implements ImageOperation {
-    private int type = BufferedImage.TYPE_INT_ARGB_PRE;
-    private Color color;
+public class Blank<P extends ParameterProvider<?>> implements ImageOperation<P> {
+    private static final int DEFAULT_TYPE = BufferedImage.TYPE_INT_ARGB_PRE;
+    private static final int DEFAULT_SIZE = 200;
+    private int type;
+    private Color backgroundColor;
     private int width;
     private int height;
 
-    public BufferedImage apply(BufferedImage source, ParameterProvider params) throws ImagingException {
+    public Blank() {
+        this(DEFAULT_SIZE, DEFAULT_SIZE);
+    }
+
+    public Blank(int width, int height) {
+        this(null, width, height);
+    }
+
+    public Blank(Color backgroundColor, int width, int height) {
+        this(DEFAULT_TYPE, backgroundColor, width, height);
+    }
+
+    public Blank(int type, Color backgroundColor, int width, int height) {
+        this.type = type;
+        this.backgroundColor = backgroundColor;
+        this.width = width;
+        this.height = height;
+    }
+
+    public BufferedImage apply(BufferedImage source, P params) throws ImagingException {
+        if (source != null) {
+            throw new ImagingException("This operation currently does not support overlaying images");
+        }
+
         final BufferedImage img = new BufferedImage(width, height, type);
 
-        if (color != null) {
+        if (backgroundColor != null) {
             final Graphics2D g = img.createGraphics();
-            g.setColor(new Color(1f, 1f, 1f, 1f));
+            g.setColor(backgroundColor);
             g.fill(new Rectangle(0, 0, width, height));
+            g.dispose();
         }
 
         return img;
@@ -62,15 +88,15 @@ public class Blank implements ImageOperation {
         this.type = type;
     }
 
-    public Color getColor() {
-        return color;
+    public Color getBackgroundColor() {
+        return backgroundColor;
     }
 
     /**
      * Background color for the new canvas. Default to white.
      */
-    public void setColor(Color color) {
-        this.color = color;
+    public void setBackgroundColor(Color backgroundColor) {
+        this.backgroundColor = backgroundColor;
     }
 
     public int getWidth() {

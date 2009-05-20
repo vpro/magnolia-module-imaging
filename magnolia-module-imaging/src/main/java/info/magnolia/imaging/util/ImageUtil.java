@@ -33,7 +33,10 @@ public class ImageUtil {
      * @see info.magnolia.imaging.util.ImageUtilTest#testJpegOddity()
      */
     public static BufferedImage flattenTransparentImageForOpaqueFormat(final BufferedImage img, OutputFormat outputFormat) {
-        if (img.getTransparency() != Transparency.OPAQUE && !outputFormat.supportsTransparency()) {
+        // this is not entirely sufficient; for instance, a gif with no transparent pixels loaded through ImageIO.read() will not be considered opaque by the following.
+        final boolean isOpaque = img.getTransparency() == Transparency.OPAQUE;
+
+        if (!isOpaque && !outputFormat.supportsTransparency()) {
             final WritableRaster raster = img.getRaster();
             final WritableRaster newRaster = raster.createWritableChild(0, 0, img.getWidth(), img.getHeight(), 0, 0, new int[]{0, 1, 2});
 

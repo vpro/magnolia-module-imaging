@@ -44,7 +44,7 @@ public class ImageOperationChainTest extends TestCase {
         final Blank blank = new Blank();
         blank.setWidth(600);
         blank.setHeight(400);
-        blank.setColor(Color.red);
+        blank.setBackgroundColor(Color.red);
         filterChain.addOperation(blank);
 
         final WoodFilter wood = new WoodFilter();
@@ -125,7 +125,7 @@ public class ImageOperationChainTest extends TestCase {
 
         ImageIO.write(result, "png", new FileOutputStream("test-result.png"));
 
-        Runtime.getRuntime().exec("open test-result.png");
+     //   Runtime.getRuntime().exec("open test-result.png");
 
 /*
         final ClasspathImageLoader overlayLoad = new ClasspathImageLoader();
