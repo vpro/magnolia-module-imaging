@@ -48,7 +48,6 @@ public class DefaultImageStreamer<P> implements ImageStreamer<P> {
 
     protected void write(final BufferedImage img, final OutputStream out, final OutputFormat outputFormat) throws IOException {
         // this is factored out of ImageIO.write() to allow customization of the ImageWriteParam
-        
         final ImageOutputStream imgOut = ImageIO.createImageOutputStream(out);
         final ImageTypeSpecifier imgType = ImageTypeSpecifier.createFromRenderedImage(img);
         final Iterator<ImageWriter> iter = ImageIO.getImageWriters(imgType, outputFormat.getFormatName());
