@@ -20,6 +20,7 @@ import javax.imageio.ImageWriteParam;
  * A simple bean holding image formatName output configuration. This is used to get the appropriate
  * ImageWriter and applied to its  underlying <code>javax.imageio.ImageWriteParam</code>.
  * It's also exposing a simpler API, making it easier to configure through a tree/gui.
+ * 
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
@@ -29,6 +30,16 @@ public class OutputFormat {
     private boolean progressive;
     private int quality;
     private String compressionType;
+
+    public OutputFormat() {
+    }
+
+    public OutputFormat(String formatName, boolean progressive, int quality, String compressionType) {
+        this.formatName = formatName;
+        this.progressive = progressive;
+        this.quality = quality;
+        this.compressionType = compressionType;
+    }
 
     public void applyTo(ImageWriteParam param) {
         if (param.canWriteProgressive()) {
