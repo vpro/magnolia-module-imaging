@@ -31,6 +31,7 @@ public class AutoCropAndResizeTest extends TestCase {
     private static final BufferedImage horizontalImage;
     private static final BufferedImage verticalImage;
 
+    // preload images for this test
     static {
         try {
             final FlipFilter f = new FlipFilter(FlipFilter.FLIP_90CW);
