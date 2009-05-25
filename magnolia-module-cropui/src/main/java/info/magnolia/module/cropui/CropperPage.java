@@ -23,7 +23,6 @@ import info.magnolia.cms.gui.dialog.DialogTab;
 import info.magnolia.context.MgnlContext;
 import info.magnolia.freemarker.FreemarkerUtil;
 import info.magnolia.module.admininterface.TemplatedMVCHandler;
-import info.magnolia.module.cropui.CropAndResizeConfig;
 import info.magnolia.content2bean.Content2BeanUtil;
 import info.magnolia.content2bean.Content2BeanException;
 import org.apache.commons.lang.StringUtils;

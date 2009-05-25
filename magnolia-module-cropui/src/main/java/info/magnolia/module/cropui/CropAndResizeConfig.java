@@ -16,7 +16,9 @@ package info.magnolia.module.cropui;
 
 /**
  * Holds a cropping configuration. (fixed ratio, minimum and maximum sizes
- * of the selection zone, and apply target size)
+ * of the selection zone)
+ * This is used to configure and setup the cropping UI widget.
+ * TODO : should it be used to check values before applying a SelectedCropAndResize too ?
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
@@ -26,7 +28,7 @@ public class CropAndResizeConfig {
     private long ratioX, ratioY;
     private long minHeight, minWidth;
     private long maxHeight, maxWidth;
-    private long targetHeight, targetWidth;
+  //  private long targetHeight, targetWidth;
 
     public String getName() {
         return name;
@@ -92,19 +94,19 @@ public class CropAndResizeConfig {
         this.maxWidth = maxWidth;
     }
 
-    public long getTargetHeight() {
-        return targetHeight;
-    }
-
-    public void setTargetHeight(long targetHeight) {
-        this.targetHeight = targetHeight;
-    }
-
-    public long getTargetWidth() {
-        return targetWidth;
-    }
-
-    public void setTargetWidth(long targetWidth) {
-        this.targetWidth = targetWidth;
-    }
+//    public long getTargetHeight() {
+//        return targetHeight;
+//    }
+//
+//    public void setTargetHeight(long targetHeight) {
+//        this.targetHeight = targetHeight;
+//    }
+//
+//    public long getTargetWidth() {
+//        return targetWidth;
+//    }
+//
+//    public void setTargetWidth(long targetWidth) {
+//        this.targetWidth = targetWidth;
+//    }
 }
