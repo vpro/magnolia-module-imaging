@@ -13,7 +13,16 @@
       <version>4.1/*</version>
     </dependency>
   </dependencies>
-
+  <servlets>
+    <servlet>
+      <name>ImagingServlet</name>
+      <class>info.magnolia.imaging.ImagingServlet</class>
+      <comment>Imaging Servlet</comment>
+      <mappings>
+        <mapping>/img/*</mapping>
+      </mappings>
+    </servlet>
+  </servlets>
   <repositories>
     <repository>
       <name>magnolia</name>
