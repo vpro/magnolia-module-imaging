@@ -32,7 +32,8 @@ import javax.jcr.RepositoryException;
 public abstract class AbstractContentBasedCachingStrategy<P> implements CachingStrategy<P> {
 
     public String getCachePath(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> params) {
-        return "/" + generator.getName() + "/" + getContent(params).getHierarchyManager().getName() + getPath(params);
+        final String workspaceName = getContent(params).getHierarchyManager().getName();
+        return "/" + generator.getName() + "/" + workspaceName + getPath(params);
     }
 
     /**

@@ -32,17 +32,13 @@ import javax.jcr.RepositoryException;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class NodeParameterProviderFactory extends AbstractWorkspaceAndPathParameterProviderFactory<Content> {
+public class ContentParameterProviderFactory extends AbstractWorkspaceAndPathParameterProviderFactory<Content> {
 
     protected ParameterProvider<Content> newParameterProviderForPath(final String workspaceName, final String path) throws RepositoryException {
         final HierarchyManager hm = MgnlContext.getHierarchyManager(workspaceName);
         return new ContentParameterProvider(hm.getContent(path));
     }
     
-    public String getGeneratedImageNodePath(Content p) {
-        return "/" + p.getHierarchyManager().getName() + p.getHandle();
-    }
-
     public CachingStrategy<Content> getCachingStrategy() {
         return new ContentBasedCachingStrategy();
     }

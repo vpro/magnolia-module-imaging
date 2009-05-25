@@ -29,7 +29,7 @@ import javax.jcr.RepositoryException;
  * @version $Id$
  *
  */
-public class NodeDataParameterFactory extends AbstractWorkspaceAndPathParameterProviderFactory<NodeData> {
+public class NodeDataParameterProviderFactory extends AbstractWorkspaceAndPathParameterProviderFactory<NodeData> {
 
     @Override
     ParameterProvider<NodeData> newParameterProviderForPath(String workspaceName, String path) throws RepositoryException {

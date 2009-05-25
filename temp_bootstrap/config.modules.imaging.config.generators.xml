@@ -121,7 +121,7 @@
         <sv:value>74d6df42-00e1-4562-8276-a41fa1cf766f</sv:value>
       </sv:property>
       <sv:property sv:name="class" sv:type="String">
-        <sv:value>info.magnolia.imaging.parameters.WorkspaceAndNodeParameterProviderFactory</sv:value>
+        <sv:value>info.magnolia.imaging.parameters.ContentParameterProviderFactory</sv:value>
       </sv:property>
       <sv:node sv:name="MetaData">
         <sv:property sv:name="jcr:primaryType" sv:type="Name">
@@ -375,7 +375,7 @@
         <sv:value>65d3749c-001c-4c4e-b94f-542f675babf0</sv:value>
       </sv:property>
       <sv:property sv:name="class" sv:type="String">
-        <sv:value>info.magnolia.imaging.parameters.WorkspaceAndNodeParameterProviderFactory</sv:value>
+        <sv:value>info.magnolia.imaging.parameters.ContentParameterProviderFactory</sv:value>
       </sv:property>
       <sv:node sv:name="MetaData">
         <sv:property sv:name="jcr:primaryType" sv:type="Name">
@@ -712,7 +712,7 @@
         <sv:value>aa4adc4b-e3f9-44fb-9cf3-b50457fcecb6</sv:value>
       </sv:property>
       <sv:property sv:name="class" sv:type="String">
-        <sv:value>info.magnolia.imaging.parameters.WorkspaceAndNodeParameterProviderFactory</sv:value>
+        <sv:value>info.magnolia.imaging.parameters.ContentParameterProviderFactory</sv:value>
       </sv:property>
       <sv:node sv:name="MetaData">
         <sv:property sv:name="jcr:primaryType" sv:type="Name">
@@ -802,7 +802,7 @@
         <sv:value>356ac9f2-2d71-4101-9925-c07a501fd69a</sv:value>
       </sv:property>
       <sv:property sv:name="class" sv:type="String">
-        <sv:value>info.magnolia.imaging.parameters.WorkspaceAndNodeParameterProviderFactory</sv:value>
+        <sv:value>info.magnolia.imaging.parameters.ContentParameterProviderFactory</sv:value>
       </sv:property>
       <sv:node sv:name="MetaData">
         <sv:property sv:name="jcr:primaryType" sv:type="Name">

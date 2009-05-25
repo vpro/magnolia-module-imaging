@@ -68,7 +68,7 @@ public class WorkspaceAndNodeParameterProviderFactoryTest extends TestCase {
         expect(hm.getContent(expectedNodePath)).andReturn(mockNode);
 
         replay(ctx, hm, mockNode, req);
-        final NodeParameterProviderFactory f = new NodeParameterProviderFactory();
+        final ContentParameterProviderFactory f = new ContentParameterProviderFactory();
         final ParameterProvider<Content> pp = f.newParameterProviderFor(req);
         final Content result = pp.getParameter();
         // we're only checking if the ParameterProvider indeed returns our mock, just so we can ensure it wasn't tempered with (i.e that the ParameterProvider did not call any unexpected method on it)
@@ -90,7 +90,7 @@ public class WorkspaceAndNodeParameterProviderFactoryTest extends TestCase {
         expect(req.getRequestURI()).andReturn("/chalala" + (pathInfo == null ? "" : pathInfo)).anyTimes();
 
         replay(req);
-        final NodeParameterProviderFactory f = new NodeParameterProviderFactory();
+        final ContentParameterProviderFactory f = new ContentParameterProviderFactory();
         try {
             f.newParameterProviderFor(req);
             fail("should have failed");
