@@ -17,7 +17,6 @@ package info.magnolia.imaging.operations.load;
 import info.magnolia.cms.core.NodeData;
 import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.ParameterProvider;
-import info.magnolia.imaging.operations.ImageOperation;
 
 import javax.imageio.ImageIO;
 import javax.jcr.PropertyType;
@@ -30,9 +29,9 @@ import java.io.InputStream;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public abstract class AbstractFromContent<PT> implements ImageOperation<ParameterProvider<PT>> {
+public abstract class AbstractFromContent<PT> extends AbstractLoader<ParameterProvider<PT>> {
 
-    public BufferedImage apply(BufferedImage source, ParameterProvider<PT> filterParams) throws ImagingException {
+    protected BufferedImage loadSource(ParameterProvider<PT> filterParams) throws ImagingException {
         final NodeData data = getNodeData(filterParams);
         if (!data.isExist() || data.getType() != PropertyType.BINARY) {
             throw new ImagingException("Nodedata " + data.getHandle() + " doesn't exist or is not of type binary.");
