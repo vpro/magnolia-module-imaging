@@ -24,7 +24,7 @@ import info.magnolia.imaging.ParameterProvider;
  * @version $Id$
  *
  */
-public class FromNode extends AbstractFromContent<Content> {
+public class FromContent extends AbstractFromContent<Content> {
 
     private String propertyName = "binary";
 
