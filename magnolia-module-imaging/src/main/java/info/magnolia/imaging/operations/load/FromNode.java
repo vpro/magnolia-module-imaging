@@ -16,40 +16,21 @@ package info.magnolia.imaging.operations.load;
 
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.NodeData;
-import info.magnolia.imaging.ImagingException;
-import info.magnolia.imaging.operations.ImageOperation;
-import info.magnolia.imaging.parameters.NodeParameterProvider;
+import info.magnolia.imaging.ParameterProvider;
 
-import javax.imageio.ImageIO;
-import javax.jcr.PropertyType;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
+ * @author pbracher
+ * @version $Id$
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
  */
-public class FromNode implements ImageOperation<NodeParameterProvider> {
+public class FromNode extends AbstractFromContent<Content> {
+
     private String propertyName = "binary";
 
-    public BufferedImage apply(BufferedImage source, NodeParameterProvider filterParams) throws ImagingException {
+    protected NodeData getNodeData(ParameterProvider<Content> filterParams) {
         final Content node = filterParams.getParameter();
-        final NodeData data = node.getNodeData(propertyName);
-        if (!data.isExist() || data.getType() != PropertyType.BINARY) {
-            throw new ImagingException("Property " + propertyName + " for " + node + " doesn't exist or is not of type binary.");
-        }
-        final InputStream in = data.getStream();
-        if (in == null) {
-            throw new ImagingException("Can't get InputStream from " + data.getHandle());
-        }
-        try {
-            // TODO - ensure this is an appropriate node/property
-            return ImageIO.read(in);
-        } catch (IOException e) {
-            throw new ImagingException("Can't load image from " + data.getHandle());
-        }
+        return node.getNodeData(propertyName);
     }
 
     public String getPropertyName() {

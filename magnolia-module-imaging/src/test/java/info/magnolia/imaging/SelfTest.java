@@ -22,9 +22,9 @@ import info.magnolia.cms.util.ContentUtil;
 import info.magnolia.cms.util.FactoryUtil;
 import info.magnolia.cms.util.NodeDataUtil;
 import info.magnolia.context.MgnlContext;
-import info.magnolia.imaging.parameters.NodeParameterProvider;
-import info.magnolia.imaging.caching.ContentBasedCachingStrategy;
+import info.magnolia.imaging.parameters.ContentParameterProvider;
 import info.magnolia.imaging.caching.CachingStrategy;
+import info.magnolia.imaging.caching.ContentBasedCachingStrategy;
 import info.magnolia.logging.AuditLoggingManager;
 import info.magnolia.module.ModuleManagementException;
 import info.magnolia.module.ModuleManager;
@@ -105,7 +105,7 @@ public class SelfTest extends RepositoryTestCase {
         cachedBinaryProp.setAttribute(FileProperties.PROPERTY_LASTMODIFIED, Calendar.getInstance());
         hm.save();
 
-        final NodeParameterProvider pp = new NodeParameterProvider(src);
+        final ContentParameterProvider pp = new ContentParameterProvider(src);
         final CachingStrategy<Content> cachingStrategy = new ContentBasedCachingStrategy();
         assertFalse(cachingStrategy.shouldRegenerate(cachedBinaryProp, pp));
 

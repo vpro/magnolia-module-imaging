@@ -27,7 +27,7 @@ import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.OutputFormat;
 import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.ParameterProviderFactory;
-import info.magnolia.imaging.parameters.NodeParameterProvider;
+import info.magnolia.imaging.parameters.ContentParameterProvider;
 import info.magnolia.imaging.operations.ImageOperationChain;
 import info.magnolia.logging.AuditLoggingManager;
 import info.magnolia.module.ModuleManagementException;
@@ -86,7 +86,7 @@ public class CachingImageStreamerRepositoryTest extends RepositoryTestCase {
         final Content src = ContentUtil.createPath(srcHM, "/foo/bar");
         final ParameterProviderFactory<Object, Content> ppf = new ParameterProviderFactory<Object, Content>() {
             public ParameterProvider<Content> newParameterProviderFor(Object environment) {
-                return new NodeParameterProvider(src);
+                return new ContentParameterProvider(src);
             }
 
             public CachingStrategy getCachingStrategy() {

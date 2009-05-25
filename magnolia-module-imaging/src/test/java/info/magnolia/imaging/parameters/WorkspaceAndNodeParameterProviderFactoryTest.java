@@ -18,6 +18,7 @@ import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.HierarchyManager;
 import info.magnolia.context.Context;
 import info.magnolia.context.MgnlContext;
+import info.magnolia.imaging.ParameterProvider;
 import junit.framework.TestCase;
 import static org.easymock.EasyMock.*;
 
@@ -67,8 +68,8 @@ public class WorkspaceAndNodeParameterProviderFactoryTest extends TestCase {
         expect(hm.getContent(expectedNodePath)).andReturn(mockNode);
 
         replay(ctx, hm, mockNode, req);
-        final WorkspaceAndNodeParameterProviderFactory f = new WorkspaceAndNodeParameterProviderFactory();
-        final NodeParameterProvider pp = f.newParameterProviderFor(req);
+        final NodeParameterProviderFactory f = new NodeParameterProviderFactory();
+        final ParameterProvider<Content> pp = f.newParameterProviderFor(req);
         final Content result = pp.getParameter();
         // we're only checking if the ParameterProvider indeed returns our mock, just so we can ensure it wasn't tempered with (i.e that the ParameterProvider did not call any unexpected method on it)
         assertEquals(mockNode, result);
@@ -89,7 +90,7 @@ public class WorkspaceAndNodeParameterProviderFactoryTest extends TestCase {
         expect(req.getRequestURI()).andReturn("/chalala" + (pathInfo == null ? "" : pathInfo)).anyTimes();
 
         replay(req);
-        final WorkspaceAndNodeParameterProviderFactory f = new WorkspaceAndNodeParameterProviderFactory();
+        final NodeParameterProviderFactory f = new NodeParameterProviderFactory();
         try {
             f.newParameterProviderFor(req);
             fail("should have failed");

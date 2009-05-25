@@ -12,27 +12,27 @@
  * intact.
  *
  */
-package info.magnolia.imaging.caching;
+package info.magnolia.imaging.parameters;
 
-import info.magnolia.cms.core.Content;
+import info.magnolia.cms.core.NodeData;
 import info.magnolia.imaging.ParameterProvider;
 
 
 /**
+ * @author pbracher
+ * @version $Id$
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
  */
-public class ContentBasedCachingStrategy extends AbstractContentBasedCachingStrategy<Content> {
-
-    @Override
-    protected Content getContent(ParameterProvider<Content> params) {
-        return params.getParameter();
+public class NodeDataParameterProvider implements ParameterProvider<NodeData> {
+    
+    private NodeData nd;
+    
+    public NodeDataParameterProvider(NodeData nd) {
+        this.nd = nd;
     }
 
-    @Override
-    protected String getPath(ParameterProvider<Content> params) {
-        return params.getParameter().getHandle();
+    public NodeData getParameter() {
+        return nd;
     }
 
 }

@@ -12,24 +12,21 @@
  * intact.
  *
  */
-package info.magnolia.imaging.parameters;
+package info.magnolia.imaging.operations.load;
 
-import info.magnolia.cms.core.Content;
+import info.magnolia.cms.core.NodeData;
 import info.magnolia.imaging.ParameterProvider;
 
+
 /**
+ * @author pbracher
+ * @version $Id$
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
  */
-public class NodeParameterProvider implements ParameterProvider<Content> {
-    private final Content node;
+public class FromNodeData extends AbstractFromContent<NodeData> {
 
-    public NodeParameterProvider(Content node) {
-        this.node = node;
+    protected NodeData getNodeData(ParameterProvider<NodeData> filterParams) {
+        return filterParams.getParameter();
     }
 
-    public Content getParameter() {
-        return node;
-    }
 }

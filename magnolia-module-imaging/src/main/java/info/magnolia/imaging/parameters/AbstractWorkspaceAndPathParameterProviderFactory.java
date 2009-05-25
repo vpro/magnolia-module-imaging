@@ -14,29 +14,22 @@
  */
 package info.magnolia.imaging.parameters;
 
-import info.magnolia.cms.core.Content;
-import info.magnolia.cms.core.HierarchyManager;
-import info.magnolia.context.MgnlContext;
+import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.ParameterProviderFactory;
-import info.magnolia.imaging.caching.CachingStrategy;
-import info.magnolia.imaging.caching.ContentBasedCachingStrategy;
 import info.magnolia.imaging.util.PathSplitter;
 
 import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * This is a ParameterProviderFactory which determines the workspace and node to use based on the
- * request uri. (the using HttpServletRequest.getPathInfo(), to be accurate)
- * It assumes that the first path element is the name of the ImageGenerator in use; that the second is the name
- * of the workspace where the node we want is, and that the rest is the path to the node in question.
- *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
- */
-public class WorkspaceAndNodeParameterProviderFactory implements ParameterProviderFactory<HttpServletRequest, Content> {
 
-    public NodeParameterProvider newParameterProviderFor(HttpServletRequest req) {
+/**
+ * @author pbracher
+ * @version $Id$
+ *
+ */
+public abstract class AbstractWorkspaceAndPathParameterProviderFactory<PT> implements ParameterProviderFactory<HttpServletRequest,PT> {
+    
+    public ParameterProvider<PT> newParameterProviderFor(HttpServletRequest req) {
         String pathInfo = req.getPathInfo();
         if (pathInfo == null) {
             throw new IllegalArgumentException("Can't determine node, no pathInfo is available for uri " + req.getRequestURI());
@@ -50,18 +43,15 @@ public class WorkspaceAndNodeParameterProviderFactory implements ParameterProvid
 
         }
         final String workspaceName = pathSplitter.skipTo(1);
-        final String nodePath = "/" + pathSplitter.remaining();
+        final String path = "/" + pathSplitter.remaining();
 
         try {
-            final HierarchyManager hm = MgnlContext.getHierarchyManager(workspaceName);
-            return new NodeParameterProvider(hm.getContent(nodePath));
+            return newParameterProviderForPath(workspaceName, path);
         } catch (RepositoryException e) {
             throw new RuntimeException(e); // TODO
         }
     }
 
-    public CachingStrategy<Content> getCachingStrategy() {
-        return new ContentBasedCachingStrategy();
-    }
+    abstract ParameterProvider<PT> newParameterProviderForPath(final String workspaceName, final String path) throws RepositoryException;
 
 }
