@@ -19,7 +19,7 @@
       <class>info.magnolia.imaging.ImagingServlet</class>
       <comment>Imaging Servlet</comment>
       <mappings>
-        <mapping>/img/*</mapping>
+        <mapping>/.imaging/*</mapping>
       </mappings>
     </servlet>
   </servlets>
