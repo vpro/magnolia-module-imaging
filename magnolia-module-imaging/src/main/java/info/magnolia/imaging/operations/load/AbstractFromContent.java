@@ -31,8 +31,8 @@ import java.io.InputStream;
  */
 public abstract class AbstractFromContent<PT> extends AbstractLoader<ParameterProvider<PT>> {
 
-    protected BufferedImage loadSource(ParameterProvider<PT> filterParams) throws ImagingException {
-        final NodeData data = getNodeData(filterParams);
+    protected BufferedImage loadSource(ParameterProvider<PT> param) throws ImagingException {
+        final NodeData data = getNodeData(param);
         if (!data.isExist() || data.getType() != PropertyType.BINARY) {
             throw new ImagingException("Nodedata " + data.getHandle() + " doesn't exist or is not of type binary.");
         }
@@ -41,13 +41,17 @@ public abstract class AbstractFromContent<PT> extends AbstractLoader<ParameterPr
             throw new ImagingException("Can't get InputStream from " + data.getHandle());
         }
         try {
-            // TODO - ensure this is an appropriate node/property
             return ImageIO.read(in);
         } catch (IOException e) {
             throw new ImagingException("Can't load image from " + data.getHandle());
         }
     }
 
-    protected abstract NodeData getNodeData(ParameterProvider<PT> filterParams);
+    /**
+     * Gets the appropriate NodeData instance based on the given ParameterProvider.
+     * If possible, the implementation should throw exceptions early, for instance if
+     * the NodeData can't be loaded.
+     */
+    protected abstract NodeData getNodeData(ParameterProvider<PT> param) throws ImagingException;
 
 }

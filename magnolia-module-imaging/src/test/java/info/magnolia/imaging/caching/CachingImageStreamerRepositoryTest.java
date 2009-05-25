@@ -14,12 +14,14 @@
  */
 package info.magnolia.imaging.caching;
 
+import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.HierarchyManager;
 import info.magnolia.cms.core.NodeData;
-import info.magnolia.cms.core.Content;
+import info.magnolia.cms.util.ContentUtil;
 import info.magnolia.cms.util.FactoryUtil;
 import info.magnolia.cms.util.HierarchyManagerWrapper;
-import info.magnolia.cms.util.ContentUtil;
+import info.magnolia.context.MgnlContext;
+import info.magnolia.imaging.AbstractRepositoryTestCase;
 import info.magnolia.imaging.DefaultImageStreamer;
 import info.magnolia.imaging.ImageGenerator;
 import info.magnolia.imaging.ImageStreamer;
@@ -27,8 +29,8 @@ import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.OutputFormat;
 import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.ParameterProviderFactory;
-import info.magnolia.imaging.parameters.ContentParameterProvider;
 import info.magnolia.imaging.operations.ImageOperationChain;
+import info.magnolia.imaging.parameters.ContentParameterProvider;
 import info.magnolia.logging.AuditLoggingManager;
 import info.magnolia.module.ModuleManagementException;
 import info.magnolia.module.ModuleManager;
@@ -36,19 +38,17 @@ import info.magnolia.module.ModuleManagerImpl;
 import info.magnolia.module.ModuleRegistry;
 import info.magnolia.module.model.ModuleDefinition;
 import info.magnolia.module.model.reader.ModuleDefinitionReader;
-import info.magnolia.test.RepositoryTestCase;
-import info.magnolia.context.MgnlContext;
-import static org.easymock.EasyMock.*;
 import org.apache.commons.io.IOUtils;
+import static org.easymock.EasyMock.createNiceMock;
 
 import javax.imageio.ImageIO;
 import javax.jcr.RepositoryException;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -68,7 +68,7 @@ import java.util.concurrent.TimeUnit;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class CachingImageStreamerRepositoryTest extends RepositoryTestCase {
+public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCase {
     private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(CachingImageStreamerRepositoryTest.class);
 
     @Override

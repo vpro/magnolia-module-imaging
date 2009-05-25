@@ -492,7 +492,7 @@
           <sv:value>1e42e464-765d-4c35-b7d1-23e04696b5c2</sv:value>
         </sv:property>
         <sv:property sv:name="class" sv:type="String">
-          <sv:value>info.magnolia.imaging.operations.load.FromNode</sv:value>
+          <sv:value>info.magnolia.imaging.operations.load.FromContent</sv:value>
         </sv:property>
         <sv:property sv:name="propertyName" sv:type="String">
           <sv:value>teaserImgBinary</sv:value>

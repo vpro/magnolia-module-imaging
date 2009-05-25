@@ -16,7 +16,6 @@ package info.magnolia.imaging.parameters;
 
 import info.magnolia.cms.core.HierarchyManager;
 import info.magnolia.cms.core.NodeData;
-import info.magnolia.context.MgnlContext;
 import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.caching.CachingStrategy;
 import info.magnolia.imaging.caching.NodeDataBasedCachingStrategy;
@@ -31,9 +30,7 @@ import javax.jcr.RepositoryException;
  */
 public class NodeDataParameterProviderFactory extends AbstractWorkspaceAndPathParameterProviderFactory<NodeData> {
 
-    @Override
-    ParameterProvider<NodeData> newParameterProviderForPath(String workspaceName, String path) throws RepositoryException {
-        final HierarchyManager hm = MgnlContext.getHierarchyManager(workspaceName);
+    protected ParameterProvider<NodeData> newParameterProviderForPath(final HierarchyManager hm, String path) throws RepositoryException {
         return new NodeDataParameterProvider(hm.getNodeData(path));
     }
 

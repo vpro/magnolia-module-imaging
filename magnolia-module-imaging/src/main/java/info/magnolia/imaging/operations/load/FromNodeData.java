@@ -16,6 +16,7 @@ package info.magnolia.imaging.operations.load;
 
 import info.magnolia.cms.core.NodeData;
 import info.magnolia.imaging.ParameterProvider;
+import info.magnolia.imaging.ImagingException;
 
 
 /**
@@ -25,8 +26,8 @@ import info.magnolia.imaging.ParameterProvider;
  */
 public class FromNodeData extends AbstractFromContent<NodeData> {
 
-    protected NodeData getNodeData(ParameterProvider<NodeData> filterParams) {
-        return filterParams.getParameter();
+    protected NodeData getNodeData(ParameterProvider<NodeData> param) throws ImagingException {
+        return param.getParameter();
     }
 
 }

@@ -14,6 +14,8 @@
  */
 package info.magnolia.imaging.parameters;
 
+import info.magnolia.cms.core.HierarchyManager;
+import info.magnolia.context.MgnlContext;
 import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.ParameterProviderFactory;
 import info.magnolia.imaging.util.PathSplitter;
@@ -27,8 +29,8 @@ import javax.servlet.http.HttpServletRequest;
  * @version $Id$
  *
  */
-public abstract class AbstractWorkspaceAndPathParameterProviderFactory<PT> implements ParameterProviderFactory<HttpServletRequest,PT> {
-    
+public abstract class AbstractWorkspaceAndPathParameterProviderFactory<PT> implements ParameterProviderFactory<HttpServletRequest, PT> {
+
     public ParameterProvider<PT> newParameterProviderFor(HttpServletRequest req) {
         String pathInfo = req.getPathInfo();
         if (pathInfo == null) {
@@ -46,12 +48,13 @@ public abstract class AbstractWorkspaceAndPathParameterProviderFactory<PT> imple
         final String path = "/" + pathSplitter.remaining();
 
         try {
-            return newParameterProviderForPath(workspaceName, path);
+            final HierarchyManager hm = MgnlContext.getHierarchyManager(workspaceName);
+            return newParameterProviderForPath(hm, path);
         } catch (RepositoryException e) {
-            throw new RuntimeException(e); // TODO
+            throw new RuntimeException("Can't load source from " + path + " from workspace " + workspaceName, e); // TODO
         }
     }
 
-    abstract ParameterProvider<PT> newParameterProviderForPath(final String workspaceName, final String path) throws RepositoryException;
+    protected abstract ParameterProvider<PT> newParameterProviderForPath(final HierarchyManager hm, final String path) throws RepositoryException;
 
 }

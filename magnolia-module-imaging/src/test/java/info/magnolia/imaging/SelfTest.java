@@ -19,34 +19,18 @@ import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.HierarchyManager;
 import info.magnolia.cms.core.NodeData;
 import info.magnolia.cms.util.ContentUtil;
-import info.magnolia.cms.util.FactoryUtil;
 import info.magnolia.cms.util.NodeDataUtil;
 import info.magnolia.context.MgnlContext;
-import info.magnolia.imaging.parameters.ContentParameterProvider;
 import info.magnolia.imaging.caching.CachingStrategy;
 import info.magnolia.imaging.caching.ContentBasedCachingStrategy;
-import info.magnolia.logging.AuditLoggingManager;
-import info.magnolia.module.ModuleManagementException;
-import info.magnolia.module.ModuleManager;
-import info.magnolia.module.ModuleManagerImpl;
-import info.magnolia.module.ModuleRegistry;
-import info.magnolia.module.model.ModuleDefinition;
-import info.magnolia.module.model.reader.ModuleDefinitionReader;
-import info.magnolia.test.RepositoryTestCase;
+import info.magnolia.imaging.parameters.ContentParameterProvider;
 import org.apache.commons.io.IOUtils;
-import static org.easymock.EasyMock.createNiceMock;
 
 import javax.jcr.PropertyType;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -54,12 +38,7 @@ import java.util.concurrent.TimeUnit;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class SelfTest extends RepositoryTestCase {
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        FactoryUtil.setInstance(AuditLoggingManager.class, new AuditLoggingManager());
-    }
+public class SelfTest extends AbstractRepositoryTestCase {
 
     public void testCanGetBinaryStreamOutOfTheSamePropertyInstanceTwice() throws Exception {
         final HierarchyManager hm = MgnlContext.getHierarchyManager("website");
@@ -115,34 +94,4 @@ public class SelfTest extends RepositoryTestCase {
         assertTrue(cachingStrategy.shouldRegenerate(cachedBinaryProp, pp));
     }
 
-    // TODO - this is an ugly hack to workaround MAGNOLIA-2593 - we should review RepositoryTestCase
-    protected void initDefaultImplementations() throws IOException {
-        //MgnlTestCase clears factory before running this method, so we have to instrument factory here rather then in setUp() before calling super.setUp()
-        ModuleRegistry registry = createNiceMock(ModuleRegistry.class);
-        FactoryUtil.setInstance(ModuleRegistry.class, registry);
-
-        final ModuleDefinitionReader fakeReader = new ModuleDefinitionReader() {
-            public ModuleDefinition read(Reader in) throws ModuleManagementException {
-                return null;
-            }
-
-            public Map readAll() throws ModuleManagementException {
-                Map m = new HashMap();
-                m.put("moduleDef", "dummy");
-                return m;
-            }
-
-            public ModuleDefinition readFromResource(String resourcePath) throws ModuleManagementException {
-                return null;
-            }
-        };
-        final ModuleManagerImpl fakeModuleManager = new ModuleManagerImpl(null, fakeReader) {
-            public List loadDefinitions() throws ModuleManagementException {
-                // TODO Auto-generated method stub
-                return new ArrayList();
-            }
-        };
-        FactoryUtil.setInstance(ModuleManager.class, fakeModuleManager);
-        super.initDefaultImplementations();
-    }
 }

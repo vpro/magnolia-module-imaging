@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class WorkspaceAndNodeParameterProviderFactoryTest extends TestCase {
+public class ContentParameterProviderFactoryTest extends TestCase {
     protected void tearDown() throws Exception {
         MgnlContext.setInstance(null);
         super.tearDown();

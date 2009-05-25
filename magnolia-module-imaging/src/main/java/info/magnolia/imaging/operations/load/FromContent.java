@@ -16,7 +16,10 @@ package info.magnolia.imaging.operations.load;
 
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.NodeData;
+import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.ParameterProvider;
+
+import javax.jcr.RepositoryException;
 
 
 /**
@@ -28,9 +31,16 @@ public class FromContent extends AbstractFromContent<Content> {
 
     private String propertyName = "binary";
 
-    protected NodeData getNodeData(ParameterProvider<Content> filterParams) {
-        final Content node = filterParams.getParameter();
-        return node.getNodeData(propertyName);
+    protected NodeData getNodeData(ParameterProvider<Content> param) throws ImagingException {
+        try {
+            final Content node = param.getParameter();
+            if (!node.hasNodeData(propertyName)) {
+                throw new ImagingException("There is no property named " + propertyName + " at " + node.getHandle());
+            }
+            return node.getNodeData(propertyName);
+        } catch (RepositoryException e) {
+            throw new RuntimeException(e); // TODO - MAGNOLIA-2746
+        }
     }
 
     public String getPropertyName() {

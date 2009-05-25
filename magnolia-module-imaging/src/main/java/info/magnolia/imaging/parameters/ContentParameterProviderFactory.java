@@ -16,7 +16,6 @@ package info.magnolia.imaging.parameters;
 
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.HierarchyManager;
-import info.magnolia.context.MgnlContext;
 import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.caching.CachingStrategy;
 import info.magnolia.imaging.caching.ContentBasedCachingStrategy;
@@ -34,8 +33,7 @@ import javax.jcr.RepositoryException;
  */
 public class ContentParameterProviderFactory extends AbstractWorkspaceAndPathParameterProviderFactory<Content> {
 
-    protected ParameterProvider<Content> newParameterProviderForPath(final String workspaceName, final String path) throws RepositoryException {
-        final HierarchyManager hm = MgnlContext.getHierarchyManager(workspaceName);
+    protected ParameterProvider<Content> newParameterProviderForPath(final HierarchyManager hm, final String path) throws RepositoryException {
         return new ContentParameterProvider(hm.getContent(path));
     }
     
