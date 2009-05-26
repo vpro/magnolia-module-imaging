@@ -22,11 +22,8 @@ import info.magnolia.imaging.operations.cropresize.resizers.BasicResizer;
 import java.awt.image.BufferedImage;
 
 /**
- * Subclasses of this determine which portion of the source image is taken into account.
- *
- * If targetWidth and targetHeight are <=0, no resizing will happen. (ie cropping only)
- * If either targetWidth or targetHeight is <=0, the ratio of the cropped image will be preserved.
- * If both targetWidth and targetHeight are >0, both will be used, even if they don't match the ratio of the cropped image.
+ * Subclasses of this determine which portion of the source image is taken into account,
+ * and what final dimensions the image needs to be resized to.
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)

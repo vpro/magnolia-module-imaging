@@ -24,6 +24,9 @@ import java.awt.image.BufferedImage;
  * and crop if needed: while respecting the ratio of the target dimensions, it will crop the image
  * such that the largest possible portion of the image is kept. It will keep the central part of the
  * image and cut off the external parts. (i.e centered crop)
+ * 
+ * If either targetWidth or targetHeight is <=0, the ratio of the source image will be preserved.
+ * If both targetWidth and targetHeight are >0, both will be used, even if they don't match the ratio of the source image (thus cropping it).
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
@@ -67,6 +70,11 @@ public class AutoCropAndResize extends AbstractCropAndResize {
         return new Coords(x1, y1, x2, y2);
     }
 
+    // TODO - this has been moved out of AbstractCropAndResize. Here is how it was originally documented.
+    // If targetWidth and targetHeight are <=0, no resizing will happen. (ie cropping only)
+    // If either targetWidth or targetHeight is <=0, the ratio of the cropped image will be preserved.
+    // If both targetWidth and targetHeight are >0, both will be used, even if they don't match the ratio of the cropped image (thus cropping it).
+    // This code might actually be useful for SelectedCropAndResize, too.
     protected Size getEffectiveTargetSize(BufferedImage source, Coords cropCoords, ParameterProvider params) {
         final int effectiveTargetWidth, effectiveTargetHeight;
         if (targetWidth <= 0 && targetHeight <= 0) {
