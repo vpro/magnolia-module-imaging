@@ -35,7 +35,7 @@ public class FromContent extends AbstractFromContent<Content> {
         try {
             final Content node = param.getParameter();
             if (!node.hasNodeData(propertyName)) {
-                throw new ImagingException("There is no property named " + propertyName + " at " + node.getHandle());
+                throw new ImagingException("There is no '" + propertyName + "' property at " + node.getHandle());
             }
             return node.getNodeData(propertyName);
         } catch (RepositoryException e) {
