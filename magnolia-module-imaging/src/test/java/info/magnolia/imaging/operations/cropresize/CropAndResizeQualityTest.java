@@ -18,6 +18,9 @@ import info.magnolia.imaging.DefaultImageStreamer;
 import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.OutputFormat;
 import info.magnolia.imaging.operations.ImageOperationChain;
+import info.magnolia.imaging.operations.cropresize.resizers.BasicResizer;
+import info.magnolia.imaging.operations.cropresize.resizers.MultiStepResizer;
+import info.magnolia.imaging.operations.cropresize.resizers.ScaleAreaAveragingResizer;
 import info.magnolia.imaging.operations.load.ClasspathImageLoader;
 import junit.framework.TestCase;
 import org.apache.commons.io.IOUtils;
@@ -62,19 +65,19 @@ public class CropAndResizeQualityTest extends TestCase {
         final DefaultImageStreamer imageStreamer = new DefaultImageStreamer();
 
         final String resFile = getClass().getSimpleName() + "test-quality1-result-basic.jpg";
-        cropAndResize.setResizeTechnique(new BasicResizeTechnique());
+        cropAndResize.setResizer(new BasicResizer());
         imageStreamer.serveImage(generator, null, new FileOutputStream(resFile));
 
         final String resFile2 = getClass().getSimpleName() + "test-quality1-result-multistep.jpg";
-        cropAndResize.setResizeTechnique(new MultiStepResizeTechnique());
+        cropAndResize.setResizer(new MultiStepResizer());
         imageStreamer.serveImage(generator, null, new FileOutputStream(resFile2));
 
         final String resFile3 = getClass().getSimpleName() + "test-quality1-result-scalearea-averaging.jpg";
-        cropAndResize.setResizeTechnique(new ScaleAreaAveragingResizeTechnique());
+        cropAndResize.setResizer(new ScaleAreaAveragingResizer());
         imageStreamer.serveImage(generator, null, new FileOutputStream(resFile3));
 
 //        final String resFile4 = "test-quality1-result-trilinear.jpg";
-//        cropAndResize.setResizeTechnique(new TriLinearResizeTechnique());
+//        cropAndResize.setResizer(new TriLinearResizer());
 //        imageStreamer.serveImage(generator, null, new FileOutputStream(resFile4));
 
 //        Runtime.getRuntime().exec("open " + expected

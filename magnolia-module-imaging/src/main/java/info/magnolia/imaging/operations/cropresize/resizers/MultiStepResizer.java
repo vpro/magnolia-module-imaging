@@ -12,7 +12,10 @@
  * intact.
  *
  */
-package info.magnolia.imaging.operations.cropresize;
+package info.magnolia.imaging.operations.cropresize.resizers;
+
+import info.magnolia.imaging.operations.cropresize.Coords;
+import info.magnolia.imaging.operations.cropresize.Size;
 
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -29,7 +32,7 @@ import java.awt.image.BufferedImage;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class MultiStepResizeTechnique extends BasicResizeTechnique {
+public class MultiStepResizer extends BasicResizer {
     @Override
     public BufferedImage resize(BufferedImage src, Coords srcCoords, Size targetSize) {
         final int targetWidth = targetSize.getWidth();

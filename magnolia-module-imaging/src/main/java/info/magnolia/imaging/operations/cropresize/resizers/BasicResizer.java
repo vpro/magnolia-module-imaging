@@ -12,7 +12,11 @@
  * intact.
  *
  */
-package info.magnolia.imaging.operations.cropresize;
+package info.magnolia.imaging.operations.cropresize.resizers;
+
+import info.magnolia.imaging.operations.cropresize.Resizer;
+import info.magnolia.imaging.operations.cropresize.Coords;
+import info.magnolia.imaging.operations.cropresize.Size;
 
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -27,7 +31,7 @@ import java.util.Map;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class BasicResizeTechnique implements ResizeTechnique {
+public class BasicResizer implements Resizer {
     /**
      * Internal map mapping a name to a corresponding RenderingHints.VALUE_INTERPOLATION_* instance.
      */

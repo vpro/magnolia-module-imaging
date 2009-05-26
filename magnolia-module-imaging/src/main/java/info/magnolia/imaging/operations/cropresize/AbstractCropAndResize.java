@@ -17,6 +17,7 @@ package info.magnolia.imaging.operations.cropresize;
 import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.operations.ImageOperation;
+import info.magnolia.imaging.operations.cropresize.resizers.BasicResizer;
 
 import java.awt.image.BufferedImage;
 
@@ -31,7 +32,7 @@ import java.awt.image.BufferedImage;
  * @version $Revision: $ ($Author: $)
  */
 public abstract class AbstractCropAndResize implements ImageOperation {
-    private ResizeTechnique resizeTechnique = new BasicResizeTechnique();
+    private Resizer resizer = new BasicResizer();
 
     public BufferedImage apply(BufferedImage source, ParameterProvider params) throws ImagingException {
         final Coords coords = getCroopCoords(source, params);
@@ -52,15 +53,15 @@ public abstract class AbstractCropAndResize implements ImageOperation {
     protected abstract Size getEffectiveTargetSize(BufferedImage source, Coords cropCoords, ParameterProvider params);
 
     protected BufferedImage resize(BufferedImage src, Coords srcCoords, Size targetSize) {
-        return getResizeTechnique().resize(src, srcCoords, targetSize);
+        return getResizer().resize(src, srcCoords, targetSize);
     }
 
-    public ResizeTechnique getResizeTechnique() {
-        return resizeTechnique;
+    public Resizer getResizer() {
+        return resizer;
     }
 
-    public void setResizeTechnique(ResizeTechnique resizeTechnique) {
-        this.resizeTechnique = resizeTechnique;
+    public void setResizer(Resizer resizer) {
+        this.resizer = resizer;
     }
 
 }

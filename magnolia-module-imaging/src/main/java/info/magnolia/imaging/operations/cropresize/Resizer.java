@@ -21,7 +21,7 @@ import java.awt.image.BufferedImage;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public interface ResizeTechnique {
+public interface Resizer {
 
     BufferedImage resize(BufferedImage src, Coords srcCoords, Size targetSize);
 

@@ -12,7 +12,11 @@
  * intact.
  *
  */
-package info.magnolia.imaging.operations.cropresize;
+package info.magnolia.imaging.operations.cropresize.resizers;
+
+import info.magnolia.imaging.operations.cropresize.Resizer;
+import info.magnolia.imaging.operations.cropresize.Coords;
+import info.magnolia.imaging.operations.cropresize.Size;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -27,7 +31,7 @@ import java.awt.image.WritableRaster;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class ScaleAreaAveragingResizeTechnique implements ResizeTechnique {
+public class ScaleAreaAveragingResizer implements Resizer {
     public BufferedImage resize(BufferedImage src, Coords srcCoords, Size targetSize) {
 
         final BufferedImage cropped = src.getSubimage(srcCoords.getX1(), srcCoords.getY1(), srcCoords.getWidth(), srcCoords.getHeight());
