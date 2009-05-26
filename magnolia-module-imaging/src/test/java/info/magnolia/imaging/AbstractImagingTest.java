@@ -15,7 +15,6 @@
 package info.magnolia.imaging;
 
 import com.jhlabs.image.FlipFilter;
-import info.magnolia.imaging.operations.cropresize.AutoCropAndResizeTest;
 import info.magnolia.imaging.operations.load.ClasspathImageLoader;
 import junit.framework.TestCase;
 
@@ -43,7 +42,7 @@ import java.util.Set;
  * @version $Revision: $ ($Author: $)
  */
 public abstract class AbstractImagingTest extends TestCase {
-    private static final boolean KEEP_GENERATED_FILES_FOR_INSPECTION = false;
+    private static final boolean KEEP_GENERATED_FILES_FOR_INSPECTION = true;
     private static final boolean OPEN_GENERATED_FILES_FOR_INSPECTION = false;
 
     protected static final OutputFormat BASIC_JPEG = new OutputFormat("jpeg", false, 80, null);
@@ -88,12 +87,14 @@ public abstract class AbstractImagingTest extends TestCase {
     // having these images as static constants is a mediocre attempt at making the tests run faster (AutoCropAndResizeTest was using around 7 seconds...)
     private static final BufferedImage horizontalImage;
     private static final BufferedImage verticalImage;
+    private static final BufferedImage squareImage;
 
     // preload images for this test
     static {
         try {
             final FlipFilter f = new FlipFilter(FlipFilter.FLIP_90CW);
-            horizontalImage = ImageIO.read(AutoCropAndResizeTest.class.getResource("/IMG_2463.JPG"));
+            squareImage = ImageIO.read(AbstractImagingTest.class.getResource("/IMG_4995.JPG"));
+            horizontalImage = ImageIO.read(AbstractImagingTest.class.getResource("/IMG_2463.JPG"));
             verticalImage = f.filter(horizontalImage, null);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -116,6 +117,15 @@ public abstract class AbstractImagingTest extends TestCase {
         assertEquals(1200, verticalImage.getWidth());
         assertEquals(1600, verticalImage.getHeight());
         return verticalImage;
+    }
+
+    /**
+     * Gets a well-known image, ensuring its dimensions haven't changed since the test was written and started.
+     */
+    protected BufferedImage getSquareTestImage() throws Exception {
+        assertEquals(500, squareImage.getWidth());
+        assertEquals(500, squareImage.getHeight());
+        return squareImage;
     }
 
     private String getCurrentTestMethodName() {

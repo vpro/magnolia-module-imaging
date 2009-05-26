@@ -29,13 +29,21 @@ public class BoundedResizeTest extends AbstractImagingTest {
     }
 
     public void testKeepsOriginalRatioAndCompliesToSmallestMaximumDimension() throws Exception {
+        // source is w:1600*h:1200
         doTestKeepsOriginalRatioAndCompliesToSmallestMaximumDimension(getHorizontalTestImage(), 2500, 300, 400, 300);
         doTestKeepsOriginalRatioAndCompliesToSmallestMaximumDimension(getHorizontalTestImage(), 200, 3000, 200, 150);
     }
 
     public void testKeepsOriginalRatioAndCompliesToSmallestMaximumDimensionForVerticalSourceToo() throws Exception {
+        // source is w:1200*h:1600
         doTestKeepsOriginalRatioAndCompliesToSmallestMaximumDimension(getVerticalTestImage(), 2500, 400, 300, 400);
         doTestKeepsOriginalRatioAndCompliesToSmallestMaximumDimension(getVerticalTestImage(), 300, 4000, 300, 400);
+    }
+
+    public void testKeepsOriginalRatioAndCompliesToSmallestMaximumDimensionForSquareSourceToo() throws Exception {
+        // source is w:500*h:500
+        doTestKeepsOriginalRatioAndCompliesToSmallestMaximumDimension(getSquareTestImage(), 2500, 400, 400, 400);
+        doTestKeepsOriginalRatioAndCompliesToSmallestMaximumDimension(getSquareTestImage(), 300, 4000, 300, 300);
     }
 
 
@@ -47,10 +55,7 @@ public class BoundedResizeTest extends AbstractImagingTest {
         final BufferedImage res = op.apply(src, null);
         write(res);
 
-        assertEquals(expectedWith, res.getWidth()); // source is w:1600*h:1200
+        assertEquals(expectedWith, res.getWidth());
         assertEquals(expectedHeight, res.getHeight());
     }
-
-
-    // TODO - test for square source
 }
