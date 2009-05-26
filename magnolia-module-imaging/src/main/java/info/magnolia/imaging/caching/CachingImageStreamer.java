@@ -99,7 +99,7 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
                             throw new RuntimeException(e);
                         } catch (ImagingException e) {
                             // the map will further wrap these in ComputationExceptions, and we will, in turn, unwrap them ...
-                            throw new ComputationException(e);
+                            throw new RuntimeException(e);
                         }
                     }
                 });
@@ -113,7 +113,7 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
                 imgProp = currentJobs.get(new ImageGenerationJob<P>(generator, params));
             } catch (ComputationException e) {
                 // thrown if the ComputingMap's Function failed
-                throw new ImagingException(e.getMessage(), e.getCause());
+                unwrapRuntimeException(e);
             }
         }
         serve(imgProp, out);
@@ -186,6 +186,28 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
             throw new ImagingException("Can't store rendered image: " + e.getMessage(), e);
         } finally {
             lock.unlock();
+        }
+    }
+
+    /**
+     * Unwrap ComputationExceptions wrapping a RuntimeException wrapping an ImagingException or IOException,
+     * as thrown by the Function of the computing map.
+     * @see #currentJobs
+     */
+    private void unwrapRuntimeException(RuntimeException e) throws ImagingException, IOException {
+        final Throwable cause = e.getCause();
+        if (cause instanceof ImagingException) {
+            throw (ImagingException) cause;
+        } else if (cause instanceof IOException) {
+            throw (IOException) cause;
+        } else if (cause instanceof RuntimeException) {
+            unwrapRuntimeException((RuntimeException) cause);
+        } else if (cause == null) {
+            throw new IllegalStateException("This really, really, should not happen... but we'll let this exception bubble up: " + e.getMessage(), e);
+
+        } else {
+            // this shouldn't happen either, actually.
+            throw new ImagingException(e.getMessage(), cause);
         }
     }
 }
