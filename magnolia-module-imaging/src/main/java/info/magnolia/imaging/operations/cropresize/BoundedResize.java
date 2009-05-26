@@ -38,7 +38,8 @@ public class BoundedResize extends AbstractCropAndResize {
         final int sourceWidth = source.getWidth();
         final int sourceHeight = source.getHeight();
 
-        final double r = (double) (maxWidth < maxHeight ? (sourceWidth / maxWidth) : (sourceHeight / maxHeight));
+        // Casting the first member of the division would be enough, just casting all of them for clarity. Adding parenthese would round the result before casting it.
+        final double r = maxWidth < maxHeight ? (double) sourceWidth / (double) maxWidth : (double) sourceHeight / (double) maxHeight;
         final int effectiveWidth = (int) (sourceWidth / r);
         final int effectiveHeight = (int) (sourceHeight / r);
 
