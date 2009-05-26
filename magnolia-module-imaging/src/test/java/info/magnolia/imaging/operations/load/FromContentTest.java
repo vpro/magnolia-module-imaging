@@ -66,7 +66,7 @@ public class FromContentTest extends AbstractRepositoryTestCase {
             op.apply(null, ppf.newParameterProviderFor(null));
             fail();
         } catch (ImagingException e) {
-            assertEquals("There is no property named foobar at /some/node", e.getMessage());
+            assertEquals("There is no 'foobar' property at /some/node", e.getMessage());
         }
     }
 
