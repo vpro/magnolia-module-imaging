@@ -14,9 +14,12 @@
  */
 package info.magnolia.imaging;
 
+import com.jhlabs.image.FlipFilter;
+import info.magnolia.imaging.operations.cropresize.AutoCropAndResizeTest;
 import info.magnolia.imaging.operations.load.ClasspathImageLoader;
 import junit.framework.TestCase;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -27,8 +30,11 @@ import java.util.Set;
 
 /**
  * Provides utility/convenience methods to load and write images.
- * These are using the imaging framework itself, so they might not be
- * appropriate for all testing situations !
+ * Also provides well known source images for tests.
+ *
+ * Some of these methods are using the imaging framework itself,
+ * so they might not be appropriate for all testing situations !
+ *
  * The write methods also keep track of generated images, so that one
  * can open them easily after all tests have run, if human verification
  * is necessary.
@@ -75,6 +81,39 @@ public abstract class AbstractImagingTest extends TestCase {
         }
     }
 
+    // having these images as static constants is a mediocre attempt at making the tests run faster (AutoCropAndResizeTest was using around 7 seconds...)
+    private static final BufferedImage horizontalImage;
+    private static final BufferedImage verticalImage;
+
+    // preload images for this test
+    static {
+        try {
+            final FlipFilter f = new FlipFilter(FlipFilter.FLIP_90CW);
+            horizontalImage = ImageIO.read(AutoCropAndResizeTest.class.getResource("/IMG_2463.JPG"));
+            verticalImage = f.filter(horizontalImage, null);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Gets a well-known image, ensuring its dimensions haven't changed since the test was written and started.
+     */
+    protected BufferedImage getHorizontalTestImage() throws Exception {
+        assertEquals(1600, horizontalImage.getWidth());
+        assertEquals(1200, horizontalImage.getHeight());
+        return horizontalImage;
+    }
+
+    /**
+     * Gets a well-known image, ensuring its dimensions haven't changed since the test was written and started.
+     */
+    protected BufferedImage getVerticalTestImage() throws Exception {
+        assertEquals(1200, verticalImage.getWidth());
+        assertEquals(1600, verticalImage.getHeight());
+        return verticalImage;
+    }
+
     private String getCurrentTestMethodName() {
         final StackTraceElement[] stackTrace = new Exception().getStackTrace();
         for (StackTraceElement ste : stackTrace) {
@@ -95,9 +134,8 @@ public abstract class AbstractImagingTest extends TestCase {
         }
     }
 
-
     static {
-        if (KEEP_GENERATED_FILES_FOR_INSPECTION&&OPEN_GENERATED_FILES_FOR_INSPECTION) {
+        if (KEEP_GENERATED_FILES_FOR_INSPECTION && OPEN_GENERATED_FILES_FOR_INSPECTION) {
             Runtime.getRuntime().addShutdownHook(new Thread() {
                 public void run() {
                     final StringBuilder command = new StringBuilder("open");
