@@ -18,9 +18,6 @@ import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.operations.ImageOperation;
 
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 
 /**
