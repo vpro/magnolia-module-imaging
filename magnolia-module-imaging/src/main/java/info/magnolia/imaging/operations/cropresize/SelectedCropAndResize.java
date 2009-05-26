@@ -14,6 +14,9 @@
  */
 package info.magnolia.imaging.operations.cropresize;
 
+import info.magnolia.imaging.ImagingException;
+import info.magnolia.imaging.ParameterProvider;
+
 import java.awt.image.BufferedImage;
 
 /**
@@ -24,7 +27,11 @@ import java.awt.image.BufferedImage;
  * @version $Revision: $ ($Author: $)
  */
 public class SelectedCropAndResize extends AbstractCropAndResize {
-    protected Coords getCroopCoords(BufferedImage source, int targetWidth, int targetHeight) {
+    protected Coords getCroopCoords(BufferedImage source, ParameterProvider params) throws ImagingException {
+        throw new IllegalStateException("not implemented yet !");
+    }
+
+    protected Size getEffectiveTargetSize(BufferedImage source, Coords cropCoords, ParameterProvider params) {
         throw new IllegalStateException("not implemented yet !");
     }
 }

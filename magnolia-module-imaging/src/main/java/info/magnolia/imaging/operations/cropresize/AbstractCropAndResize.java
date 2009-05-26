@@ -32,43 +32,27 @@ import java.awt.image.BufferedImage;
  */
 public abstract class AbstractCropAndResize implements ImageOperation {
     private ResizeTechnique resizeTechnique = new BasicResizeTechnique();
-    private int targetWidth;
-    private int targetHeight;
 
     public BufferedImage apply(BufferedImage source, ParameterProvider params) throws ImagingException {
-        final Coords coords = getCroopCoords(source, targetWidth, targetHeight);
-        return resize(source, coords);
+        final Coords coords = getCroopCoords(source, params);
+        final Size effectiveTargetSize = getEffectiveTargetSize(source, coords, params);
+        return resize(source, coords, effectiveTargetSize);
     }
 
     /**
      * Determines the coordinates of the cropping to apply on the source image.
      * If no cropping needs to happen, return new Coords(0, 0, source.getWidth(), source.getHeight()). 
      */
-    protected abstract Coords getCroopCoords(BufferedImage source, int targetWidth, int targetHeight) throws ImagingException;
+    protected abstract Coords getCroopCoords(BufferedImage source, ParameterProvider params) throws ImagingException;
 
-    protected BufferedImage resize(BufferedImage src, Coords cropCoords) {
-        final int effectiveTargetWidth, effectiveTargetHeight;
-        if (targetWidth <= 0 && targetHeight <= 0) {
-            effectiveTargetWidth = cropCoords.getWidth();
-            effectiveTargetHeight = cropCoords.getHeight();
-        } else if (targetWidth <= 0) {
-            double ratio = (double) targetHeight / (double) cropCoords.getHeight();
-            effectiveTargetWidth = (int) (cropCoords.getWidth() * ratio);
-            effectiveTargetHeight = targetHeight;
-        } else if (targetHeight <= 0) {
-            double ratio = (double) targetWidth / (double) cropCoords.getWidth();
-            effectiveTargetHeight = (int) (cropCoords.getHeight() * ratio);
-            effectiveTargetWidth = targetWidth;
-        } else {
-            effectiveTargetWidth = targetWidth;
-            effectiveTargetHeight = targetHeight;
-        }
+    /**
+     * Determines the actual size for the resized image based on the source image, the crop coordinates
+     * calculated by {@link #getCroopCoords} and the given ParameterProvider.
+     */
+    protected abstract Size getEffectiveTargetSize(BufferedImage source, Coords cropCoords, ParameterProvider params);
 
-        return resize(src, cropCoords, effectiveTargetWidth, effectiveTargetHeight);
-    }
-
-    protected BufferedImage resize(BufferedImage src, Coords srcCoords, int targetWidth, int targetHeight) {
-        return getResizeTechnique().resize(src, srcCoords, targetWidth, targetHeight);
+    protected BufferedImage resize(BufferedImage src, Coords srcCoords, Size targetSize) {
+        return getResizeTechnique().resize(src, srcCoords, targetSize);
     }
 
     public ResizeTechnique getResizeTechnique() {
@@ -79,19 +63,4 @@ public abstract class AbstractCropAndResize implements ImageOperation {
         this.resizeTechnique = resizeTechnique;
     }
 
-    public int getTargetWidth() {
-        return targetWidth;
-    }
-
-    public void setTargetWidth(int targetWidth) {
-        this.targetWidth = targetWidth;
-    }
-
-    public int getTargetHeight() {
-        return targetHeight;
-    }
-
-    public void setTargetHeight(int targetHeight) {
-        this.targetHeight = targetHeight;
-    }
 }

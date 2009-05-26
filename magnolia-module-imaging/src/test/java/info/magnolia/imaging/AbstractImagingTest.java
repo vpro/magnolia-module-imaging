@@ -54,6 +54,10 @@ public abstract class AbstractImagingTest extends TestCase {
         return loader.apply(null, null);
     }
 
+    protected void write(BufferedImage res) throws IOException {
+        write(res, BASIC_JPEG);
+    }
+
     protected void write(BufferedImage res, OutputFormat outputFormat) throws IOException {
         write(null, res, outputFormat);
     }

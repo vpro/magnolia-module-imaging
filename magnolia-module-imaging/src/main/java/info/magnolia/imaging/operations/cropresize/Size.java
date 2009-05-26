@@ -14,15 +14,30 @@
  */
 package info.magnolia.imaging.operations.cropresize;
 
-import java.awt.image.BufferedImage;
+import java.io.Serializable;
 
 /**
+ * A simple immutable bean holding two integers reprensenting a Size, width and height.
+ * Similar to java.awt.Dimension, without all the toolkit and environment
+ * dependencies.
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public interface ResizeTechnique {
+public class Size implements Serializable {
+    private final int width;
+    private final int height;
 
-    BufferedImage resize(BufferedImage src, Coords srcCoords, Size targetSize);
+    public Size(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
 
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
 }

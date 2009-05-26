@@ -39,15 +39,15 @@ public class BasicResizeTechnique implements ResizeTechnique {
 
     private String interpolation = "bilinear";
 
-    public BufferedImage resize(BufferedImage src, Coords srcCoords, int targetWidth, int targetHeight) {
+    public BufferedImage resize(BufferedImage src, Coords srcCoords, Size targetSize) {
         final ColorModel cm = src.getColorModel();
-        final WritableRaster raster = cm.createCompatibleWritableRaster(targetWidth, targetHeight);
+        final WritableRaster raster = cm.createCompatibleWritableRaster(targetSize.getWidth(), targetSize.getHeight());
         final BufferedImage dst = new BufferedImage(cm, raster, cm.isAlphaPremultiplied(), null);
         final Graphics2D g = dst.createGraphics();
 
         g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, getInterpolationHint());
 
-        g.drawImage(src, 0, 0, targetWidth, targetHeight, srcCoords.getX1(), srcCoords.getY1(), srcCoords.getX2(), srcCoords.getY2(), null);
+        g.drawImage(src, 0, 0, targetSize.getWidth(), targetSize.getHeight(), srcCoords.getX1(), srcCoords.getY1(), srcCoords.getX2(), srcCoords.getY2(), null);
         g.dispose();
         return dst;
     }
@@ -63,6 +63,7 @@ public class BasicResizeTechnique implements ResizeTechnique {
     /**
      * One of "nearest_neighbor", "bilinear" or "bicubic".
      * @see #INTERPOLATION_HINTS
+     * TODO : make this an enum, when content2bean supports it.
      */
     public void setInterpolation(String interpolation) {
         this.interpolation = interpolation;

@@ -21,20 +21,20 @@ import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 
 /**
- * This implementation uses the discouraged java.awt.Image#getScaledInstance method, which has rather poor performance,
- * but unmatched quality.
- * 
+ * This implementation uses the discouraged java.awt.Image#getScaledInstance method,
+ * which has rather poor performance, but unmatched quality.
+ *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
 public class ScaleAreaAveragingResizeTechnique implements ResizeTechnique {
-    public BufferedImage resize(BufferedImage src, Coords srcCoords, int targetWidth, int targetHeight) {
+    public BufferedImage resize(BufferedImage src, Coords srcCoords, Size targetSize) {
 
         final BufferedImage cropped = src.getSubimage(srcCoords.getX1(), srcCoords.getY1(), srcCoords.getWidth(), srcCoords.getHeight());
-        final Image img = cropped.getScaledInstance(targetWidth, targetHeight, Image.SCALE_AREA_AVERAGING);
+        final Image img = cropped.getScaledInstance(targetSize.getWidth(), targetSize.getHeight(), Image.SCALE_AREA_AVERAGING);
 
         final ColorModel cm = src.getColorModel();
-        final WritableRaster raster = cm.createCompatibleWritableRaster(targetWidth, targetHeight);
+        final WritableRaster raster = cm.createCompatibleWritableRaster(targetSize.getWidth(), targetSize.getHeight());
         final BufferedImage dst = new BufferedImage(cm, raster, cm.isAlphaPremultiplied(), null);
         final Graphics2D g = dst.createGraphics();
         g.drawImage(img, null, null);

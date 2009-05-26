@@ -15,6 +15,7 @@
 package info.magnolia.imaging.operations.cropresize;
 
 import info.magnolia.imaging.ImagingException;
+import info.magnolia.imaging.ParameterProvider;
 
 import java.awt.image.BufferedImage;
 
@@ -28,7 +29,10 @@ import java.awt.image.BufferedImage;
  * @version $Revision: $ ($Author: $)
  */
 public class AutoCropAndResize extends AbstractCropAndResize {
-    protected Coords getCroopCoords(BufferedImage source, int targetWidth, int targetHeight) throws ImagingException {
+    private int targetWidth;
+    private int targetHeight;
+
+    protected Coords getCroopCoords(BufferedImage source, ParameterProvider params) throws ImagingException {
         final int sourceWidth = source.getWidth();
         final int sourceHeight = source.getHeight();
 
@@ -63,5 +67,40 @@ public class AutoCropAndResize extends AbstractCropAndResize {
         return new Coords(x1, y1, x2, y2);
     }
 
+    protected Size getEffectiveTargetSize(BufferedImage source, Coords cropCoords, ParameterProvider params) {
+        final int effectiveTargetWidth, effectiveTargetHeight;
+        if (targetWidth <= 0 && targetHeight <= 0) {
+            effectiveTargetWidth = cropCoords.getWidth();
+            effectiveTargetHeight = cropCoords.getHeight();
+        } else if (targetWidth <= 0) {
+            double ratio = (double) targetHeight / (double) cropCoords.getHeight();
+            effectiveTargetWidth = (int) (cropCoords.getWidth() * ratio);
+            effectiveTargetHeight = targetHeight;
+        } else if (targetHeight <= 0) {
+            double ratio = (double) targetWidth / (double) cropCoords.getWidth();
+            effectiveTargetHeight = (int) (cropCoords.getHeight() * ratio);
+            effectiveTargetWidth = targetWidth;
+        } else {
+            effectiveTargetWidth = targetWidth;
+            effectiveTargetHeight = targetHeight;
+        }
 
+        return new Size(effectiveTargetWidth, effectiveTargetHeight);
+    }
+
+    public int getTargetWidth() {
+        return targetWidth;
+    }
+
+    public void setTargetWidth(int targetWidth) {
+        this.targetWidth = targetWidth;
+    }
+
+    public int getTargetHeight() {
+        return targetHeight;
+    }
+
+    public void setTargetHeight(int targetHeight) {
+        this.targetHeight = targetHeight;
+    }
 }

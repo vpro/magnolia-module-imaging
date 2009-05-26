@@ -30,8 +30,10 @@ import java.awt.image.BufferedImage;
  * @version $Revision: $ ($Author: $)
  */
 public class MultiStepResizeTechnique extends BasicResizeTechnique {
-    public BufferedImage resize(BufferedImage src, Coords srcCoords, int targetWidth, int targetHeight) {
-
+    @Override
+    public BufferedImage resize(BufferedImage src, Coords srcCoords, Size targetSize) {
+        final int targetWidth = targetSize.getWidth();
+        final int targetHeight = targetSize.getHeight();
         final int type = (src.getTransparency() == Transparency.OPAQUE) ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
         BufferedImage ret = src;
         int w, h;
