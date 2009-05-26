@@ -46,6 +46,11 @@ public class BoundedResizeTest extends AbstractImagingTest {
         doTestKeepsOriginalRatioAndCompliesToSmallestMaximumDimension(getSquareTestImage(), 300, 4000, 300, 300);
     }
 
+    // TODO - we could implement this for consistency's sake
+//    public void testWhatHappensIfWeOnlySpecifyMaxWidth() throws Exception {
+//        doTestKeepsOriginalRatioAndCompliesToSmallestMaximumDimension(getHorizontalTestImage(), 400, 0, 400, 300);
+//    }
+
 
     private void doTestKeepsOriginalRatioAndCompliesToSmallestMaximumDimension(final BufferedImage src, final int maxWidth, final int maxHeight, final int expectedWith, final int expectedHeight) throws Exception {
         final BoundedResize op = new BoundedResize();

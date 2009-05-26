@@ -97,7 +97,6 @@ public class AutoCropAndResizeTest extends AbstractImagingTest {
         final BufferedImage res = op.apply(getHorizontalTestImage(), null);
         assertEquals(400, res.getWidth());
         assertEquals(300, res.getHeight());
-
     }
 
     public void testDoesNotCropIfOnlyTargetWidthIsSpecifiedAndRespectsOriginalRatio() throws Exception {
