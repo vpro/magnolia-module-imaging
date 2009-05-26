@@ -74,6 +74,9 @@ public class ImagingServlet extends HttpServlet {
     }
 
     protected ImageStreamer getStreamer(ParameterProviderFactory parameterProviderFactory) {
+        // TODO -- CachingImageStreamer currently has a non-static "currentJobs" map.
+        // TODO -- to investigate, but I highly suspect that it's not really useful if
+        // we use a different instance of CachingImageStreamer for every request.
         final HierarchyManager hm = MgnlContext.getHierarchyManager("imaging");
         final CachingStrategy cachingStrategy = parameterProviderFactory.getCachingStrategy();
         return new CachingImageStreamer(hm, cachingStrategy, new DefaultImageStreamer());

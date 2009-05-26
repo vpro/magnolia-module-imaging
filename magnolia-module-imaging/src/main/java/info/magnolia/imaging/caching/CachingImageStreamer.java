@@ -39,6 +39,7 @@ import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * An ImageStreamer which stores and serves generated images to/from a specific workspace.
@@ -64,6 +65,17 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
      * Further calls are blocked until the value is generated, and they all retrieve the same value.
      */
     private final ConcurrentMap<ImageGenerationJob<P>, NodeData> currentJobs;
+
+    /**
+     * Despite the currentJobs doing quite a good job at avoiding multiple requests
+     * for the same job, we still need to lock around JCR operations, otherwise multiple
+     * requests end up creating the same cachePath (or parts of it), thus yielding
+     * InvalidItemStateException: "Item cannot be saved because it has been modified externally".
+     * TODO - this is currently static because we *know* ImagingServlet uses a different instance
+     * of CachingImageStreamer for every request. This is not exactly the most elegant.
+     * TODO - see related TODO in currentJobs and info.magnolia.imaging.ImagingServlet#getStreamer
+     */
+    private static final ReentrantLock lock = new ReentrantLock();
 
     public CachingImageStreamer(HierarchyManager hm, CachingStrategy<P> cachingStrategy, ImageStreamer<P> delegate) {
         this.hm = hm;
@@ -144,14 +156,19 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
     }
 
     protected NodeData generateAndStore(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> parameterProvider) throws IOException, ImagingException {
-        final String cachePath = cachingStrategy.getCachePath(generator, parameterProvider);
+        // generate
+        final ByteArrayOutputStream tempOut = new ByteArrayOutputStream();
+        delegate.serveImage(generator, parameterProvider, tempOut);
+
+        // it's time to lock now, we can only save one node at a time, since we'll be working on the same nodes as other threads
+        lock.lock();
         try {
+            // create cachePath if needed
+            final String cachePath = cachingStrategy.getCachePath(generator, parameterProvider);
             final Content cacheNode = ContentUtil.createPath(hm, cachePath, false);
             final NodeData imageData = NodeDataUtil.getOrCreate(cacheNode, GENERATED_IMAGE_PROPERTY, PropertyType.BINARY);
 
-            final ByteArrayOutputStream tempOut = new ByteArrayOutputStream();
-            delegate.serveImage(generator, parameterProvider, tempOut);
-
+            // store generated image
             final ByteArrayInputStream tempIn = new ByteArrayInputStream(tempOut.toByteArray());
             imageData.setValue(tempIn);
             // TODO mimetype, lastmod, and other attributes ?
@@ -161,12 +178,14 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
             // Update metadata of the cache *after* a succesfull image generation (creationDate has been set when creating
             // Since this might be called from a different thread than the actual request, we can't call cacheNode.updateMetaData(), which by default tries to set the authorId by using the current context
             cacheNode.getMetaData().setModificationDate();
-            
-            hm.save();
 
+            // finally save it all
+            hm.save();
             return imageData;
         } catch (RepositoryException e) {
             throw new ImagingException("Can't store rendered image: " + e.getMessage(), e);
+        } finally {
+            lock.unlock();
         }
     }
 }
