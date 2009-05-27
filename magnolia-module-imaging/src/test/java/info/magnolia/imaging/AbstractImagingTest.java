@@ -16,9 +16,13 @@ package info.magnolia.imaging;
 
 import com.jhlabs.image.FlipFilter;
 import info.magnolia.imaging.operations.load.ClasspathImageLoader;
+import info.magnolia.imaging.util.ImageUtil;
 import junit.framework.TestCase;
 
 import javax.imageio.ImageIO;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -126,6 +130,19 @@ public abstract class AbstractImagingTest extends TestCase {
         assertEquals(500, squareImage.getWidth());
         assertEquals(500, squareImage.getHeight());
         return squareImage;
+    }
+
+    /**
+     * Generates an image of arbitrary width and height. Re-generated for every call.
+     */
+    protected BufferedImage generateArbitraryTestImage(final int width, final int height) {
+        final BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        final Graphics2D g = img.createGraphics();
+        g.setColor(Color.green);
+        g.fill(new Rectangle(0, 0, width, height));
+        g.setColor(Color.red);
+        g.fill(new Rectangle(10, 10, 30, 30));
+        return ImageUtil.flattenTransparentImageForOpaqueFormat(img, BASIC_JPEG);
     }
 
     private String getCurrentTestMethodName() {
