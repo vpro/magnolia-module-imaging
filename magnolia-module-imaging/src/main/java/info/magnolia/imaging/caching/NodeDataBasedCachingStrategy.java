@@ -18,7 +18,6 @@ import javax.jcr.RepositoryException;
 
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.NodeData;
-import info.magnolia.imaging.ParameterProvider;
 
 
 /**
@@ -27,21 +26,23 @@ import info.magnolia.imaging.ParameterProvider;
  *
  */
 public class NodeDataBasedCachingStrategy extends AbstractContentBasedCachingStrategy<NodeData> {
+    @Override
+    protected String getWorkspaceName(NodeData param) {
+        return param.getHierarchyManager().getName();
+    }
 
     @Override
-    protected Content getContent(ParameterProvider<NodeData> params) {
-        final NodeData nd = params.getParameter();
+    protected Content getContent(NodeData param) {
         try {
-            return nd.getParent();
-        }
-        catch (RepositoryException e) {
-            throw new IllegalStateException("Can't access parent of " + nd.getHandle());
+            return param.getParent();
+        } catch (RepositoryException e) {
+            throw new IllegalStateException("Can't access parent of " + param.getHandle());
         }
     }
 
     @Override
-    protected String getPath(ParameterProvider<NodeData> params) {
-        return params.getParameter().getHandle();
+    protected String getPathOf(NodeData param) {
+        return param.getHandle();
     }
     
 

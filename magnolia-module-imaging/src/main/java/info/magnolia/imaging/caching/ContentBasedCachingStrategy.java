@@ -15,7 +15,6 @@
 package info.magnolia.imaging.caching;
 
 import info.magnolia.cms.core.Content;
-import info.magnolia.imaging.ParameterProvider;
 
 
 /**
@@ -24,15 +23,19 @@ import info.magnolia.imaging.ParameterProvider;
  * @version $Revision: $ ($Author: $)
  */
 public class ContentBasedCachingStrategy extends AbstractContentBasedCachingStrategy<Content> {
-
     @Override
-    protected Content getContent(ParameterProvider<Content> params) {
-        return params.getParameter();
+    protected String getWorkspaceName(Content param) {
+        return param.getHierarchyManager().getName();
     }
 
     @Override
-    protected String getPath(ParameterProvider<Content> params) {
-        return params.getParameter().getHandle();
+    protected Content getContent(Content param) {
+        return param;
+    }
+
+    @Override
+    protected String getPathOf(Content param) {
+        return param.getHandle();
     }
 
 }

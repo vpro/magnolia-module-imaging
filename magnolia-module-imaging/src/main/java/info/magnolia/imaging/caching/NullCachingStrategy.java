@@ -25,7 +25,7 @@ import info.magnolia.imaging.ParameterProvider;
  * @version $Revision: $ ($Author: $)
  */
 public class NullCachingStrategy<P> implements CachingStrategy<P> {
-    public String getCachePath(ImageGenerator<ParameterProvider<P>> parameterProviderImageGenerator, ParameterProvider<P> params) {
+    public String getCachePath(ImageGenerator<ParameterProvider<P>> parameterProviderImageGenerator, ParameterProvider<P> parameterProvider) {
         return null;
     }
 

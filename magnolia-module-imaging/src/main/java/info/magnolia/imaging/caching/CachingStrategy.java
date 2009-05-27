@@ -29,7 +29,7 @@ public interface CachingStrategy<P> {
      * Returns a unique path pertinent to the given generator and parameter to use for storing
      * the generated image.
      */
-    String getCachePath(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> params);
+    String getCachePath(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> parameterProvider);
 
 
     /**

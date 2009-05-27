@@ -31,9 +31,9 @@ import javax.jcr.RepositoryException;
  */
 public abstract class AbstractContentBasedCachingStrategy<P> implements CachingStrategy<P> {
 
-    public String getCachePath(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> params) {
-        final String workspaceName = getContent(params).getHierarchyManager().getName();
-        return "/" + generator.getName() + "/" + workspaceName + getPath(params);
+    public String getCachePath(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> parameterProvider) {
+        final P param = parameterProvider.getParameter();
+        return "/" + generator.getName() + "/" + getWorkspaceName(param) + getPathOf(param);
     }
 
     /**
@@ -46,7 +46,7 @@ public abstract class AbstractContentBasedCachingStrategy<P> implements CachingS
             final Calendar cacheLastMod = cachedBinary.getParent().getMetaData().getModificationDate();
     
             // this is assuming our parameter's mgnl:metaData was updated when updating any of its properties/binaries
-            final Calendar srcLastMod = getContent(parameterProvider).getMetaData().getModificationDate();
+            final Calendar srcLastMod = getContent(parameterProvider.getParameter()).getMetaData().getModificationDate();
     
             return cacheLastMod.before(srcLastMod);
         } catch (RepositoryException e) {
@@ -54,7 +54,9 @@ public abstract class AbstractContentBasedCachingStrategy<P> implements CachingS
         }
     }
 
-    abstract protected Content getContent(ParameterProvider<P> params);
+    abstract protected String getWorkspaceName(P param);
 
-    abstract protected String getPath(ParameterProvider<P> params);
+    abstract protected Content getContent(P param);
+
+    abstract protected String getPathOf(P param);
 }
