@@ -23,6 +23,7 @@ import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.BasicStroke;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -138,10 +139,23 @@ public abstract class AbstractImagingTest extends TestCase {
     protected BufferedImage generateArbitraryTestImage(final int width, final int height) {
         final BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         final Graphics2D g = img.createGraphics();
+        // background
         g.setColor(Color.green);
         g.fill(new Rectangle(0, 0, width, height));
+        // dashed diagonals
+        g.setColor(Color.darkGray);
+        g.setStroke(new BasicStroke(3, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1f, new float[]{10,10}, 0));
+        g.drawLine(0, 0, width, height);
+        g.drawLine(0, height, width, 0);
+        // small square in each corner
         g.setColor(Color.red);
         g.fill(new Rectangle(10, 10, 30, 30));
+        g.setColor(Color.blue);
+        g.fill(new Rectangle(width-40, height-40, 30, 30));
+        g.setColor(Color.yellow);
+        g.fill(new Rectangle(width-40, 10, 30, 30));
+        g.setColor(Color.white);
+        g.fill(new Rectangle(10, height-40, 30, 30));
         return ImageUtil.flattenTransparentImageForOpaqueFormat(img, BASIC_JPEG);
     }
 

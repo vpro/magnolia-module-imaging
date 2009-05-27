@@ -41,6 +41,7 @@ public class AutoCropAndResizeTest extends AbstractImagingTest {
         assertEquals(1200, coords.getY2());
 
         final BufferedImage res = op.apply(getHorizontalTestImage(), null);
+        write(res);
         assertEquals(400, res.getWidth());
         assertEquals(300, res.getHeight());
     }
@@ -59,6 +60,7 @@ public class AutoCropAndResizeTest extends AbstractImagingTest {
         assertEquals(1050, coords.getY2());
 
         final BufferedImage res = op.apply(getHorizontalTestImage(), null);
+        write(res);
         assertEquals(400, res.getWidth());
         assertEquals(225, res.getHeight());
     }
@@ -77,6 +79,7 @@ public class AutoCropAndResizeTest extends AbstractImagingTest {
         assertEquals(1200, coords.getY2());
 
         final BufferedImage res = op.apply(getHorizontalTestImage(), null);
+        write(res);
         assertEquals(200, res.getWidth());
         assertEquals(600, res.getHeight());
     }
@@ -95,6 +98,7 @@ public class AutoCropAndResizeTest extends AbstractImagingTest {
         assertEquals(1200, coords.getY2());
 
         final BufferedImage res = op.apply(getHorizontalTestImage(), null);
+        write(res);
         assertEquals(400, res.getWidth());
         assertEquals(300, res.getHeight());
     }
@@ -113,6 +117,7 @@ public class AutoCropAndResizeTest extends AbstractImagingTest {
         assertEquals(1200, coords.getY2());
 
         final BufferedImage res = op.apply(getHorizontalTestImage(), null);
+        write(res);
         assertEquals(400, res.getWidth());
         assertEquals(300, res.getHeight());
     }
@@ -132,6 +137,7 @@ public class AutoCropAndResizeTest extends AbstractImagingTest {
         assertEquals(1200, coords.getY2());
 
         final BufferedImage res = op.apply(getHorizontalTestImage(), null);
+        write(res);
         assertEquals(400, res.getWidth());
         assertEquals(400, res.getHeight());
     }
@@ -150,6 +156,7 @@ public class AutoCropAndResizeTest extends AbstractImagingTest {
         assertEquals(1400, coords.getY2());
 
         final BufferedImage res = op.apply(getVerticalTestImage(), null);
+        write(res);
         assertEquals(400, res.getWidth());
         assertEquals(400, res.getHeight());
     }
@@ -169,6 +176,7 @@ public class AutoCropAndResizeTest extends AbstractImagingTest {
         assertEquals(1250, coords.getY2());
 
         final BufferedImage res = op.apply(getVerticalTestImage(), null);
+        write(res);
         assertEquals(400, res.getWidth());
         assertEquals(300, res.getHeight());
     }
@@ -187,8 +195,51 @@ public class AutoCropAndResizeTest extends AbstractImagingTest {
         assertEquals(1600, coords.getY2());
 
         final BufferedImage res = op.apply(getVerticalTestImage(), null);
+        write(res);
         assertEquals(150, res.getWidth());
         assertEquals(600, res.getHeight());
+    }
+
+    public void testPhilippSawBlackBorders() throws Exception {
+        final AutoCropAndResize op = new AutoCropAndResize();
+        op.setTargetWidth(150);
+        op.setTargetHeight(100);
+
+        final BufferedImage src = generateArbitraryTestImage(400, 200);
+
+        final Coords coords = op.getCroopCoords(src, null);
+        assertEquals(300, coords.getWidth());
+        assertEquals(200, coords.getHeight());
+        assertEquals(50, coords.getX1());
+        assertEquals(350, coords.getX2());
+        assertEquals(0, coords.getY1());
+        assertEquals(200, coords.getY2());
+
+        final BufferedImage res = op.apply(src, null);
+        write(res);
+        assertEquals(150, res.getWidth());
+        assertEquals(100, res.getHeight());
+    }
+
+    public void testThereWereVerticalBlackBordersToo() throws Exception {
+        final AutoCropAndResize op = new AutoCropAndResize();
+        op.setTargetWidth(100);
+        op.setTargetHeight(150);
+
+        final BufferedImage src = generateArbitraryTestImage(200, 400);
+
+        final Coords coords = op.getCroopCoords(src, null);
+        assertEquals(200, coords.getWidth());
+        assertEquals(300, coords.getHeight());
+        assertEquals(0, coords.getX1());
+        assertEquals(200, coords.getX2());
+        assertEquals(50, coords.getY1());
+        assertEquals(350, coords.getY2());
+
+        final BufferedImage res = op.apply(src, null);
+        write(res);
+        assertEquals(100, res.getWidth());
+        assertEquals(150, res.getHeight());
     }
 
     public void testNoResizeIfWidthAndHeightAreNotSpecified() throws IOException {
