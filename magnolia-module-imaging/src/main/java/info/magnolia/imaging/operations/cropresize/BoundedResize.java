@@ -50,10 +50,6 @@ public class BoundedResize extends AbstractCropAndResize {
             // nope, we need to resize the other way
             final int effectiveHeight = maxHeight;
             final int effectiveWidth = (int) (effectiveHeight * sourceRatio);
-//            if (effectiveWidth > maxWidth) {
-            // TODO can this happen ?
-//                throw new IllegalStateException("WTF???");
-//            }
             return new Size(effectiveWidth, effectiveHeight);
         }
     }
