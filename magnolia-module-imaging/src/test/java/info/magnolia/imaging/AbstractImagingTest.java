@@ -42,7 +42,7 @@ import java.util.Set;
  * @version $Revision: $ ($Author: $)
  */
 public abstract class AbstractImagingTest extends TestCase {
-    private static final boolean KEEP_GENERATED_FILES_FOR_INSPECTION = true;
+    private static final boolean KEEP_GENERATED_FILES_FOR_INSPECTION = false;
     private static final boolean OPEN_GENERATED_FILES_FOR_INSPECTION = false;
 
     protected static final OutputFormat BASIC_JPEG = new OutputFormat("jpeg", false, 80, null);
