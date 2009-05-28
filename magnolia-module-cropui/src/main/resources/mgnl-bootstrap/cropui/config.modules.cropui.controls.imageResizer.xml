@@ -6,11 +6,8 @@
   <sv:property sv:name="jcr:primaryType" sv:type="Name">
     <sv:value>mgnl:contentNode</sv:value>
   </sv:property>
-  <sv:property sv:name="jcr:mixinTypes" sv:type="Name">
-    <sv:value>mix:versionable</sv:value>
-  </sv:property>
   <sv:property sv:name="jcr:uuid" sv:type="String">
-    <sv:value>288a7145-c73e-4673-9e0c-0290f9b0256f</sv:value>
+    <sv:value>00598f03-2dae-4d0b-aece-059d88009fe0</sv:value>
   </sv:property>
   <sv:property sv:name="class" sv:type="String">
     <sv:value>info.magnolia.module.cropui.CropAndResizeControl</sv:value>
@@ -19,8 +16,11 @@
     <sv:property sv:name="jcr:primaryType" sv:type="Name">
       <sv:value>mgnl:metaData</sv:value>
     </sv:property>
-    <sv:property sv:name="jcr:uuid" sv:type="String">
-      <sv:value>d2fcd41a-5048-46cf-b1d3-d3af545f4fa0</sv:value>
+    <sv:property sv:name="mgnl:activated" sv:type="Boolean">
+      <sv:value>false</sv:value>
+    </sv:property>
+    <sv:property sv:name="mgnl:activatorid" sv:type="String">
+      <sv:value>superuser</sv:value>
     </sv:property>
     <sv:property sv:name="mgnl:authorid" sv:type="String">
       <sv:value>superuser</sv:value>
@@ -28,20 +28,11 @@
     <sv:property sv:name="mgnl:creationdate" sv:type="String">
       <sv:value>2005-04-30T14:46:54.316+02:00</sv:value>
     </sv:property>
-    <sv:property sv:name="mgnl:lastmodified" sv:type="Date">
-      <sv:value>2007-05-22T12:58:41.208+02:00</sv:value>
-    </sv:property>
-    <sv:property sv:name="mgnl:activated" sv:type="Boolean">
-      <sv:value>false</sv:value>
-    </sv:property>
-    <sv:property sv:name="mgnl:Data" sv:type="String">
-      <sv:value>MetaData</sv:value>
-    </sv:property>
     <sv:property sv:name="mgnl:lastaction" sv:type="Date">
       <sv:value>2007-05-22T12:58:41.118+02:00</sv:value>
     </sv:property>
-    <sv:property sv:name="mgnl:activatorid" sv:type="String">
-      <sv:value>superuser</sv:value>
+    <sv:property sv:name="mgnl:lastmodified" sv:type="Date">
+      <sv:value>2009-05-28T20:38:49.522+02:00</sv:value>
     </sv:property>
   </sv:node>
 </sv:node>
