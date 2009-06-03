@@ -10,16 +10,11 @@
   <version>2.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>magnolia-module-imaging-parent</name>
-  <description>A Magnolia module that provides image filtering capabilities.
-
-    TODO
-    Current features include
-    a control to resize/crop images, and appropriate dialogs and paragraphs.
-  </description>
+  <description>A Magnolia module that provides image generation and filtering capabilities.</description>
   <properties>
-    <magnoliaVersion>4.1-SNAPSHOT</magnoliaVersion>
+    <magnoliaVersion>4.1-rc3</magnoliaVersion>
     <javaVersion>1.5</javaVersion>
-    <documentationURL>http://documentation.magnolia-cms.com/modules/imagefiltering.html</documentationURL>
+    <documentationURL>http://documentation.magnolia-cms.com/modules/imaging.html</documentationURL>
   </properties>
   <issueManagement>
     <system>Jira</system>
@@ -129,18 +124,6 @@
       <!--<groupId>org.apache.maven.plugins</groupId>-->
       <!--<artifactId>maven-assembly-plugin</artifactId>-->
       <!--</plugin>-->
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <!-- this will be in parent poms v9 -->
-          <systemProperties>
-            <property>
-              <name>java.awt.headless</name>
-              <value>true</value>
-            </property>
-          </systemProperties>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
 </project>
