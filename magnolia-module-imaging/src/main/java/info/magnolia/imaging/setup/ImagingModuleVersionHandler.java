@@ -36,7 +36,7 @@ public class ImagingModuleVersionHandler extends DefaultModuleVersionHandler {
     @Override
     protected List getExtraInstallTasks(InstallContext installContext) {
         return Collections.singletonList(new IsAuthorInstanceDelegateTask(
-            "Give anynimous role permission to write/cache images.",
+            "Give anonymous role permission to write/cache images.",
             "The anonymous user needs write permission so that images can be cached on public instances",
             null,
             new AbstractTask("", "") {
