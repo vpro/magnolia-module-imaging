@@ -14,9 +14,6 @@
  */
 package info.magnolia.imaging.setup;
 
-import java.util.Collections;
-import java.util.List;
-
 import info.magnolia.cms.security.Permission;
 import info.magnolia.cms.security.Role;
 import info.magnolia.cms.security.Security;
@@ -26,6 +23,9 @@ import info.magnolia.module.delta.AbstractTask;
 import info.magnolia.module.delta.IsAuthorInstanceDelegateTask;
 import info.magnolia.module.delta.TaskExecutionException;
 
+import java.util.Collections;
+import java.util.List;
+
 
 /**
  * @author gjoseph
@@ -33,18 +33,15 @@ import info.magnolia.module.delta.TaskExecutionException;
  */
 public class ImagingModuleVersionHandler extends DefaultModuleVersionHandler {
 
-    @Override
     protected List getExtraInstallTasks(InstallContext installContext) {
-        return Collections.singletonList(new IsAuthorInstanceDelegateTask(
-            "Give anonymous role permission to write/cache images",
-            "The anonymous user needs write permission so that images can be cached on public instances.",
-            null,
-            new AbstractTask("", "") {
-
-                public void execute(InstallContext installContext) throws TaskExecutionException {
-                    Role anonymous = Security.getRoleManager().getRole("anonymous");
-                    anonymous.addPermission("imaging", "/*", Permission.ALL);
-                }
-            }));
+        // TODO - see MGNLIMG-36
+        return Collections.singletonList(new IsAuthorInstanceDelegateTask("Anonymous permissions for generated images", "The anonymous user needs write permission so that images can be cached on public instances.",
+                null,
+                new AbstractTask("", "") {
+                    public void execute(InstallContext installContext) throws TaskExecutionException {
+                        Role anonymous = Security.getRoleManager().getRole("anonymous");
+                        anonymous.addPermission("imaging", "/*", Permission.ALL);
+                    }
+                }));
     }
 }
