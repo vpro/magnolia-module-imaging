@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module SYSTEM "module.dtd" >
+<module>
+  <name>fix-load-awt</name>
+  <displayName>${project.name}</displayName>
+  <class>info.magnolia.imaging.fix.LoadAWT</class>
+  <version>${project.version}</version>
+</module>

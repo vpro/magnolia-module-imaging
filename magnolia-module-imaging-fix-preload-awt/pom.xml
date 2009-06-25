@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd ">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>info.magnolia</groupId>
+    <artifactId>magnolia-module-imaging-parent</artifactId>
+    <version>2.0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>magnolia-module-imaging-fix-preload-awt</artifactId>
+  <packaging>jar</packaging>
+  <name>magnolia-module-imaging-fix-preload-awt</name>
+  <description>Fix - ensure AWT is loaded on startup</description>
+
+  <dependencies>
+    <dependency>
+      <groupId>info.magnolia</groupId>
+      <artifactId>magnolia-core</artifactId>
+    </dependency>
+  </dependencies>
+</project>

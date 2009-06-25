@@ -30,6 +30,7 @@
     <module>magnolia-module-cropui</module>
     <module>magnolia-module-imaging</module>
     <module>magnolia-module-imagingtools</module>
+    <module>magnolia-module-imaging-fix-preload-awt</module>
   </modules>
 
   <dependencyManagement>
