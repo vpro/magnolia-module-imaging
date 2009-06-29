@@ -23,7 +23,6 @@ import info.magnolia.imaging.ParameterProvider;
  * @version $Revision: $ ($Author: $)
  */
 public class ContentParameterProvider implements ParameterProvider<Content> {
-    
     private final Content node;
 
     public ContentParameterProvider(Content node) {
