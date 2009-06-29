@@ -15,6 +15,9 @@
 package info.magnolia.imaging;
 
 /**
+ * ParameterProvider is usually just a simple holder for the actual parameter.
+ *
+ * TODO - this might actually be removed in a future version
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
