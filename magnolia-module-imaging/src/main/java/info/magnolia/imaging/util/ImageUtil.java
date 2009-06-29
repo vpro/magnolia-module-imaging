@@ -33,6 +33,9 @@ public class ImageUtil {
      * @see info.magnolia.imaging.util.ImageUtilTest#testJpegOddity()
      */
     public static BufferedImage flattenTransparentImageForOpaqueFormat(final BufferedImage img, OutputFormat outputFormat) {
+        if (img == null || outputFormat == null) {
+            throw new IllegalArgumentException("No image or output format passed: [img:" + img + ", outputFormat:" + outputFormat + "]");
+        }
         // this is not entirely sufficient; for instance, a gif with no transparent pixels loaded through ImageIO.read() will not be considered opaque by the following.
         final boolean isOpaque = img.getTransparency() == Transparency.OPAQUE;
 
