@@ -203,8 +203,8 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
         } else if (cause instanceof RuntimeException) {
             unwrapRuntimeException((RuntimeException) cause);
         } else if (cause == null) {
-            throw new IllegalStateException("This really, really, should not happen... but we'll let this exception bubble up: " + e.getMessage(), e);
-
+            // This really, really, should not happen... but we'll let this exception bubble up
+            throw new IllegalStateException("Unexpected and unhandled exception: " + (e.getMessage() != null ? e.getMessage() : ""), e);
         } else {
             // this shouldn't happen either, actually.
             throw new ImagingException(e.getMessage(), cause);
