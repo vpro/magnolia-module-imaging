@@ -111,6 +111,10 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
 
         final IMocksControl generatorCtrl = createStrictControl();
         generatorCtrl.checkOrder(false);
+        // we don't want to synchronize calls to the Generator mock
+        generatorCtrl.makeThreadSafe(false);
+        // all methods of the generator (except generate()) can be called from various threads
+        generatorCtrl.checkIsUsedInOneThread(false);
         final ImageGenerator<ParameterProvider<Content>> generator = generatorCtrl.createMock(ImageGenerator.class);
         expect(generator.getParameterProviderFactory()).andReturn(ppf).anyTimes();
         expect(generator.getName()).andReturn("test").anyTimes();
