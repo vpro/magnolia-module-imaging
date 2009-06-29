@@ -31,7 +31,8 @@ import javax.jcr.RepositoryException;
 public class NodeDataParameterProviderFactory extends AbstractWorkspaceAndPathParameterProviderFactory<NodeData> {
 
     protected ParameterProvider<NodeData> newParameterProviderForPath(final HierarchyManager hm, String path) throws RepositoryException {
-        return new NodeDataParameterProvider(hm.getNodeData(path));
+        final NodeData nodeData = hm.getNodeData(path);
+        return new NodeDataParameterProvider(new SimpleEqualityNodeDataWrapper(nodeData));
     }
 
     public CachingStrategy<NodeData> getCachingStrategy() {

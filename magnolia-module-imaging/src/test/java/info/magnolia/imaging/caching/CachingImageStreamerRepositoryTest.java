@@ -25,12 +25,11 @@ import info.magnolia.imaging.AbstractRepositoryTestCase;
 import info.magnolia.imaging.DefaultImageStreamer;
 import info.magnolia.imaging.ImageGenerator;
 import info.magnolia.imaging.ImageStreamer;
-import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.OutputFormat;
 import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.ParameterProviderFactory;
-import info.magnolia.imaging.operations.ImageOperationChain;
 import info.magnolia.imaging.parameters.ContentParameterProvider;
+import info.magnolia.imaging.parameters.SimpleEqualityContentWrapper;
 import info.magnolia.logging.AuditLoggingManager;
 import info.magnolia.module.ModuleManagementException;
 import info.magnolia.module.ModuleManager;
@@ -39,7 +38,8 @@ import info.magnolia.module.ModuleRegistry;
 import info.magnolia.module.model.ModuleDefinition;
 import info.magnolia.module.model.reader.ModuleDefinitionReader;
 import org.apache.commons.io.IOUtils;
-import static org.easymock.EasyMock.createNiceMock;
+import static org.easymock.EasyMock.*;
+import org.easymock.IMocksControl;
 
 import javax.imageio.ImageIO;
 import javax.jcr.RepositoryException;
@@ -63,7 +63,6 @@ import java.util.concurrent.TimeUnit;
 /**
  * TODO : this is sort of a load test and uses a real (in memory) repository.
  * TODO : cleanup.
- * TODO : ensure generation is trigger only once properly, not by looking at the console output.
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
@@ -83,10 +82,20 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
 
     public void testRequestForSimilarUncachedImageOnlyGeneratesItOnce() throws Exception {
         final HierarchyManager srcHM = MgnlContext.getHierarchyManager("website");
-        final Content src = ContentUtil.createPath(srcHM, "/foo/bar");
-        final ParameterProviderFactory<Object, Content> ppf = new ParameterProviderFactory<Object, Content>() {
+        final String srcPath = "/foo/bar";
+        ContentUtil.createPath(srcHM, srcPath);
+
+        // ParameterProvider for tests - return a new instance of the same node everytime
+        // if we'd return the same src instance everytime, the purpose of this test would be null
+        final ParameterProviderFactory<Object, Content> ppf = new ParameterProviderFactory() {
             public ParameterProvider<Content> newParameterProviderFor(Object environment) {
-                return new ContentParameterProvider(src);
+                try {
+                    final Content src = srcHM.getContent(srcPath);
+                    // copied from ContentParameterProviderFactory
+                    return new ContentParameterProvider(new SimpleEqualityContentWrapper(src));
+                } catch (RepositoryException e) {
+                    throw new RuntimeException(e);
+                }
             }
 
             public CachingStrategy getCachingStrategy() {
@@ -97,25 +106,26 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
         final OutputFormat png = new OutputFormat();
         png.setFormatName("png");
 
-        final ImageOperationChain generator = new ImageOperationChain() {
-            public BufferedImage generate(ParameterProvider params) throws ImagingException {
-                try {
-                    final BufferedImage img = ImageIO.read(getClass().getResourceAsStream("/funnel.gif"));
-                    return img;
-                } catch (IOException e) {
-                    throw new ImagingException(e.getMessage(), e);
-                }
-            }
-        };
-        generator.setName("test");
-        generator.setOutputFormat(png);
-        generator.setParameterProviderFactory(ppf);
+        final BufferedImage dummyImg = ImageIO.read(getClass().getResourceAsStream("/funnel.gif"));
+        assertNotNull("Couldn't load dummy test image", dummyImg);
+
+        final IMocksControl generatorCtrl = createStrictControl();
+        generatorCtrl.checkOrder(false);
+        final ImageGenerator<ParameterProvider<Content>> generator = generatorCtrl.createMock(ImageGenerator.class);
+        expect(generator.getParameterProviderFactory()).andReturn(ppf).anyTimes();
+        expect(generator.getName()).andReturn("test").anyTimes();
+        expect(generator.getOutputFormat()).andReturn(png).anyTimes();
+
+        // aaaaand finally, here's the real reason for this test !
+        expect(generator.generate(isA(ParameterProvider.class))).andReturn(dummyImg).times(1);
+
+        replay(generator);
 
         // yeah, we're using a "wrong" workspace for the image cache, to avoid having to setup a custom one in this test
         final HierarchyManager hm = new HierarchyManagerWrapper(MgnlContext.getHierarchyManager("config")) {
             boolean saved = false;
 
-            public void save() throws RepositoryException {
+            public synchronized void save() throws RepositoryException {
                 if (saved) {
                     fail("save() was called more than once");
                 } else {
@@ -209,7 +219,7 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
 
         outs2[outs2.length - 1] = null;
 
-
+        verify(generator);
         /* verify(hm, root, t, m, p, y); */
     }
 
@@ -263,42 +273,42 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
         super.initDefaultImplementations();
     }
 
-        /*
-        final IMocksControl iMocksControl = createStrictControl();
-        // can't be strict on method call order on hm, because we can't guarantee which of the 8 threads will create the node
-        iMocksControl.checkOrder(false);
-        // not exactly sure what this entails; hopefully it doesn't render the test useless...
-        iMocksControl.makeThreadSafe(true);
-        final HierarchyManager hm = iMocksControl.createMock(HierarchyManager.class);
-        final Content root = createStrictMock(Content.class);
-        final Content t = createStrictMock(Content.class);
-        final Content m = createStrictMock(Content.class);
-        final Content p = createStrictMock(Content.class);
-        final Content y = createStrictMock(Content.class);
+    /*
+    final IMocksControl iMocksControl = createStrictControl();
+    // can't be strict on method call order on hm, because we can't guarantee which of the 8 threads will create the node
+    iMocksControl.checkOrder(false);
+    // not exactly sure what this entails; hopefully it doesn't render the test useless...
+    iMocksControl.makeThreadSafe(true);
+    final HierarchyManager hm = iMocksControl.createMock(HierarchyManager.class);
+    final Content root = createStrictMock(Content.class);
+    final Content t = createStrictMock(Content.class);
+    final Content m = createStrictMock(Content.class);
+    final Content p = createStrictMock(Content.class);
+    final Content y = createStrictMock(Content.class);
 
-        // first 8 request: node doesn't exist.
-        for (int i = 0; i < 8; i++) {
-            // generator name + path provided by ParameterProviderFactory
-            expect(hm.isExist("/test/my/param/yo")).andReturn(false);
-        }
+    // first 8 request: node doesn't exist.
+    for (int i = 0; i < 8; i++) {
+        // generator name + path provided by ParameterProviderFactory
+        expect(hm.isExist("/test/my/param/yo")).andReturn(false);
+    }
 
-        // one of these 8 threads creates the node
-        expect(hm.getRoot()).andReturn(root);
-        expect(root.hasContent("test")).andReturn(false);
-        expect(root.createContent("test", ItemType.CONTENT)).andReturn(t);
-        expect(t.hasContent("my")).andReturn(false);
-        expect(t.createContent("my", ItemType.CONTENT)).andReturn(m);
-        expect(m.hasContent("param")).andReturn(false);
-        expect(m.createContent("param", ItemType.CONTENT)).andReturn(p);
-        expect(p.hasContent("yo")).andReturn(false);
-        expect(p.createContent("yo", ItemType.CONTENT)).andReturn(y);
-        expect(y.hasNodeData("generated-image")).andReturn(false);
+    // one of these 8 threads creates the node
+    expect(hm.getRoot()).andReturn(root);
+    expect(root.hasContent("test")).andReturn(false);
+    expect(root.createContent("test", ItemType.CONTENT)).andReturn(t);
+    expect(t.hasContent("my")).andReturn(false);
+    expect(t.createContent("my", ItemType.CONTENT)).andReturn(m);
+    expect(m.hasContent("param")).andReturn(false);
+    expect(m.createContent("param", ItemType.CONTENT)).andReturn(p);
+    expect(p.hasContent("yo")).andReturn(false);
+    expect(p.createContent("yo", ItemType.CONTENT)).andReturn(y);
+    expect(y.hasNodeData("generated-image")).andReturn(false);
 
-        // 8 more requests, the node exists in the hm
-        for (int i = 0; i < 8; i++) {
-            expect(hm.isExist("/test/my/param/yo")).andReturn(true);
-        }
+    // 8 more requests, the node exists in the hm
+    for (int i = 0; i < 8; i++) {
+        expect(hm.isExist("/test/my/param/yo")).andReturn(true);
+    }
 
-        replay(hm, root, t, m, p, y);
-        */
+    replay(hm, root, t, m, p, y);
+    */
 }

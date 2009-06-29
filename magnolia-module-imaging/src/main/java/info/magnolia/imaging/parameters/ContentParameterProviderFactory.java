@@ -34,11 +34,12 @@ import javax.jcr.RepositoryException;
 public class ContentParameterProviderFactory extends AbstractWorkspaceAndPathParameterProviderFactory<Content> {
 
     protected ParameterProvider<Content> newParameterProviderForPath(final HierarchyManager hm, final String path) throws RepositoryException {
-        return new ContentParameterProvider(hm.getContent(path));
+        final Content node = hm.getContent(path);
+        return new ContentParameterProvider(new SimpleEqualityContentWrapper(node));
     }
-    
+
     public CachingStrategy<Content> getCachingStrategy() {
         return new ContentBasedCachingStrategy();
     }
-    
+
 }

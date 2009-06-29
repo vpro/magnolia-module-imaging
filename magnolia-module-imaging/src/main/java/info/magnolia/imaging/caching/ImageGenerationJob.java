@@ -22,14 +22,8 @@ import info.magnolia.imaging.ParameterProvider;
  * CachingImageStreamer.
  *
  * The IMPORTANT bit here is that we implemented equals() and hashCode() to compare
- * the actual parameter and not the ParameterProvider instance.
- *
- * We're assuming that whatever parameter is used provides a equals/hashCode() implementations.
- *
- * TODO - and ... DefaultContent does not.
- * TODO - and since there isn't one single/simple way of implementing equals() for a node
- * (using just the uuid wouldn't be enough, it might have been modified, and here we might have the "same" node coming from 2 different sessions... etc etc)
- * TODO - then we might want to have an equals/hash pair at ParameterProvider(Factory) level
+ * the actual parameter and not the ParameterProvider instance: we're assuming that whatever parameter
+ * is used provides an appropriate equals/hashCode() implementation.
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
@@ -59,6 +53,7 @@ class ImageGenerationJob<P> {
 
         if (!generator.equals(that.generator)) return false;
         if (!params.getParameter().equals(that.params.getParameter())) return false;
+        // if (!params.isSameParameter(that.params.getParameter())) return false;
 
         return true;
     }
