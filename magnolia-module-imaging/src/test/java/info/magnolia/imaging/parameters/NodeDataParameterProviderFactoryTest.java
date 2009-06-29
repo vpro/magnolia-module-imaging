@@ -45,6 +45,22 @@ public class NodeDataParameterProviderFactoryTest extends AbstractRepositoryTest
         req = createStrictMock(HttpServletRequest.class);
     }
 
+    public void testWrapsNodeDataSuchThatEqualsAndHashCodeAreImplementedBasedOnPathAndHierarchyManagerName() throws RepositoryException {
+        final HierarchyManager hm = MgnlContext.getHierarchyManager("website");
+        assertNotSame(srcProp, hm.getNodeData("/some/node/chalala"));
+
+        expect(req.getPathInfo()).andReturn("/generator/website/some/node/chalala").times(2);
+        replay(req);
+        final NodeDataParameterProviderFactory factory = new NodeDataParameterProviderFactory();
+        final ParameterProvider<NodeData> param1 = factory.newParameterProviderFor(req);
+        final ParameterProvider<NodeData> param2 = factory.newParameterProviderFor(req);
+        assertNotSame("2 calls to ParameterProviderFactory should return 2 *different instances*.",
+                param1.getParameter(), param2.getParameter());
+        assertEquals("2 calls to ParameterProviderFactory should return 2 *equivalent instances*.",
+                param1.getParameter(), param2.getParameter());
+        verify(req);
+    }
+
     public void testYieldsAProperExceptionIfPropertyDoesNotExist() throws Exception {
         expect(req.getPathInfo()).andReturn("/generator/website/some/node/booyah");
         replay(req);

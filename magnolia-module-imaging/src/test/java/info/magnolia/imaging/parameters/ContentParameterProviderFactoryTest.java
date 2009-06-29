@@ -16,6 +16,7 @@ package info.magnolia.imaging.parameters;
 
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.HierarchyManager;
+import info.magnolia.cms.util.ContentWrapper;
 import info.magnolia.context.Context;
 import info.magnolia.context.MgnlContext;
 import info.magnolia.imaging.ParameterProvider;
@@ -71,8 +72,11 @@ public class ContentParameterProviderFactoryTest extends TestCase {
         final ContentParameterProviderFactory f = new ContentParameterProviderFactory();
         final ParameterProvider<Content> pp = f.newParameterProviderFor(req);
         final Content result = pp.getParameter();
-        // we're only checking if the ParameterProvider indeed returns our mock, just so we can ensure it wasn't tempered with (i.e that the ParameterProvider did not call any unexpected method on it)
-        assertEquals(mockNode, result);
+        // we're only checking if the ParameterProvider indeed returns our mock, just
+        // so we can ensure it wasn't tempered with (i.e that the ParameterProvider did not call any unexpected method on it)
+        // now that we know its wrapped, we also check that, and assertEquals against the unwrapped instance
+        assertTrue(result instanceof SimpleEqualityContentWrapper);
+        assertEquals(mockNode, ((ContentWrapper)result).getWrappedContent());
         verify(ctx, hm, mockNode, req);
     }
 
