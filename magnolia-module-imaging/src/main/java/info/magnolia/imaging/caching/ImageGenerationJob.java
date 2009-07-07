@@ -53,7 +53,6 @@ class ImageGenerationJob<P> {
 
         if (!generator.equals(that.generator)) return false;
         if (!params.getParameter().equals(that.params.getParameter())) return false;
-        // if (!params.isSameParameter(that.params.getParameter())) return false;
 
         return true;
     }
