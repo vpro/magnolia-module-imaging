@@ -9,7 +9,7 @@
   <artifactId>magnolia-module-imaging</artifactId>
   <packaging>jar</packaging>
   <name>magnolia-module-imaging</name>
-  <description>TODO</description>
+  <description>A Magnolia module that provides image generation and filtering capabilities.</description>
 
   <dependencies>
     <dependency>
