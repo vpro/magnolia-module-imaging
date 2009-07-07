@@ -12,6 +12,11 @@
       <name>core</name>
       <version>4.1/*</version>
     </dependency>
+    <dependency>
+      <name>fix-preload-awt</name>
+      <version>${project.version}</version>
+      <optional>true</optional>
+    </dependency>
   </dependencies>
   <servlets>
     <servlet>
