@@ -24,8 +24,8 @@ import java.awt.Toolkit;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class LoadAWT implements ModuleLifecycle {
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(LoadAWT.class);
+public class PreloadAWT implements ModuleLifecycle {
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(PreloadAWT.class);
 
     public void start(ModuleLifecycleContext moduleLifecycleContext) {
         log.info("Starting up" + this);
