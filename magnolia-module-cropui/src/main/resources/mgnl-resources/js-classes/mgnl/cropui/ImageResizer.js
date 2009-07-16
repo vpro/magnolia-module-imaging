@@ -31,7 +31,7 @@
  * intact.
  *
  */
-classDef("mgnl.imagefiltering.ImageResizer", {
+classDef("mgnl.cropui.ImageCropper", {
     /**
      * @param resultControlId the (html) id of the control where the cropping data should be stored.
      * @param dialogUUID the uuid of the dialog that holds the configuration for the cropper.
