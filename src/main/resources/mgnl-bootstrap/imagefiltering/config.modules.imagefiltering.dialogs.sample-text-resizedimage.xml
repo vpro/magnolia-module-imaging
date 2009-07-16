@@ -62,7 +62,7 @@
       <sv:value>1c7f52ac-dbd9-4eb2-8852-ac5788f2a176</sv:value>
     </sv:property>
     <sv:property sv:name="label" sv:type="String">
-      <sv:value>dialog.imageResizer.tabImage.label</sv:value>
+      <sv:value>dialog.imageCropper.tabImage.label</sv:value>
     </sv:property>
     <sv:property sv:name="controlType" sv:type="String">
       <sv:value>tab</sv:value>
@@ -110,10 +110,10 @@
         <sv:value>Binary</sv:value>
       </sv:property>
       <sv:property sv:name="label" sv:type="String">
-        <sv:value>dialog.imageResizer.image.label</sv:value>
+        <sv:value>dialog.imageCropper.image.label</sv:value>
       </sv:property>
       <sv:property sv:name="description" sv:type="String">
-        <sv:value>dialog.imageResizer.image.description</sv:value>
+        <sv:value>dialog.imageCropper.image.description</sv:value>
       </sv:property>
       <sv:property sv:name="preview" sv:type="String">
         <sv:value>false</sv:value>
@@ -169,7 +169,7 @@
         <sv:value>Binary</sv:value>
       </sv:property>
       <sv:property sv:name="label" sv:type="String">
-        <sv:value>dialog.imageResizer.imageCrop.label</sv:value>
+        <sv:value>dialog.imageCropper.imageCrop.label</sv:value>
       </sv:property>
       <sv:property sv:name="formatName" sv:type="String">
         <sv:value>jpg</sv:value>
@@ -178,10 +178,10 @@
         <sv:value>image</sv:value>
       </sv:property>
       <sv:property sv:name="description" sv:type="String">
-        <sv:value>dialog.imageResizer.imageCrop.description</sv:value>
+        <sv:value>dialog.imageCropper.imageCrop.description</sv:value>
       </sv:property>
       <sv:property sv:name="controlType" sv:type="String">
-        <sv:value>imageResizer</sv:value>
+        <sv:value>imageCropper</sv:value>
       </sv:property>
       <sv:node sv:name="MetaData">
         <sv:property sv:name="jcr:primaryType" sv:type="Name">
@@ -356,7 +356,7 @@
       <sv:value>81338ef5-aba4-4164-b5d8-e9a37d7dd12f</sv:value>
     </sv:property>
     <sv:property sv:name="label" sv:type="String">
-      <sv:value>dialog.imageResizer.tabText.label</sv:value>
+      <sv:value>dialog.imageCropper.tabText.label</sv:value>
     </sv:property>
     <sv:property sv:name="controlType" sv:type="String">
       <sv:value>tab</sv:value>
@@ -404,7 +404,7 @@
         <sv:value>String</sv:value>
       </sv:property>
       <sv:property sv:name="label" sv:type="String">
-        <sv:value>dialog.imageResizer.title.label</sv:value>
+        <sv:value>dialog.imageCropper.title.label</sv:value>
       </sv:property>
       <sv:property sv:name="rows" sv:type="String">
         <sv:value>3</sv:value>
@@ -413,7 +413,7 @@
         <sv:value>title</sv:value>
       </sv:property>
       <sv:property sv:name="description" sv:type="String">
-        <sv:value>dialog.imageResizer.title.description</sv:value>
+        <sv:value>dialog.imageCropper.title.description</sv:value>
       </sv:property>
       <sv:property sv:name="controlType" sv:type="String">
         <sv:value>edit</sv:value>
@@ -462,7 +462,7 @@
         <sv:value>String</sv:value>
       </sv:property>
       <sv:property sv:name="label" sv:type="String">
-        <sv:value>dialog.imageResizer.text.label</sv:value>
+        <sv:value>dialog.imageCropper.text.label</sv:value>
       </sv:property>
       <sv:property sv:name="name" sv:type="String">
         <sv:value>text</sv:value>
@@ -471,7 +471,7 @@
         <sv:value>300px</sv:value>
       </sv:property>
       <sv:property sv:name="description" sv:type="String">
-        <sv:value>dialog.imageResizer.text.description</sv:value>
+        <sv:value>dialog.imageCropper.text.description</sv:value>
       </sv:property>
       <sv:property sv:name="controlType" sv:type="String">
         <sv:value>fckEdit</sv:value>

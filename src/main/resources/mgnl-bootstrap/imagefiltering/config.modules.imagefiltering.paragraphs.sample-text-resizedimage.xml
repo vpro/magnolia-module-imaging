@@ -23,13 +23,13 @@
     <sv:value>sample-text-resizedimage</sv:value>
   </sv:property>
   <sv:property sv:name="description" sv:type="String">
-    <sv:value>paragraph.imageResizer.description</sv:value>
+    <sv:value>paragraph.imageCropper.description</sv:value>
   </sv:property>
   <sv:property sv:name="templatePath" sv:type="String">
     <sv:value>/templates/imagefiltering/paragraphs/text-resized-image.jsp</sv:value>
   </sv:property>
   <sv:property sv:name="title" sv:type="String">
-    <sv:value>paragraph.imageResizer.title</sv:value>
+    <sv:value>paragraph.imageCropper.title</sv:value>
   </sv:property>
   <sv:node sv:name="MetaData">
     <sv:property sv:name="jcr:primaryType" sv:type="Name">

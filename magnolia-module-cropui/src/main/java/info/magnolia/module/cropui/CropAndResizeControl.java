@@ -110,7 +110,7 @@ public class CropAndResizeControl extends DialogBox {
             final String controlUUID = configNode.getUUID();
             final Button button = new Button();
             button.setLabel(getMessage("cropper.edit.button"));
-            button.setOnclick("new mgnl.imagefiltering.ImageResizer.openCropper('" + cropperInfo.getId() + "', '" + controlUUID + "', '" + imagePath + "');");
+            button.setOnclick("new mgnl.cropui.ImageCropper.openCropper('" + cropperInfo.getId() + "', '" + controlUUID + "', '" + imagePath + "');");
 
             out.write("<div class=\""); // just to give a little padding
             out.write(CssConstants.CSSCLASS_DESCRIPTION);

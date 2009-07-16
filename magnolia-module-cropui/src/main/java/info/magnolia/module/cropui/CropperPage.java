@@ -109,7 +109,7 @@ public class CropperPage extends TemplatedMVCHandler {
             final Dialog dialog = new CropperDialog();
             dialog.init(request, response, null, imageControlConfigNode);
             // TODO : this is not needed with 3.5
-            dialog.setConfig("i18nBasename", "info.magnolia.module.imagefiltering.messages");
+            dialog.setConfig("i18nBasename", "info.magnolia.module.cropui.messages");
             dialog.setConfig("saveLabel", dialog.getMessage("cropper.apply.button"));
             dialog.setConfig("saveOnclick", "cropperSubmit();");
 
@@ -151,7 +151,7 @@ public class CropperPage extends TemplatedMVCHandler {
     private final class CropperDialog extends Dialog {
         protected void drawHtmlPreSubsHead(Writer out) throws IOException {
             super.drawHtmlPreSubsHead(out);
-            renderTemplate("/info/magnolia/module/imagefiltering/cropresize/CropperPage.head.html", out);
+            renderTemplate("/info/magnolia/module/cropui/CropperPage.head.html", out);
             out.flush();
         }
     }
@@ -160,7 +160,7 @@ public class CropperPage extends TemplatedMVCHandler {
         public void drawHtml(Writer out) throws IOException {
             out.write("<tbody><tr><td>");
             out.flush();
-            renderTemplate("/info/magnolia/module/imagefiltering/cropresize/CropperPage.html", out);
+            renderTemplate("/info/magnolia/module/cropui/CropperPage.html", out);
             out.flush();
             out.write("</td></tr></tbody>");
         }

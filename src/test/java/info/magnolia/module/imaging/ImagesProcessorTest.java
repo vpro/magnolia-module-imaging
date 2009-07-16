@@ -44,9 +44,9 @@ import java.util.Map;
  * @version $Revision: $ ($Author: $)
  */
 public class ImagesProcessorTest extends TestCase {
-    private final static String SAMPLE_PARAMS_WITH_IMAGERESIZER = "{\"CropperInfo\":{configName:\"foo\",coords:{\"x1\":1,\"y1\":30,\"x2\":20,\"y2\":50}}}";
+    private final static String SAMPLE_PARAMS_WITH_IMAGECROPPER = "{\"CropperInfo\":{configName:\"foo\",coords:{\"x1\":1,\"y1\":30,\"x2\":20,\"y2\":50}}}";
 
-    public void testPostSaveCallsImageResizerForBinaryNodesThatHaveCorrespondingCropperInfo() throws IOException, RepositoryException, Content2BeanException {
+    public void testPostSaveCallsImageCropperForBinaryNodesThatHaveCorrespondingCropperInfo() throws IOException, RepositoryException, Content2BeanException {
         final Content configNode = createMock(Content.class);
 
         final Content storageNode = createMock(Content.class);
@@ -63,7 +63,7 @@ public class ImagesProcessorTest extends TestCase {
         expect(storageNode.hasNodeData("bin1_cropperInfo")).andReturn(false);
         expect(storageNode.hasNodeData("bin2_cropperInfo")).andReturn(true);
         expect(storageNode.getNodeData("bin2_cropperInfo")).andReturn(bin2Crop);
-        expect(bin2Crop.getString()).andReturn(SAMPLE_PARAMS_WITH_IMAGERESIZER);
+        expect(bin2Crop.getString()).andReturn(SAMPLE_PARAMS_WITH_IMAGECROPPER);
         expect(storageNode.hasNodeData("bin2_resized")).andReturn(false); // TODO we could have a test that asserts the node is overwritten
         expect(storageNode.createNodeData("bin2_resized", PropertyType.BINARY)).andReturn(createMock(NodeData.class));
         final InputStream imgStream = getClass().getResourceAsStream("/cookies.gif");
@@ -96,7 +96,7 @@ public class ImagesProcessorTest extends TestCase {
 
     public void testParamsAreProperlyDecoded() {
         final ImagesProcessor processor = new ImagesProcessor(new CropAndResizeFilter());
-        final MockNodeData mockData = new MockNodeData("pouet", SAMPLE_PARAMS_WITH_IMAGERESIZER);
+        final MockNodeData mockData = new MockNodeData("pouet", SAMPLE_PARAMS_WITH_IMAGECROPPER);
         final Map params = processor.getUserParams(mockData);
         assertEquals(1, params.size());
         final CropperInfo cropperInfo = (CropperInfo) params.get("CropperInfo");
