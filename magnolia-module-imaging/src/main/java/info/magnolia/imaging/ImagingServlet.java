@@ -15,13 +15,14 @@
 package info.magnolia.imaging;
 
 import info.magnolia.cms.core.HierarchyManager;
+import info.magnolia.cms.util.BooleanUtil;
 import info.magnolia.context.MgnlContext;
-import info.magnolia.imaging.util.PathSplitter;
 import info.magnolia.imaging.caching.CachingImageStreamer;
 import info.magnolia.imaging.caching.CachingStrategy;
-import info.magnolia.imaging.caching.NullCachingStrategy;
+import info.magnolia.imaging.util.PathSplitter;
 import info.magnolia.module.ModuleRegistry;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -30,13 +31,20 @@ import java.io.IOException;
 
 /**
  * Servlet responsible for the actual generation of the images.
- * TODO This is totally temporary code.
- * TODO And please find a decent name for this.
+ * TODO This servlet might need some investigation - improvements; particularly how the parameterProvider, and various factories are bound together.
+ *
+ * During development / tests of generators, set the storeGeneratedImages parameter to "false".
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
 public class ImagingServlet extends HttpServlet {
+    private boolean storeGeneratedImages = true;
+
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        storeGeneratedImages = BooleanUtil.toBoolean(config.getInitParameter("storeGeneratedImages"), true);
+    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         final String generatorName = getImageGeneratorName(request);
@@ -77,9 +85,15 @@ public class ImagingServlet extends HttpServlet {
         // TODO -- CachingImageStreamer currently has a non-static "currentJobs" map.
         // TODO -- to investigate, but I highly suspect that it's not really useful if
         // we use a different instance of CachingImageStreamer for every request.
-        final HierarchyManager hm = MgnlContext.getHierarchyManager("imaging");
-        final CachingStrategy cachingStrategy = parameterProviderFactory.getCachingStrategy();
-        return new CachingImageStreamer(hm, cachingStrategy, new DefaultImageStreamer());
+
+        final DefaultImageStreamer newDefaultImageStreamer = new DefaultImageStreamer();
+        if (!storeGeneratedImages) {
+            return newDefaultImageStreamer;
+        } else {
+            final HierarchyManager hm = MgnlContext.getHierarchyManager("imaging");
+            final CachingStrategy cachingStrategy = parameterProviderFactory.getCachingStrategy();
+            return new CachingImageStreamer(hm, cachingStrategy, newDefaultImageStreamer);
+        }
     }
 
     protected ImagingModuleConfig getImagingConfiguration() {
