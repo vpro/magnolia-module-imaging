@@ -30,7 +30,7 @@ public class TextStyleTransformer extends Content2BeanTransformerImpl {
     public Object convertPropertyValue(Class propertyType, Object value) throws Content2BeanException {
         if (Color.class.equals(propertyType)) {
             if (!(value instanceof String)) {
-                throw new Content2BeanException("Can only transform to Color from String values.");
+                throw new Content2BeanException("Can only transform String values to java.awt.Color instances.");
             }
             return ColorConverter.toColor((String) value);
         }
