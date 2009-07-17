@@ -43,11 +43,6 @@ public class ColorConverter {
         }
     }
 
-//    public static String toString(Color c) {
-//        System.out.println("c.getRGB() = " + c.getRGB());
-//        return null;
-//    }
-
     /**
      * Using reflection, gather all fields of java.awt.Color that are
      * static, public, final and of type java.awt.Color, and put them
