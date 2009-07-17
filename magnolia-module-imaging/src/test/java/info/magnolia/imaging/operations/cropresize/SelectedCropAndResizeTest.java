@@ -20,8 +20,24 @@ import junit.framework.TestCase;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public abstract class SelectedCropAndResizeTest extends TestCase {
+public class SelectedCropAndResizeTest extends TestCase {
 
+    /**
+     * This is how cropper info was stored with the now defunct imagefiltering module.
+     * The syntax/structure might change in the future, but we should still be able to decode such
+     * strings at least until the next major version.
+     */
+    public void testCanDecodeLegacyCropInfoStrings() {
+        final String legacyJsonString = "{\"CropperInfo\":{\"configName\":\"screenshot\",\"coords\":{\"x1\":424,\"y1\":174,\"x2\":1138,\"y2\":650}}}";
+        final CroppingInfo croppingInfo = new SelectedCropAndResize().decode(legacyJsonString);
+        assertEquals("screenshot", croppingInfo.getConfigName());
+        final Coords coords = croppingInfo.getCoords();
+        assertNotNull(coords);
+        assertEquals(424, coords.getX1());
+        assertEquals(174, coords.getY1());
+        assertEquals(1138, coords.getX2());
+        assertEquals(650, coords.getY2());
+    }
 
     /**
      * This test is now irrelevant since this is configured at operation level using content2bean

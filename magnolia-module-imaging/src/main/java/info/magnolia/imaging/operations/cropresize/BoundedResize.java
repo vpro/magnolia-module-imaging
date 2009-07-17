@@ -35,23 +35,7 @@ public class BoundedResize extends AbstractCropAndResize {
     }
 
     protected Size getEffectiveTargetSize(BufferedImage source, Coords cropCoords, ParameterProvider params) {
-        final int sourceWidth = source.getWidth();
-        final int sourceHeight = source.getHeight();
-
-        final double sourceRatio = (double) sourceWidth / (double) sourceHeight;
-
-        final int tentativeWidth = maxWidth;
-        final int tentativeHeight = (int) (tentativeWidth / sourceRatio);
-
-        if (tentativeHeight <= maxHeight) {
-            // first attempt was good enough
-            return new Size(tentativeWidth, tentativeHeight);
-        } else {
-            // nope, we need to resize the other way
-            final int effectiveHeight = maxHeight;
-            final int effectiveWidth = (int) (effectiveHeight * sourceRatio);
-            return new Size(effectiveWidth, effectiveHeight);
-        }
+        return Size.maxSizeComplyingWithSourceRatio(source.getWidth(), source.getHeight(), maxWidth, maxHeight);
     }
 
     public int getMaxWidth() {

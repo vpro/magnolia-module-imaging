@@ -28,10 +28,10 @@ import java.awt.image.BufferedImage;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public abstract class AbstractCropAndResize implements ImageOperation {
+public abstract class AbstractCropAndResize<P extends ParameterProvider<?>> implements ImageOperation<P> {
     private Resizer resizer = new BasicResizer();
 
-    public BufferedImage apply(BufferedImage source, ParameterProvider params) throws ImagingException {
+    public BufferedImage apply(BufferedImage source, P params) throws ImagingException {
         final Coords coords = getCroopCoords(source, params);
         final Size effectiveTargetSize = getEffectiveTargetSize(source, coords, params);
         return resize(source, coords, effectiveTargetSize);
@@ -41,13 +41,13 @@ public abstract class AbstractCropAndResize implements ImageOperation {
      * Determines the coordinates of the cropping to apply on the source image.
      * If no cropping needs to happen, return new Coords(0, 0, source.getWidth(), source.getHeight()). 
      */
-    protected abstract Coords getCroopCoords(BufferedImage source, ParameterProvider params) throws ImagingException;
+    protected abstract Coords getCroopCoords(BufferedImage source, P params) throws ImagingException;
 
     /**
      * Determines the actual size for the resized image based on the source image, the crop coordinates
      * calculated by {@link #getCroopCoords} and the given ParameterProvider.
      */
-    protected abstract Size getEffectiveTargetSize(BufferedImage source, Coords cropCoords, ParameterProvider params);
+    protected abstract Size getEffectiveTargetSize(BufferedImage source, Coords cropCoords, P params);
 
     protected BufferedImage resize(BufferedImage src, Coords srcCoords, Size targetSize) {
         return getResizer().resize(src, srcCoords, targetSize);

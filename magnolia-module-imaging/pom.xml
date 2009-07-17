@@ -24,7 +24,10 @@
       <groupId>com.google.collections</groupId>
       <artifactId>google-collections</artifactId>
     </dependency>
-
+    <dependency>
+      <groupId>net.sf.json-lib</groupId>
+      <artifactId>json-lib</artifactId>
+    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

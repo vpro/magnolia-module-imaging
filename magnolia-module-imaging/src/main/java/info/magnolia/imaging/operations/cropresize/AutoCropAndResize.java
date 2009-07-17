@@ -70,26 +70,8 @@ public class AutoCropAndResize extends AbstractCropAndResize {
     // If targetWidth and targetHeight are <=0, no resizing will happen. (ie cropping only)
     // If either targetWidth or targetHeight is <=0, the ratio of the cropped image will be preserved.
     // If both targetWidth and targetHeight are >0, both will be used, even if they don't match the ratio of the cropped image (thus cropping it).
-    // This code might actually be useful for SelectedCropAndResize, too.
     protected Size getEffectiveTargetSize(BufferedImage source, Coords cropCoords, ParameterProvider params) {
-        final int effectiveTargetWidth, effectiveTargetHeight;
-        if (targetWidth <= 0 && targetHeight <= 0) {
-            effectiveTargetWidth = cropCoords.getWidth();
-            effectiveTargetHeight = cropCoords.getHeight();
-        } else if (targetWidth <= 0) {
-            double ratio = (double) targetHeight / (double) cropCoords.getHeight();
-            effectiveTargetWidth = (int) (cropCoords.getWidth() * ratio);
-            effectiveTargetHeight = targetHeight;
-        } else if (targetHeight <= 0) {
-            double ratio = (double) targetWidth / (double) cropCoords.getWidth();
-            effectiveTargetHeight = (int) (cropCoords.getHeight() * ratio);
-            effectiveTargetWidth = targetWidth;
-        } else {
-            effectiveTargetWidth = targetWidth;
-            effectiveTargetHeight = targetHeight;
-        }
-
-        return new Size(effectiveTargetWidth, effectiveTargetHeight);
+        return Size.conformToCropRatio(cropCoords, targetWidth, targetHeight);
     }
 
     public int getTargetWidth() {

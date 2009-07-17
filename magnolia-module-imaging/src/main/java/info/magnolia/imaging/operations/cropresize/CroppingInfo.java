@@ -12,13 +12,13 @@
  * intact.
  *
  */
-package info.magnolia.module.cropui;
-
-import info.magnolia.imaging.operations.cropresize.Coords;
+package info.magnolia.imaging.operations.cropresize;
 
 /**
- * Holds the result of a human selection in a cropping ui.
+ * Holds the result of a human selection in a cropping UI component.
  *
+ * The cropui module, for instance, stores instances of this (in the form of a JSon string) into the repository.
+ * 
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
