@@ -28,6 +28,8 @@ import info.magnolia.imaging.ImageStreamer;
 import info.magnolia.imaging.OutputFormat;
 import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.ParameterProviderFactory;
+import info.magnolia.imaging.operations.ImageOperationChain;
+import info.magnolia.imaging.operations.load.URLImageLoader;
 import info.magnolia.imaging.parameters.ContentParameterProvider;
 import info.magnolia.imaging.parameters.SimpleEqualityContentWrapper;
 import info.magnolia.logging.AuditLoggingManager;
@@ -72,11 +74,10 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
 
     @Override
     protected void setUp() throws Exception {
-        setAutoStart(false);
+        // this used to set autostart to false, but I'm not sure why.
+        // It seems fine as is.
+
         super.setUp();
-        cleanUp();
-        startRepository();
-        // autostart also triggers the repo shutdown in teardown... but we should wait.. TODO -- check how best to do this
         FactoryUtil.setInstance(AuditLoggingManager.class, new AuditLoggingManager());
     }
 
@@ -87,21 +88,7 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
 
         // ParameterProvider for tests - return a new instance of the same node everytime
         // if we'd return the same src instance everytime, the purpose of this test would be null
-        final ParameterProviderFactory<Object, Content> ppf = new ParameterProviderFactory() {
-            public ParameterProvider<Content> newParameterProviderFor(Object environment) {
-                try {
-                    final Content src = srcHM.getContent(srcPath);
-                    // copied from ContentParameterProviderFactory
-                    return new ContentParameterProvider(new SimpleEqualityContentWrapper(src));
-                } catch (RepositoryException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-
-            public CachingStrategy getCachingStrategy() {
-                return new ContentBasedCachingStrategy();
-            }
-        };
+        final ParameterProviderFactory<Object, Content> ppf = new TestParameterProviderFactory(srcHM, srcPath);
 
         final OutputFormat png = new OutputFormat();
         png.setFormatName("png");
@@ -126,18 +113,7 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
         replay(generator);
 
         // yeah, we're using a "wrong" workspace for the image cache, to avoid having to setup a custom one in this test
-        final HierarchyManager hm = new HierarchyManagerWrapper(MgnlContext.getHierarchyManager("config")) {
-            boolean saved = false;
-
-            public synchronized void save() throws RepositoryException {
-                if (saved) {
-                    fail("save() was called more than once");
-                } else {
-                    saved = true;
-                }
-                super.save();
-            }
-        };
+        final HierarchyManager hm = new SingleSaveHierarchyManagerWrapper("config");
 
         final ImageStreamer streamer = new CachingImageStreamer(hm, ppf.getCachingStrategy(), new DefaultImageStreamer());
 
@@ -227,6 +203,73 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
         /* verify(hm, root, t, m, p, y); */
     }
 
+    /**
+     * This test is not executed by default - too long !
+     * Used to reproduce the "session already closed issue", see MGNLIMG-59.
+     * Set the "expiration" property of the jobs map in CachingImageStreamer to a longer value
+     * to have more chances of reproducing the problem.
+     */
+    public void /*test*/ConcurrencyAndJCRSessions() throws Exception {
+        final HierarchyManager srcHM = MgnlContext.getHierarchyManager("website");
+        final String srcPath = "/foo/bar";
+        ContentUtil.createPath(srcHM, srcPath);
+
+        // ParameterProvider for tests - return a new instance of the same node everytime
+        // if we'd return the same src instance everytime, the purpose of this test would be null
+        final ParameterProviderFactory<Object, Content> ppf = new TestParameterProviderFactory(srcHM, srcPath);
+
+        final OutputFormat png = new OutputFormat();
+        png.setFormatName("png");
+
+        final ImageOperationChain<ParameterProvider<Content>> generator = new ImageOperationChain<ParameterProvider<Content>>();
+        final URLImageLoader<ParameterProvider<Content>> load = new URLImageLoader<ParameterProvider<Content>>();
+        load.setUrl(getClass().getResource("/funnel.gif").toExternalForm());
+        generator.addOperation(load);
+        generator.setOutputFormat(png);
+        generator.setName("foo blob bar");
+        generator.setParameterProviderFactory(ppf);
+
+        // yeah, we're using a "wrong" workspace for the image cache, to avoid having to setup a custom one in this test
+        final HierarchyManager hm = new SingleSaveHierarchyManagerWrapper("config");
+
+        final ImageStreamer streamer = new CachingImageStreamer(hm, ppf.getCachingStrategy(), new DefaultImageStreamer());
+
+        // thread pool of 10, launching 8 requests, can we hit some concurrency please ?
+        final ExecutorService executor = Executors.newFixedThreadPool(10);
+        final ByteArrayOutputStream[] outs = new ByteArrayOutputStream[8];
+        final Future[] futures = new Future[8];
+        for (int i = 0; i < outs.length; i++) {
+            final int ii = i;
+            outs[i] = new ByteArrayOutputStream();
+            futures[i] = executor.submit(new Runnable() {
+                public void run() {
+                    final ParameterProvider p = generator.getParameterProviderFactory().newParameterProviderFor(null);
+                    try {
+                        streamer.serveImage(generator, p, outs[ii]);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e); // TODO
+                    }
+                }
+            });
+        }
+        executor.shutdown();
+        executor.awaitTermination(30, TimeUnit.SECONDS);
+
+        for (Future<?> future : futures) {
+            assertTrue(future.isDone());
+            assertFalse(future.isCancelled());
+            // ignore the results of TestJob - all we care about is if an exception was thrown
+            // and if there was any, it is kept in Future until we call Future.get()
+            future.get();
+        }
+
+        shutdownRepository(true);
+
+        // sleep for a while so that the jobs map's expiration thread can kick in !
+        Thread.sleep(10000);
+    }
+
+
     // just a generation job for tests
     private class TestJob implements Callable<Object> {
         private final ImageGenerator generator;
@@ -315,4 +358,45 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
 
     replay(hm, root, t, m, p, y);
     */
+
+    private static class TestParameterProviderFactory implements ParameterProviderFactory {
+        private final HierarchyManager srcHM;
+        private final String srcPath;
+
+        public TestParameterProviderFactory(HierarchyManager srcHM, String srcPath) {
+            this.srcHM = srcHM;
+            this.srcPath = srcPath;
+        }
+
+        public ParameterProvider<Content> newParameterProviderFor(Object environment) {
+            try {
+                final Content src = srcHM.getContent(srcPath);
+                // copied from ContentParameterProviderFactory
+                return new ContentParameterProvider(new SimpleEqualityContentWrapper(src));
+            } catch (RepositoryException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public CachingStrategy getCachingStrategy() {
+            return new ContentBasedCachingStrategy();
+        }
+    }
+
+    private static class SingleSaveHierarchyManagerWrapper extends HierarchyManagerWrapper {
+        boolean saved = false;
+
+        public SingleSaveHierarchyManagerWrapper(String repositoryId) {
+            super(MgnlContext.getHierarchyManager(repositoryId));
+        }
+
+        public synchronized void save() throws RepositoryException {
+            if (saved) {
+                fail("save() was called more than once");
+            } else {
+                saved = true;
+            }
+            super.save();
+        }
+    }
 }

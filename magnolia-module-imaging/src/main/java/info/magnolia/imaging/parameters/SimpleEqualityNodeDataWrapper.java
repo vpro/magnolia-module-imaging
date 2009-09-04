@@ -20,10 +20,20 @@ import info.magnolia.cms.util.NodeDataWrapper;
 /**
  * A NodeDataWrapper which simply defines equals() and hashCode() methods
  * based on the property's path and HierarchyManager name.
+ * It also caches the handle of the node, so that equals() and hashCode()
+ * can be used even if the node's JCR session was terminated.
  */
 public class SimpleEqualityNodeDataWrapper extends NodeDataWrapper {
+    private final String handle;
+
     public SimpleEqualityNodeDataWrapper(NodeData nodeData) {
         super(nodeData);
+        this.handle = nodeData.getHandle();
+    }
+
+    @Override
+    public String getHandle() {
+        return handle;
     }
 
     public boolean equals(Object o) {

@@ -86,8 +86,8 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
 //                    .concurrencyLevel(32)
 //                    .softKeys() weakKeys()
 //                    .softValues() weakValues()
-                // entries from the map will be removed 500ms after their creation
-                // TODO - is this correct ? or will it fail if the image generation takes longer ? (seemed to work with 3ms but then again the generation wasn't heavy)
+                // entries from the map will be removed 500ms after their creation,
+                // thus unblocking further requests for an equivalent job.
                 .expiration(500, TimeUnit.MILLISECONDS)
 
                 .makeComputingMap(new Function<ImageGenerationJob<P>, NodeData>() {
