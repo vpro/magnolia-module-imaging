@@ -67,6 +67,7 @@ public class ContentParameterProviderFactoryTest extends TestCase {
         expect(req.getPathInfo()).andReturn(pathInfo);
         expect(ctx.getHierarchyManager(expectedWorkspaceName)).andReturn(hm);
         expect(hm.getContent(expectedNodePath)).andReturn(mockNode);
+        expect(mockNode.getHandle()).andReturn("/does/not/matter"); // see SimpleEqualityContentWrapper
 
         replay(ctx, hm, mockNode, req);
         final ContentParameterProviderFactory f = new ContentParameterProviderFactory();
