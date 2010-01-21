@@ -49,6 +49,9 @@ public abstract class AbstractLoader<P extends ParameterProvider<?>> implements 
             throw new ImagingException("This operation currently does not support overlaying images");
         }
         final BufferedImage loaded = loadSource(filterParams);
+        if (loaded == null) {
+            throw new ImagingException("Could not load image for " + filterParams);
+        }
         final BufferedImage img = new BufferedImage(loaded.getWidth(), loaded.getHeight(), BufferedImage.TYPE_INT_ARGB_PRE);
         final Graphics2D g = img.createGraphics();
 
