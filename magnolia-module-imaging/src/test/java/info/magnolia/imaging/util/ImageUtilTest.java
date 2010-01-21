@@ -15,8 +15,10 @@
 package info.magnolia.imaging.util;
 
 import info.magnolia.imaging.AbstractImagingTest;
+import info.magnolia.imaging.operations.ImageOperationChain;
 import info.magnolia.imaging.operations.load.Blank;
 import info.magnolia.imaging.operations.load.ClasspathImageLoader;
+import info.magnolia.imaging.operations.load.SunJPEGCodecImageDecoder;
 
 import javax.imageio.ImageIO;
 import java.awt.Color;
@@ -27,11 +29,119 @@ import java.io.IOException;
 import java.net.URL;
 
 /**
- *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
 public class ImageUtilTest extends AbstractImagingTest {
+
+    // not exactly sure what differentiates this jpeg yet - but com.sun.image.codec.jpeg.JPEGImageDecoder handles it correctly for us
+    // while the imageio's built-in jpeg support will only "work" if we pass the image's metadata back to the write (which is not
+    // practical since we might want to overlay another image on top for instance)
+
+    public void testDecodingHuffmanImage() throws Exception {
+        final ClasspathImageLoader loader = new ClasspathImageLoader("/huffmann.jpg");
+        loader.setImageDecoder(new SunJPEGCodecImageDecoder());
+
+        final ImageOperationChain chain = new ImageOperationChain();
+        chain.addOperation(loader);
+        // chain.addOperation(new ClasspathImageLoader("/cookies.gif")); // overlay some cookies
+        // yeah so the overlay isn't supported at the moment.
+
+        final BufferedImage res = chain.generate(null);
+        final BufferedImage flat = ImageUtil.flattenTransparentImageForOpaqueFormat(res, BASIC_JPEG);
+        // write("loaded", res, BASIC_JPEG);
+        write("flat", flat, BASIC_JPEG);
+    }
+
+    /* stuff
+//        loader.setSrc("/huffmann-saved-by-imageeditor.jpg");
+//        final BufferedImage test2 = ImageUtil.flattenTransparentImageForOpaqueFormat(loader.apply(null, null), BASIC_JPEG);
+//        write("test2", test2, BASIC_JPEG);
+//
+//        final URLImageLoader ul = new URLImageLoader();
+//        ul.setUrl("file:///Users/gjoseph/tmp/resaved.jpg");
+//        final BufferedImage test3 = ImageUtil.flattenTransparentImageForOpaqueFormat(ul.apply(null, null), BASIC_JPEG);
+//        write("test3", test3, BASIC_JPEG);
+
+        // ------------------------------------------------------------------------
+//        ImageDecoder ir = ImageIO.getImageReadersByFormatName("jpeg").next();
+//        final InputStream in = getClass().getResourceAsStream("/huffmann.jpg");
+//        ImageInputStream iis = ImageIO.createImageInputStream(in);
+//        ir.setInput(iis);
+//        final BufferedImage bufferedImage = ir.read(0);
+//        IIOImage iioImage = new IIOImage(bufferedImage, null, ir.getImageMetadata(0));
+//        JPEGImageWriteParam writerParam = new JPEGImageWriteParam(null);
+//        writerParam.setOptimizeHuffmanTables(true);
+//        ImageOutputStream imageOutputStream = ImageIO.createImageOutputStream(new File("/Users/gjoseph/tmp/resaved.jpg"));
+//        ImageWriter iw = ImageIO.getImageWritersByFormatName("jpeg").next();
+//        iw.setOutput(imageOutputStream);
+//        iw.write(iioImage.getMetadata(), iioImage, writerParam);
+//        imageOutputStream.close();
+
+        
+    }
+//
+//        ImageIO.write(iioImage.getRenderedImage(), "jpeg", new File("/Users/gjoseph/Downloads/34348371-broken.jpg"));
+//
+//        ir.setInput(ImageIO.createImageInputStream(new FileInputStream("/Users/gjoseph/Downloads/34348371-test.jpg")));
+//        final IIOMetadata mdOK = ir.getImageMetadata(0);
+//
+//        ir.setInput(ImageIO.createImageInputStream(new FileInputStream("/Users/gjoseph/Downloads/34348371-broken.jpg")));
+//        final IIOMetadata mdKO = ir.getImageMetadata(0);
+//
+//        System.out.println("mdOK = " + mdOK);
+//        System.out.println("mdKO = " + mdKO);
+
+    private void printImageTypes(String path) throws IOException {
+        System.out.println(path + ":");
+        final JPEGImageReader re = (JPEGImageReader) ImageIO.getImageReadersByFormatName("jpg").next();
+        final InputStream in = getClass().getResourceAsStream(path);
+        re.setInput(ImageIO.createImageInputStream(in));
+        final int num = re.getNumImages(true);
+        for (int i = 0; i < num; i++) {
+            System.out.println("i = " + i);
+            final Iterator types = re.getImageTypes(i);
+            while (types.hasNext()) {
+                ImageTypeSpecifier type = (ImageTypeSpecifier) types.next();
+                System.out.println("  type: " + type);
+                System.out.println("    cm: " + type.getColorModel());
+                System.out.println("    sm: " + type.getSampleModel());
+                System.out.println("    nb: " + type.getNumBands());
+            }
+            System.out.println();
+        }
+    }
+
+
+        ImageDecoder ir = ImageIO.getImageReadersByFormatName("jpeg").next();
+        FileInputStream fis = new FileInputStream(new File(path));
+        ImageInputStream iis = ImageIO.createImageInputStream(fis);
+        ir.setInput(iis);
+
+        final BufferedImage bufferedImage = ir.read(0);
+        IIOImage iioImage = new IIOImage(bufferedImage, null, ir.getImageMetadata(0));
+
+        JPEGImageWriteParam writerParam = new JPEGImageWriteParam(null);
+        writerParam.setOptimizeHuffmanTables(true);
+
+        ImageOutputStream imageOutputStream = ImageIO.createImageOutputStream(new File("/Users/gjoseph/Downloads/34348371-test.jpg"));
+        ImageWriter iw = ImageIO.getImageWritersByFormatName("jpeg").next();
+        iw.setOutput(imageOutputStream);
+        iw.write(iioImage.getMetadata(), iioImage, writerParam);
+        imageOutputStream.close();
+
+        ImageIO.write(iioImage.getRenderedImage(), "jpeg", new File("/Users/gjoseph/Downloads/34348371-broken.jpg"));
+        
+        ir.setInput(ImageIO.createImageInputStream(new FileInputStream("/Users/gjoseph/Downloads/34348371-test.jpg")));
+        final IIOMetadata mdOK = ir.getImageMetadata(0);
+
+        ir.setInput(ImageIO.createImageInputStream(new FileInputStream("/Users/gjoseph/Downloads/34348371-broken.jpg")));
+        final IIOMetadata mdKO = ir.getImageMetadata(0);
+
+        System.out.println("mdOK = " + mdOK);
+        System.out.println("mdKO = " + mdKO);
+
+    }*/
 
     public void testCanHandleImageCreatedByBlankOperationWithoutBackgroundColor() throws Exception {
         final Blank blank = new Blank(200, 200);
