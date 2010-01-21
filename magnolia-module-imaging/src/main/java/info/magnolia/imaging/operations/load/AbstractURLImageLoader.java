@@ -17,10 +17,10 @@ package info.magnolia.imaging.operations.load;
 import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.ParameterProvider;
 
-import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 
 /**
@@ -38,11 +38,12 @@ public abstract class AbstractURLImageLoader<P extends ParameterProvider<?>> ext
     }
 
     protected BufferedImage loadSource(P filterParams) throws ImagingException {
+        final URL url = getAndValidateUrl(filterParams);
         try {
-            final URL url = getAndValidateUrl(filterParams);
-            return ImageIO.read(url);
+            final InputStream inputStream = url.openStream();
+            return doReadAndClose(inputStream);
         } catch (IOException e) {
-            throw new ImagingException("Can't load image: " + e.getMessage(), e);
+            throw new ImagingException("Can't load image from " + url + ": " + e.getMessage(), e);
         }
     }
 

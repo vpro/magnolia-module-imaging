@@ -18,10 +18,13 @@ import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.operations.ImageOperation;
 
-import java.awt.Graphics2D;
+import javax.imageio.ImageIO;
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * An abstract ImageOperation used to load images. It takes charge of converting the loaded image
@@ -60,6 +63,17 @@ public abstract class AbstractLoader<P extends ParameterProvider<?>> implements 
     }
 
     protected abstract BufferedImage loadSource(P filterParams) throws ImagingException;
+
+    protected BufferedImage doReadAndClose(InputStream inputStream) throws IOException {
+        if (inputStream == null) {
+            throw new IOException("No input");
+        }
+        try {
+            return ImageIO.read(inputStream);
+        } finally {
+            inputStream.close();
+        }
+    }
 
     public Color getBackgroundColor() {
         return backgroundColor;

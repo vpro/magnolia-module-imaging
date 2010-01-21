@@ -18,7 +18,6 @@ import info.magnolia.cms.core.NodeData;
 import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.ParameterProvider;
 
-import javax.imageio.ImageIO;
 import javax.jcr.PropertyType;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -41,7 +40,7 @@ public abstract class AbstractFromContent<PT> extends AbstractLoader<ParameterPr
             throw new ImagingException("Can't get InputStream from " + data.getHandle());
         }
         try {
-            return ImageIO.read(in);
+            return doReadAndClose(in);
         } catch (IOException e) {
             throw new ImagingException("Can't load image from " + data.getHandle());
         }
