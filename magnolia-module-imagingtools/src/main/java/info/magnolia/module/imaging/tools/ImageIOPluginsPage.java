@@ -53,7 +53,9 @@ public class ImageIOPluginsPage extends TemplatedMVCHandler {
         return filter(ImageIO.getWriterMIMETypes());
     }
 
-    // this is just static to make testing easier... hu.
+    /**
+     * Removes duplicates and returns a sorted set of all entries in lowercase.
+     */
     protected static Collection<String> filter(String... formats) {
         final TreeSet<String> set = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
         set.addAll(Arrays.asList(formats));
