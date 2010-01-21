@@ -18,7 +18,6 @@ import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.operations.ImageOperation;
 
-import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -35,6 +34,7 @@ import java.io.InputStream;
  * @version $Revision: $ ($Author: $)
  */
 public abstract class AbstractLoader<P extends ParameterProvider<?>> implements ImageOperation<P> {
+    private ImageDecoder imageDecoder = new DefaultImageIOImageDecoder();
     private Color backgroundColor;
 
     protected AbstractLoader() {
@@ -57,6 +57,7 @@ public abstract class AbstractLoader<P extends ParameterProvider<?>> implements 
             g.fill(new Rectangle(0, 0, img.getWidth(), img.getHeight()));
         }
         g.drawImage(loaded, null, 0, 0);
+        // TODO would this make any difference ? g.drawRenderedImage(loaded, null);
 
         g.dispose();
         return img;
@@ -69,10 +70,18 @@ public abstract class AbstractLoader<P extends ParameterProvider<?>> implements 
             throw new IOException("No input");
         }
         try {
-            return ImageIO.read(inputStream);
+            return imageDecoder.read(inputStream);
         } finally {
             inputStream.close();
         }
+    }
+
+    public ImageDecoder getImageDecoder() {
+        return imageDecoder;
+    }
+
+    public void setImageDecoder(ImageDecoder imageDecoder) {
+        this.imageDecoder = imageDecoder;
     }
 
     public Color getBackgroundColor() {
