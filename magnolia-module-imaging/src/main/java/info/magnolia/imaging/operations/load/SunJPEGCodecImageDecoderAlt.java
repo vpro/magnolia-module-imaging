@@ -74,8 +74,6 @@ public class SunJPEGCodecImageDecoderAlt implements ImageDecoder {
             }
         }
         return null;
-
-
     }
 
 }
