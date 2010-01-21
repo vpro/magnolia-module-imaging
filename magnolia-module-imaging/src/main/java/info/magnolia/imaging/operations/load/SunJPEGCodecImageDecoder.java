@@ -17,6 +17,7 @@ package info.magnolia.imaging.operations.load;
 import com.sun.image.codec.jpeg.ImageFormatException;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageDecoder;
+import info.magnolia.imaging.ImagingException;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
@@ -35,7 +36,7 @@ public class SunJPEGCodecImageDecoder implements ImageDecoder {
 
     private final ImageDecoder fallback = new DefaultImageIOImageDecoder();
 
-    public BufferedImage read(InputStream in) throws IOException {
+    public BufferedImage read(InputStream in) throws IOException, ImagingException {
         final BufferedInputStream buff = newBufferedInputStream(in);
         // Observed JPEGImageDecoder going as far as 60k in the stream before throwing an ImageFormatException.
         // JPEGImageDecoder seems to re-mark this buffer much further once it starts loading.

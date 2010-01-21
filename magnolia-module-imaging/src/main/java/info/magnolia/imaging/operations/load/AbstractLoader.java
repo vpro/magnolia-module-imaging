@@ -68,7 +68,7 @@ public abstract class AbstractLoader<P extends ParameterProvider<?>> implements 
 
     protected abstract BufferedImage loadSource(P filterParams) throws ImagingException;
 
-    protected BufferedImage doReadAndClose(InputStream inputStream) throws IOException {
+    protected BufferedImage doReadAndClose(InputStream inputStream) throws IOException, ImagingException {
         if (inputStream == null) {
             throw new IOException("No input");
         }

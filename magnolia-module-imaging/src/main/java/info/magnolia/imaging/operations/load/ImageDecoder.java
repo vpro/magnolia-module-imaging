@@ -14,6 +14,8 @@
  */
 package info.magnolia.imaging.operations.load;
 
+import info.magnolia.imaging.ImagingException;
+
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,5 +27,5 @@ import java.io.InputStream;
  * @version $Revision: $ ($Author: $) 
  */
 public interface ImageDecoder {
-    BufferedImage read(InputStream in) throws IOException;
+    BufferedImage read(InputStream in) throws IOException, ImagingException;
 }

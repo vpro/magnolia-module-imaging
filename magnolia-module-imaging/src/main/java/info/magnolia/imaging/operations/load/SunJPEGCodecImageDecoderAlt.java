@@ -17,6 +17,7 @@ package info.magnolia.imaging.operations.load;
 import com.sun.image.codec.jpeg.ImageFormatException;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageDecoder;
+import info.magnolia.imaging.ImagingException;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReadParam;
@@ -41,18 +42,18 @@ import java.util.Iterator;
  */
 public class SunJPEGCodecImageDecoderAlt implements ImageDecoder {
 
-    public BufferedImage read(InputStream in) throws IOException {
+    public BufferedImage read(InputStream in) throws IOException, ImagingException {
         if (in.markSupported()) {
             // Haven't observed ImageIO's preliminary usage of the stream (before we do the actual loading)
             // going further than 8. (As opposed to JPEGImageDecoder who went as far as 60k before throwing
             // an ImageFormatException.
             in.mark(100);
         }
-        try {
-            final ImageInputStream iis = ImageIO.createImageInputStream(in);
-            final Iterator<ImageReader> readers = ImageIO.getImageReaders(iis);
-            if (readers.hasNext()) {
-                final ImageReader reader = readers.next();
+        final ImageInputStream iis = ImageIO.createImageInputStream(in);
+        final Iterator<ImageReader> readers = ImageIO.getImageReaders(iis);
+        if (readers.hasNext()) {
+            final ImageReader reader = readers.next();
+            try {
                 final String formatName = reader.getFormatName().toLowerCase();
                 if (formatName.contains("jpeg") || formatName.contains("jpg")) {
                     if (in.markSupported()) {
@@ -63,18 +64,16 @@ public class SunJPEGCodecImageDecoderAlt implements ImageDecoder {
                 } else {
                     final ImageReadParam param = reader.getDefaultReadParam();
                     reader.setInput(iis, true, true);
-                    try {
-                        return reader.read(0, param);
-                    } finally {
-                        reader.dispose();
-                        iis.close();
-                    }
+                    return reader.read(0, param);
                 }
+            } catch (ImageFormatException e) {
+                throw new ImagingException("Could not load image using com.sun.image.codec.jpeg.JPEGImageDecoder: " + e.getMessage(), e);
+            } finally {
+                reader.dispose();
+                iis.close();
             }
-            return null;
-        } catch (ImageFormatException e) {
-            throw new IOException("Could not load image using com.sun.image.codec.jpeg.JPEGImageDecoder: " + e.getMessage(), e);
         }
+        return null;
 
 
     }
