@@ -24,8 +24,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * An {@link ImageDecoder} implementation which uses {@link com.sun.image.codec.jpeg.JPEGImageDecoder},
- * which might not be present on all systems.
+ * An {@link ImageDecoder} implementation which uses {@link com.sun.image.codec.jpeg.JPEGImageDecoder}
+ * (which might not be present on all systems), and if failing, falls back on {@link info.magnolia.imaging.operations.load.DefaultImageIOImageDecoder}
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $) 
@@ -37,6 +37,8 @@ public class SunJPEGCodecImageDecoder implements ImageDecoder {
 
     public BufferedImage read(InputStream in) throws IOException {
         final BufferedInputStream buff = newBufferedInputStream(in);
+        // Observed JPEGImageDecoder going as far as 60k in the stream before throwing an ImageFormatException.
+        // JPEGImageDecoder seems to re-mark this buffer much further once it starts loading.
         buff.mark(1000);
         try {
             final JPEGImageDecoder decoder = JPEGCodec.createJPEGDecoder(buff);

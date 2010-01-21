@@ -15,10 +15,13 @@
 package info.magnolia.imaging.util;
 
 import info.magnolia.imaging.AbstractImagingTest;
+import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.operations.ImageOperationChain;
 import info.magnolia.imaging.operations.load.Blank;
 import info.magnolia.imaging.operations.load.ClasspathImageLoader;
+import info.magnolia.imaging.operations.load.ImageDecoder;
 import info.magnolia.imaging.operations.load.SunJPEGCodecImageDecoder;
+import info.magnolia.imaging.operations.load.SunJPEGCodecImageDecoderAlt;
 
 import javax.imageio.ImageIO;
 import java.awt.Color;
@@ -39,8 +42,16 @@ public class ImageUtilTest extends AbstractImagingTest {
     // practical since we might want to overlay another image on top for instance)
 
     public void testDecodingHuffmanImage() throws Exception {
-        final ClasspathImageLoader loader = new ClasspathImageLoader("/huffmann.jpg");
-        loader.setImageDecoder(new SunJPEGCodecImageDecoder());
+        doTestDecodingHuffmanImage(new SunJPEGCodecImageDecoder());
+    }
+
+    public void testDecodingHuffmanImageAlt() throws Exception {
+        doTestDecodingHuffmanImage(new SunJPEGCodecImageDecoderAlt());
+    }
+
+    private void doTestDecodingHuffmanImage(ImageDecoder imageDecoder) throws ImagingException, IOException {
+        final ClasspathImageLoader loader = new ClasspathImageLoader("/huffman.jpg");
+        loader.setImageDecoder(imageDecoder);
 
         final ImageOperationChain chain = new ImageOperationChain();
         chain.addOperation(loader);
@@ -65,7 +76,7 @@ public class ImageUtilTest extends AbstractImagingTest {
 
         // ------------------------------------------------------------------------
 //        ImageDecoder ir = ImageIO.getImageReadersByFormatName("jpeg").next();
-//        final InputStream in = getClass().getResourceAsStream("/huffmann.jpg");
+//        final InputStream in = getClass().getResourceAsStream("/huffman.jpg");
 //        ImageInputStream iis = ImageIO.createImageInputStream(in);
 //        ir.setInput(iis);
 //        final BufferedImage bufferedImage = ir.read(0);
