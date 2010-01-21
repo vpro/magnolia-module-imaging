@@ -56,6 +56,7 @@ public class Coords implements Serializable {
     }
 
     // regular (generated) getters and setters :
+
     public int getX1() {
         return x1;
     }
@@ -89,6 +90,7 @@ public class Coords implements Serializable {
     }
 
     // generated methods:
+
     public boolean equals(Object o) {
         if (this == o) {
             return true;

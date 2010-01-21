@@ -18,7 +18,7 @@ package info.magnolia.imaging.operations.cropresize;
  * Holds the result of a human selection in a cropping UI component.
  *
  * The cropui module, for instance, stores instances of this (in the form of a JSon string) into the repository.
- * 
+ *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
@@ -35,6 +35,7 @@ public class CroppingInfo {
     }
 
     // regular (generated) getters and setters :
+
     public String getConfigName() {
         return configName;
     }
@@ -52,6 +53,7 @@ public class CroppingInfo {
     }
 
     // generated equals / hashcode
+
     public boolean equals(Object o) {
         if (this == o) {
             return true;

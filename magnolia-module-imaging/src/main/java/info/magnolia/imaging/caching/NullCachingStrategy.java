@@ -20,7 +20,7 @@ import info.magnolia.imaging.ParameterProvider;
 
 /**
  * A CachingStrategy implementation that will ... never cache !
- * 
+ *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */

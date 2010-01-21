@@ -14,10 +14,10 @@
  */
 package info.magnolia.imaging.caching;
 
-import javax.jcr.RepositoryException;
-
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.NodeData;
+
+import javax.jcr.RepositoryException;
 
 
 /**
@@ -44,6 +44,6 @@ public class NodeDataBasedCachingStrategy extends AbstractContentBasedCachingStr
     protected String getPathOf(NodeData param) {
         return param.getHandle();
     }
-    
+
 
 }

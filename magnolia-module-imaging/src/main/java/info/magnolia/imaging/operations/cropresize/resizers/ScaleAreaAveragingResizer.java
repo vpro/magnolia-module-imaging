@@ -14,8 +14,8 @@
  */
 package info.magnolia.imaging.operations.cropresize.resizers;
 
-import info.magnolia.imaging.operations.cropresize.Resizer;
 import info.magnolia.imaging.operations.cropresize.Coords;
+import info.magnolia.imaging.operations.cropresize.Resizer;
 import info.magnolia.imaging.operations.cropresize.Size;
 
 import java.awt.Graphics2D;

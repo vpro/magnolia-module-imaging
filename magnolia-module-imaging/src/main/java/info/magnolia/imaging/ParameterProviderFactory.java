@@ -32,7 +32,7 @@ import info.magnolia.imaging.caching.CachingStrategy;
  * TODO -- Since the ParameterProviderFactory is provided by
  * TODO -- the ImageGenerator, this might means that a particular ImageGenerator is tied
  * TODO -- to a specific context.
- * 
+ *
  * @see info.magnolia.imaging.caching.ImageGenerationJob
  *
  *

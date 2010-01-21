@@ -20,7 +20,7 @@ import javax.imageio.ImageWriteParam;
  * A simple bean holding image formatName output configuration. This is used to get the appropriate
  * ImageWriter and applied to its  underlying <code>javax.imageio.ImageWriteParam</code>.
  * It's also exposing a simpler API, making it easier to configure through a tree/gui.
- * 
+ *
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
@@ -62,11 +62,13 @@ public class OutputFormat {
     }
 
     // there's probably a better way ...
+
     public boolean supportsTransparency() {
         return !"jpg".equalsIgnoreCase(formatName) && !"jpeg".equalsIgnoreCase(formatName);
     }
 
     // -- generated getters and setters
+
     public String getFormatName() {
         return formatName;
     }

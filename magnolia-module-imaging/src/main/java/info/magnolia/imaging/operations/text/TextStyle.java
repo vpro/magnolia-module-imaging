@@ -45,11 +45,13 @@ public class TextStyle {
 
     //    public Font deriveFont() {
     //  return this.font.deriveFont(this.fontStyle, (float) this.fontSize);
+
     public Font getFont() {
         return new Font(fontName, fontStyle, fontSize);
     }
 
     // ---generated getters and setters
+
     public String getFontName() {
         return fontName;
     }

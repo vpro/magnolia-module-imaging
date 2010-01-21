@@ -55,6 +55,7 @@ public class ImageUtil {
     }
 
     // this is much slower than flattenTransparentImageForOpaqueFormat; left here for comparisons and tests.
+
     static BufferedImage fillTransparentPixels(final BufferedImage image, Color fillColor) {
         int w = image.getWidth();
         int h = image.getHeight();

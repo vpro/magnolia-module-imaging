@@ -15,8 +15,8 @@
 package info.magnolia.imaging.operations.load;
 
 import info.magnolia.cms.core.NodeData;
-import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.ImagingException;
+import info.magnolia.imaging.ParameterProvider;
 
 
 /**

@@ -19,9 +19,8 @@ import info.magnolia.cms.core.NodeData;
 import info.magnolia.imaging.ImageGenerator;
 import info.magnolia.imaging.ParameterProvider;
 
-import java.util.Calendar;
-
 import javax.jcr.RepositoryException;
+import java.util.Calendar;
 
 
 /**
@@ -44,10 +43,10 @@ public abstract class AbstractContentBasedCachingStrategy<P> implements CachingS
         try {
             // this is assuming the cached node's metadata was updated, not just the binary
             final Calendar cacheLastMod = cachedBinary.getParent().getMetaData().getModificationDate();
-    
+
             // this is assuming our parameter's mgnl:metaData was updated when updating any of its properties/binaries
             final Calendar srcLastMod = getContent(parameterProvider.getParameter()).getMetaData().getModificationDate();
-    
+
             return cacheLastMod.before(srcLastMod);
         } catch (RepositoryException e) {
             throw new RuntimeException(e);
