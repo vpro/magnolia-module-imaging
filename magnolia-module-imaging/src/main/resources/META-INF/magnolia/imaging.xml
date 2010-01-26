@@ -6,7 +6,12 @@
   <class>info.magnolia.imaging.ImagingModuleConfig</class>
   <versionHandler>info.magnolia.imaging.setup.ImagingModuleVersionHandler</versionHandler>
   <version>${project.version}</version>
-
+  <properties>
+    <property>
+      <name>info.magnolia.imaging.operations.load.ImageDecoder</name>
+      <value>info.magnolia.imaging.operations.load.DefaultImageIOImageDecoder</value>
+    </property>
+  </properties>
   <dependencies>
     <dependency>
       <name>core</name>

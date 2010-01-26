@@ -18,6 +18,7 @@ import com.sun.image.codec.jpeg.ImageFormatException;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageDecoder;
 import info.magnolia.imaging.ImagingException;
+import info.magnolia.imaging.util.ImageUtil;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
@@ -36,8 +37,8 @@ public class SunJPEGCodecImageDecoder implements ImageDecoder {
 
     private final ImageDecoder fallback = new DefaultImageIOImageDecoder();
 
-    public BufferedImage read(InputStream in) throws IOException, ImagingException {
-        final BufferedInputStream buff = newBufferedInputStream(in);
+    public BufferedImage read(final InputStream in) throws IOException, ImagingException {
+        final BufferedInputStream buff = ImageUtil.newBufferedInputStream(in);
         // Observed JPEGImageDecoder going as far as 60k in the stream before throwing an ImageFormatException.
         // JPEGImageDecoder seems to re-mark this buffer much further once it starts loading.
         buff.mark(1000);
@@ -51,19 +52,4 @@ public class SunJPEGCodecImageDecoder implements ImageDecoder {
         }
     }
 
-    private BufferedInputStream newBufferedInputStream(InputStream in) {
-        return new BufferedInputStream(in) {
-            public String toString() {
-                final StringBuilder sb = new StringBuilder();
-                sb.append("BufferedInputStream");
-                sb.append("{pos='").append(pos).append('\'');
-                sb.append(", count='").append(count).append('\'');
-                sb.append(", markpos='").append(markpos).append('\'');
-                sb.append(", marklimit='").append(marklimit).append('\'');
-                sb.append(", buf.length='").append(buf.length).append('\'');
-                sb.append('}');
-                return sb.toString();
-            }
-        };
-    }
 }

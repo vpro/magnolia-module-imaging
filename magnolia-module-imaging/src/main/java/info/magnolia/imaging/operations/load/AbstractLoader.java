@@ -14,6 +14,7 @@
  */
 package info.magnolia.imaging.operations.load;
 
+import info.magnolia.cms.util.FactoryUtil;
 import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.operations.ImageOperation;
@@ -34,7 +35,7 @@ import java.io.InputStream;
  * @version $Revision: $ ($Author: $)
  */
 public abstract class AbstractLoader<P extends ParameterProvider<?>> implements ImageOperation<P> {
-    private ImageDecoder imageDecoder = new DefaultImageIOImageDecoder();
+    private ImageDecoder imageDecoder = (ImageDecoder) FactoryUtil.newInstance(ImageDecoder.class);
     private Color backgroundColor;
 
     protected AbstractLoader() {

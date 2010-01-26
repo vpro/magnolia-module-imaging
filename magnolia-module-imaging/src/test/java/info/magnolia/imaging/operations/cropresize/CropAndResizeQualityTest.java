@@ -14,6 +14,7 @@
  */
 package info.magnolia.imaging.operations.cropresize;
 
+import info.magnolia.imaging.AbstractImagingTest;
 import info.magnolia.imaging.DefaultImageStreamer;
 import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.OutputFormat;
@@ -22,7 +23,6 @@ import info.magnolia.imaging.operations.cropresize.resizers.BasicResizer;
 import info.magnolia.imaging.operations.cropresize.resizers.MultiStepResizer;
 import info.magnolia.imaging.operations.cropresize.resizers.ScaleAreaAveragingResizer;
 import info.magnolia.imaging.operations.load.ClasspathImageLoader;
-import junit.framework.TestCase;
 import org.apache.commons.io.IOUtils;
 
 import java.io.File;
@@ -35,7 +35,7 @@ import java.io.InputStream;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class CropAndResizeQualityTest extends TestCase {
+public class CropAndResizeQualityTest extends AbstractImagingTest {
     public void testNeedsAnEyeToCheck() throws IOException, ImagingException {
 
         final String originalRes = "/quality1/original.jpg";

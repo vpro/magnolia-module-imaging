@@ -22,6 +22,8 @@ import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.awt.image.DirectColorModel;
 import java.awt.image.WritableRaster;
+import java.io.BufferedInputStream;
+import java.io.InputStream;
 
 /**
  *
@@ -66,5 +68,22 @@ public class ImageUtil {
         g.drawRenderedImage(image, null);
         g.dispose();
         return image2;
+    }
+
+    public static BufferedInputStream newBufferedInputStream(InputStream in) {
+        return new BufferedInputStream(in) {
+            public String toString() {
+                final StringBuilder sb = new StringBuilder();
+                sb.append("BufferedInputStream");
+                sb.append("{pos='").append(pos).append('\'');
+                sb.append(", count='").append(count).append('\'');
+                sb.append(", markpos='").append(markpos).append('\'');
+                sb.append(", marklimit='").append(marklimit).append('\'');
+                sb.append(", buf.length='").append(buf.length).append('\'');
+                sb.append(", wrapping ").append(in.toString());
+                sb.append('}');
+                return sb.toString();
+            }
+        };
     }
 }

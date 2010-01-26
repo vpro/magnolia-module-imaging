@@ -15,6 +15,8 @@
 package info.magnolia.imaging;
 
 import info.magnolia.cms.util.FactoryUtil;
+import info.magnolia.imaging.operations.load.DefaultImageIOImageDecoder;
+import info.magnolia.imaging.operations.load.ImageDecoder;
 import info.magnolia.logging.AuditLoggingManager;
 import info.magnolia.module.ModuleManagementException;
 import info.magnolia.module.ModuleManager;
@@ -23,6 +25,7 @@ import info.magnolia.module.ModuleRegistry;
 import info.magnolia.module.model.ModuleDefinition;
 import info.magnolia.module.model.reader.ModuleDefinitionReader;
 import info.magnolia.test.RepositoryTestCase;
+
 import static org.easymock.EasyMock.createNiceMock;
 
 import java.io.IOException;
@@ -42,9 +45,17 @@ public abstract class AbstractRepositoryTestCase extends RepositoryTestCase {
     protected void setUp() throws Exception {
         super.setUp();
         FactoryUtil.setInstance(AuditLoggingManager.class, new AuditLoggingManager());
+        // this is set via the module descriptor (imaging.xml)
+        FactoryUtil.setDefaultImplementation(ImageDecoder.class, DefaultImageIOImageDecoder.class);
+    }
+
+    protected void tearDown() throws Exception {
+        FactoryUtil.clear();
+        super.tearDown();
     }
 
     // TODO - this is an ugly hack to workaround MAGNOLIA-2593 - we should review RepositoryTestCase
+
     protected void initDefaultImplementations() throws IOException {
         //MgnlTestCase clears factory before running this method, so we have to instrument factory here rather then in setUp() before calling super.setUp()
         ModuleRegistry registry = createNiceMock(ModuleRegistry.class);

@@ -18,12 +18,14 @@ import com.sun.image.codec.jpeg.ImageFormatException;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageDecoder;
 import info.magnolia.imaging.ImagingException;
+import info.magnolia.imaging.util.ImageUtil;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReadParam;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
@@ -42,24 +44,23 @@ import java.util.Iterator;
  */
 public class SunJPEGCodecImageDecoderAlt implements ImageDecoder {
 
-    public BufferedImage read(InputStream in) throws IOException, ImagingException {
-        if (in.markSupported()) {
-            // Haven't observed ImageIO's preliminary usage of the stream (before we do the actual loading)
-            // going further than 8. (As opposed to JPEGImageDecoder who went as far as 60k before throwing
-            // an ImageFormatException.
-            in.mark(100);
-        }
-        final ImageInputStream iis = ImageIO.createImageInputStream(in);
+    public BufferedImage read(final InputStream in) throws IOException, ImagingException {
+        final BufferedInputStream buff = ImageUtil.newBufferedInputStream(in);
+        // Haven't observed ImageIO's preliminary usage of the stream (before we do the actual loading)
+        // going further than 8. (As opposed to JPEGImageDecoder who went as far as 60k before throwing
+        // an ImageFormatException.
+        buff.mark(100);
+
+        final ImageInputStream iis = ImageIO.createImageInputStream(buff);
         final Iterator<ImageReader> readers = ImageIO.getImageReaders(iis);
         if (readers.hasNext()) {
             final ImageReader reader = readers.next();
             try {
                 final String formatName = reader.getFormatName().toLowerCase();
                 if (formatName.contains("jpeg") || formatName.contains("jpg")) {
-                    if (in.markSupported()) {
-                        in.reset();
-                    }
-                    final JPEGImageDecoder decoder = JPEGCodec.createJPEGDecoder(in);
+                    buff.reset();
+
+                    final JPEGImageDecoder decoder = JPEGCodec.createJPEGDecoder(buff);
                     return decoder.decodeAsBufferedImage();
                 } else {
                     final ImageReadParam param = reader.getDefaultReadParam();

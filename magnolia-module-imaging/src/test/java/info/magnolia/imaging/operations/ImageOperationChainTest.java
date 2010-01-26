@@ -15,6 +15,7 @@
 package info.magnolia.imaging.operations;
 
 import com.jhlabs.image.WoodFilter;
+import info.magnolia.imaging.AbstractImagingTest;
 import info.magnolia.imaging.StringParameterProvider;
 import info.magnolia.imaging.operations.cropresize.AutoCropAndResize;
 import info.magnolia.imaging.operations.load.Blank;
@@ -23,7 +24,6 @@ import info.magnolia.imaging.operations.text.FixedText;
 import info.magnolia.imaging.operations.text.HorizontalAlignment;
 import info.magnolia.imaging.operations.text.TextStyle;
 import info.magnolia.imaging.operations.text.VerticalAlignment;
-import junit.framework.TestCase;
 
 import javax.imageio.ImageIO;
 import java.awt.Color;
@@ -35,7 +35,7 @@ import java.io.FileOutputStream;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class ImageOperationChainTest extends TestCase {
+public class ImageOperationChainTest extends AbstractImagingTest {
     //TODO - test that nested chains on several level work too
 
     public void testBlankAndWood() throws Exception {
@@ -125,7 +125,7 @@ public class ImageOperationChainTest extends TestCase {
 
         ImageIO.write(result, "png", new FileOutputStream("test-result.png"));
 
-     //   Runtime.getRuntime().exec("open test-result.png");
+        //   Runtime.getRuntime().exec("open test-result.png");
 
 /*
         final ClasspathImageLoader overlayLoad = new ClasspathImageLoader();

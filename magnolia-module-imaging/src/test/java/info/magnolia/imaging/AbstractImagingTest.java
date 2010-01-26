@@ -15,7 +15,10 @@
 package info.magnolia.imaging;
 
 import com.jhlabs.image.FlipFilter;
+import info.magnolia.cms.util.FactoryUtil;
 import info.magnolia.imaging.operations.load.ClasspathImageLoader;
+import info.magnolia.imaging.operations.load.DefaultImageIOImageDecoder;
+import info.magnolia.imaging.operations.load.ImageDecoder;
 import info.magnolia.imaging.util.ImageUtil;
 import junit.framework.TestCase;
 
@@ -52,6 +55,17 @@ public abstract class AbstractImagingTest extends TestCase {
 
     protected static final OutputFormat BASIC_JPEG = new OutputFormat("jpeg", false, 80, null);
     private static final Set<String> generatedFiles = new HashSet<String>();
+
+    protected void setUp() throws Exception {
+        super.setUp();
+        // this is set via the module descriptor (imaging.xml)
+        FactoryUtil.setDefaultImplementation(ImageDecoder.class, DefaultImageIOImageDecoder.class);
+    }
+
+    protected void tearDown() throws Exception {
+        FactoryUtil.clear();
+        super.tearDown();
+    }
 
     protected BufferedImage loadFromResource(String source) throws ImagingException {
         final ClasspathImageLoader loader = new ClasspathImageLoader(source);
@@ -95,6 +109,7 @@ public abstract class AbstractImagingTest extends TestCase {
     private static final BufferedImage squareImage;
 
     // preload images for this test
+
     static {
         try {
             final FlipFilter f = new FlipFilter(FlipFilter.FLIP_90CW);
@@ -144,18 +159,18 @@ public abstract class AbstractImagingTest extends TestCase {
         g.fill(new Rectangle(0, 0, width, height));
         // dashed diagonals
         g.setColor(Color.darkGray);
-        g.setStroke(new BasicStroke(3, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1f, new float[]{10,10}, 0));
+        g.setStroke(new BasicStroke(3, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1f, new float[]{10, 10}, 0));
         g.drawLine(0, 0, width, height);
         g.drawLine(0, height, width, 0);
         // small square in each corner
         g.setColor(Color.red);
         g.fill(new Rectangle(10, 10, 30, 30));
         g.setColor(Color.blue);
-        g.fill(new Rectangle(width-40, height-40, 30, 30));
+        g.fill(new Rectangle(width - 40, height - 40, 30, 30));
         g.setColor(Color.yellow);
-        g.fill(new Rectangle(width-40, 10, 30, 30));
+        g.fill(new Rectangle(width - 40, 10, 30, 30));
         g.setColor(Color.white);
-        g.fill(new Rectangle(10, height-40, 30, 30));
+        g.fill(new Rectangle(10, height - 40, 30, 30));
         return ImageUtil.flattenTransparentImageForOpaqueFormat(img, BASIC_JPEG);
     }
 
