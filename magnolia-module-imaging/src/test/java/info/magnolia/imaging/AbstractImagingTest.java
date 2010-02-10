@@ -174,6 +174,9 @@ public abstract class AbstractImagingTest extends TestCase {
         return ImageUtil.flattenTransparentImageForOpaqueFormat(img, BASIC_JPEG);
     }
 
+    /**
+     * @deprecated This has been moved to info.magnolia.test.TestUtil#getCurrentTestMethodName() in Magnolia 4.3
+     */
     private String getCurrentTestMethodName() {
         final StackTraceElement[] stackTrace = new Exception().getStackTrace();
         for (StackTraceElement ste : stackTrace) {
