@@ -29,7 +29,6 @@ public enum HorizontalAlignment implements Alignment {
         public float getPositionFor(double content, double container, double delta) {
             return (float) (container / 2) - (float) (content / 2);
         }},
-
     right {
         public float getPositionFor(double content, double container, double delta) {
             return (float) (container - content - delta);
