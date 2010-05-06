@@ -21,6 +21,7 @@ import info.magnolia.module.DefaultModuleVersionHandler;
 import info.magnolia.module.InstallContext;
 import info.magnolia.module.delta.AbstractRepositoryTask;
 import info.magnolia.module.delta.AbstractTask;
+import info.magnolia.module.delta.BootstrapSingleResource;
 import info.magnolia.module.delta.DeltaBuilder;
 import info.magnolia.module.delta.TaskExecutionException;
 
@@ -38,6 +39,7 @@ public class ImagingModuleVersionHandler extends DefaultModuleVersionHandler {
         super();
         register(DeltaBuilder.update("2.0.4", "")
                 .addTask(new CreateConfigNodeTask())
+                .addTask(new BootstrapSingleResource("Tree", "Bootstraps a tree configuration.", "/mgnl-bootstrap/imaging/config.modules.imaging.trees.imaging.xml"))
         );
 
     }
