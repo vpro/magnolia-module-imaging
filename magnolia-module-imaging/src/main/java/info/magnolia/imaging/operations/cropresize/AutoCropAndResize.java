@@ -20,7 +20,7 @@ import info.magnolia.imaging.ParameterProvider;
 import java.awt.image.BufferedImage;
 
 /**
- * A CropAndResize implementation which will resize to the configured targetWidth and targetSize,
+ * A CropAndResize implementation which will resize to the configured targetWidth and targetHeight,
  * and crop if needed: while respecting the ratio of the target dimensions, it will crop the image
  * such that the largest possible portion of the image is kept. It will keep the central part of the
  * image and cut off the external parts. (i.e centered crop)
