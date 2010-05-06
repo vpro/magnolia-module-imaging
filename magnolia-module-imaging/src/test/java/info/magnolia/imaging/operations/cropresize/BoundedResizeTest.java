@@ -59,6 +59,7 @@ public class BoundedResizeTest extends AbstractImagingTest {
     // TODO - we could implement this for consistency's sake
 //    public void testWhatHappensIfWeOnlySpecifyMaxWidth() throws Exception {
 //        doTestKeepsOriginalRatioAndCompliesToSmallestMaximumDimension(getHorizontalTestImage(), 400, 0, 400, 300);
+//        doTestKeepsOriginalRatioAndCompliesToSmallestMaximumDimension(getHorizontalTestImage(), 0, 400, 400, 300);
 //    }
 
 
