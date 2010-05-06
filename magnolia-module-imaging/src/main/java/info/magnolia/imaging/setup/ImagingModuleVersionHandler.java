@@ -37,8 +37,8 @@ public class ImagingModuleVersionHandler extends DefaultModuleVersionHandler {
     public ImagingModuleVersionHandler() {
         super();
         register(DeltaBuilder.update("2.0.4", "")
-                .addTask(new CreateConfigNodeTask()
-        ));
+                .addTask(new CreateConfigNodeTask())
+        );
 
     }
 
