@@ -36,7 +36,8 @@ import java.io.InputStream;
  * @version $Revision: $ ($Author: $)
  */
 public class CropAndResizeQualityTest extends AbstractImagingTest {
-    public void testNeedsAnEyeToCheck() throws IOException, ImagingException {
+
+    public void testJpgNeedsAnEyeToCheck() throws IOException, ImagingException {
 
         final String originalRes = "/quality1/original.jpg";
         final String originalCopy = copyTempResource(originalRes);
@@ -73,6 +74,59 @@ public class CropAndResizeQualityTest extends AbstractImagingTest {
         imageStreamer.serveImage(generator, null, new FileOutputStream(resFile2));
 
         final String resFile3 = getClass().getSimpleName() + "test-quality1-result-scalearea-averaging.jpg";
+        cropAndResize.setResizer(new ScaleAreaAveragingResizer());
+        imageStreamer.serveImage(generator, null, new FileOutputStream(resFile3));
+
+//        final String resFile4 = "test-quality1-result-trilinear.jpg";
+//        cropAndResize.setResizer(new TriLinearResizer());
+//        imageStreamer.serveImage(generator, null, new FileOutputStream(resFile4));
+
+//        Runtime.getRuntime().exec("open " + expected
+//                + " " + resFile
+//                + " " + resFile2
+//                + " " + resFile3
+//                + " " + resFile4
+//        );
+
+    }
+
+    public void testPngNeedsAnEyeToCheck() throws IOException, ImagingException {
+
+        final String originalRes = "/quality1/original.png";
+        final String originalCopy = copyTempResource(originalRes);
+        final String expected = copyTempResource("/quality1/expected.png");
+
+        final OutputFormat outputFormat = new OutputFormat();
+        outputFormat.setFormatName("png");
+        outputFormat.setQuality(100);
+        outputFormat.setProgressive(true);
+
+        // resize to 298x169
+
+        final ClasspathImageLoader loader = new ClasspathImageLoader();
+        loader.setSrc(originalRes);
+
+        final AutoCropAndResize cropAndResize = new AutoCropAndResize();
+        cropAndResize.setTargetHeight(169);
+        cropAndResize.setTargetWidth(298);
+
+        final ImageOperationChain generator = new ImageOperationChain();
+        generator.addOperation(loader);
+        generator.addOperation(cropAndResize);
+        generator.setOutputFormat(outputFormat);
+        generator.setName("test");
+
+        final DefaultImageStreamer imageStreamer = new DefaultImageStreamer();
+
+        final String resFile = getClass().getSimpleName() + "test-quality1-result-basic.png";
+        cropAndResize.setResizer(new BasicResizer());
+        imageStreamer.serveImage(generator, null, new FileOutputStream(resFile));
+
+        final String resFile2 = getClass().getSimpleName() + "test-quality1-result-multistep.png";
+        cropAndResize.setResizer(new MultiStepResizer());
+        imageStreamer.serveImage(generator, null, new FileOutputStream(resFile2));
+
+        final String resFile3 = getClass().getSimpleName() + "test-quality1-result-scalearea-averaging.png";
         cropAndResize.setResizer(new ScaleAreaAveragingResizer());
         imageStreamer.serveImage(generator, null, new FileOutputStream(resFile3));
 
