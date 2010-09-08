@@ -53,7 +53,7 @@ public abstract class AbstractImagingTest extends TestCase {
     private static final boolean KEEP_GENERATED_FILES_FOR_INSPECTION = false;
     private static final boolean OPEN_GENERATED_FILES_FOR_INSPECTION = false;
 
-    protected static final OutputFormat BASIC_JPEG = new OutputFormat("jpeg", false, 80, null);
+    protected static final OutputFormat BASIC_JPEG = new OutputFormat("jpeg", false, 80, null, false);
     private static final Set<String> generatedFiles = new HashSet<String>();
 
     protected void setUp() throws Exception {

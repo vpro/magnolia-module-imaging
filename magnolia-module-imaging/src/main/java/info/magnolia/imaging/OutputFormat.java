@@ -30,15 +30,17 @@ public class OutputFormat {
     private boolean progressive;
     private int quality;
     private String compressionType;
+    private boolean dynamicFormatType;
 
     public OutputFormat() {
     }
 
-    public OutputFormat(String formatName, boolean progressive, int quality, String compressionType) {
+    public OutputFormat(String formatName, boolean progressive, int quality, String compressionType, boolean dynamicFormatType) {
         this.formatName = formatName;
         this.progressive = progressive;
         this.quality = quality;
         this.compressionType = compressionType;
+        this.dynamicFormatType = dynamicFormatType;
     }
 
     public void applyTo(ImageWriteParam param) {
@@ -100,5 +102,12 @@ public class OutputFormat {
     public void setCompressionType(String compressionType) {
         this.compressionType = compressionType;
     }
+    
+    public boolean getDynamicFormatType() {
+        return dynamicFormatType;
+    }
 
+    public void setDynamicFormatType(boolean dynamicFormatType) {
+        this.dynamicFormatType = dynamicFormatType;
+    }
 }

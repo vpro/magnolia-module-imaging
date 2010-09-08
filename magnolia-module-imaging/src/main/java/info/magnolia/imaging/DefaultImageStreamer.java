@@ -22,9 +22,15 @@ import javax.imageio.ImageTypeSpecifier;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
+
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 
 /**
@@ -37,9 +43,30 @@ import java.util.Iterator;
  */
 public class DefaultImageStreamer<P> implements ImageStreamer<P> {
 
+    private static final Logger log = LoggerFactory.getLogger(DefaultImageStreamer.class);
+
     public void serveImage(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> params, OutputStream out) throws ImagingException, IOException {
         final BufferedImage img = generator.generate(params);
-
+               
+        if (generator.getOutputFormat().getDynamicFormatType() == true){
+            try {
+                P parameter = params.getParameter();
+                String extension = (String) parameter.getClass().getMethod("getExtension", null).invoke(parameter, null);
+                generator.getOutputFormat().setFormatName(extension);
+                if (StringUtils.lowerCase(extension).equals("gif")){
+                    generator.getOutputFormat().setCompressionType("lzw");
+                    }else{
+                        generator.getOutputFormat().setCompressionType(null);
+                    }
+            } catch (IllegalAccessException e) {
+                log.error("Exception caught: " + e.getMessage(), e);
+            } catch (InvocationTargetException e) {
+                log.error("Exception caught: " + e.getMessage(), e);
+            } catch (NoSuchMethodException e) {
+                log.error("Exception caught: " + e.getMessage(), e);
+            }
+        }
+                
         // if source is transparent and format doesn't support transparency, we have to do some handy work
         final BufferedImage fixedImg = ImageUtil.flattenTransparentImageForOpaqueFormat(img, generator.getOutputFormat());
 
