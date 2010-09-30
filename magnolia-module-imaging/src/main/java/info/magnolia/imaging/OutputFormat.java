@@ -35,6 +35,10 @@ public class OutputFormat {
     public OutputFormat() {
     }
 
+    public OutputFormat(String formatName, boolean progressive, int quality, String compressionType) {
+        this(formatName, progressive, quality, compressionType, false);
+    }
+    
     public OutputFormat(String formatName, boolean progressive, int quality, String compressionType, boolean dynamicFormatType) {
         this.formatName = formatName;
         this.progressive = progressive;
