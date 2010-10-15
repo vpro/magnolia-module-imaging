@@ -54,11 +54,21 @@ public class MultiStepResizer extends BasicResizer {
                 if (w < targetWidth) {
                     w = targetWidth;
                 }
+            } else if (w < targetWidth) {
+                w = targetWidth * 2;
+                if (w > targetWidth) {
+                    w = targetWidth;
+                }
             }
 
             if (h > targetHeight) {
                 h /= 2;
                 if (h < targetHeight) {
+                    h = targetHeight;
+                }
+            } else if (h < targetHeight) {
+                h = targetHeight * 2;
+                if (h > targetHeight) {
                     h = targetHeight;
                 }
             }
@@ -72,7 +82,10 @@ public class MultiStepResizer extends BasicResizer {
                 g2.drawImage(ret, 0, 0, w, h, null);
             }
             g2.dispose();
-
+            if (ret != null) {
+                // if we are generating many images, flush native resources w/o waiting for GC to do this for you
+                ret.flush();
+            }
             ret = tmp;
             firstStep = false;
         } while (w != targetWidth || h != targetHeight);
