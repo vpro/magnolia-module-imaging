@@ -32,6 +32,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * -- this class is a remnant of the previous incarnation of m-m-imagefiltering - only kept around for reference until m-m-cropui is back into a useable state.
+ *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  * @deprecated for 3.5, we should use a SaveHandler, this is only to be compatible with 3.0

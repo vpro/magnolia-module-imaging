@@ -49,6 +49,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
+ * -- this class is a remnant of the previous incarnation of m-m-imagefiltering - only kept around for reference until m-m-cropui is back into a useable state.
+ * 
  * In a given node, searches for binary properties with associated cropper properties,
  * and generates appropriate resized/cropped images.
  *
