@@ -143,6 +143,11 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
             if (!nodeData.isExist()) {
                 return null;
             }
+            if (nodeData.getStream() == null) {
+                // binary data were not stored yet
+                return null;
+            }
+
             if (cachingStrategy.shouldRegenerate(nodeData, parameterProvider)) {
                 return null;
             }
