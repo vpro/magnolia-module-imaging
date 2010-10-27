@@ -83,38 +83,43 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
         this.delegate = delegate;
 
         this.currentJobs = new MapMaker()
-//                    .concurrencyLevel(32)
-//                    .softKeys() weakKeys()
-//                    .softValues() weakValues()
-                // entries from the map will be removed 500ms after their creation,
-                // thus unblocking further requests for an equivalent job.
-                .expiration(500, TimeUnit.MILLISECONDS)
+        //                    .concurrencyLevel(32)
+        //                    .softKeys() weakKeys()
+        //                    .softValues() weakValues()
+        // entries from the map will be removed 500ms after their creation,
+        // thus unblocking further requests for an equivalent job.
+        .expiration(500, TimeUnit.MILLISECONDS)
 
-                .makeComputingMap(new Function<ImageGenerationJob<P>, NodeData>() {
-                    public NodeData apply(ImageGenerationJob<P> job) {
-                        try {
-                            return generateAndStore(job.getGenerator(), job.getParams());
-                        } catch (IOException e) {
-                            // the map will further wrap these in ComputationExceptions, and we will, in turn, unwrap them ...
-                            throw new RuntimeException(e);
-                        } catch (ImagingException e) {
-                            // the map will further wrap these in ComputationExceptions, and we will, in turn, unwrap them ...
-                            throw new RuntimeException(e);
-                        }
-                    }
-                });
+        .makeComputingMap(new Function<ImageGenerationJob<P>, NodeData>() {
+            public NodeData apply(ImageGenerationJob<P> job) {
+                try {
+                    return generateAndStore(job.getGenerator(), job.getParams());
+                } catch (IOException e) {
+                    // the map will further wrap these in ComputationExceptions, and we will, in turn, unwrap them ...
+                    throw new RuntimeException(e);
+                } catch (ImagingException e) {
+                    // the map will further wrap these in ComputationExceptions, and we will, in turn, unwrap them ...
+                    throw new RuntimeException(e);
+                }
+            }
+        });
     }
 
     public void serveImage(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> params, OutputStream out) throws IOException, ImagingException {
         NodeData imgProp = fetchFromCache(generator, params);
         if (imgProp == null) {
+            System.out.println(Thread.currentThread().getName() + ":: Image prop not cached");
             // image is not in cache or should be regenerated
             try {
                 imgProp = currentJobs.get(new ImageGenerationJob<P>(generator, params));
+                System.out.println(Thread.currentThread().getName() + ":: created image from " + params.getParameter() + " using " + generator);
             } catch (ComputationException e) {
                 // thrown if the ComputingMap's Function failed
                 unwrapRuntimeException(e);
             }
+        } else {
+            System.out.println(Thread.currentThread().getName() + ":: using cached image " + imgProp + (imgProp.getStream() == null ? " without" : " with") + " binary data attached.");
+
         }
         serve(imgProp, out);
     }
@@ -150,7 +155,7 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
     protected void serve(NodeData binary, OutputStream out) throws IOException {
         final InputStream in = binary.getStream();
         if (in == null) {
-            throw new IllegalStateException("Can't get InputStream from " + binary.getHandle());
+            throw new IllegalStateException("Can't get InputStream from " + binary.getHandle() + " on " + Thread.currentThread().getName() + " at " + System.currentTimeMillis());
         }
         IOUtils.copy(in, out);
     }

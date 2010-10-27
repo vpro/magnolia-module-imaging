@@ -132,6 +132,7 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
         }
         executor.shutdown();
         executor.awaitTermination(30, TimeUnit.SECONDS);
+        log.info(Thread.currentThread().getName() + ":: Executor terminated at " + System.currentTimeMillis());
 
         for (Future<?> future : futures) {
             assertTrue(future.isDone());
