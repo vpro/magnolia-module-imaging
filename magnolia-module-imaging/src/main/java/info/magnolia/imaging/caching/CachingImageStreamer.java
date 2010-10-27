@@ -108,18 +108,13 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
     public void serveImage(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> params, OutputStream out) throws IOException, ImagingException {
         NodeData imgProp = fetchFromCache(generator, params);
         if (imgProp == null) {
-            System.out.println(Thread.currentThread().getName() + ":: Image prop not cached");
             // image is not in cache or should be regenerated
             try {
                 imgProp = currentJobs.get(new ImageGenerationJob<P>(generator, params));
-                System.out.println(Thread.currentThread().getName() + ":: created image from " + params.getParameter() + " using " + generator);
             } catch (ComputationException e) {
                 // thrown if the ComputingMap's Function failed
                 unwrapRuntimeException(e);
             }
-        } else {
-            System.out.println(Thread.currentThread().getName() + ":: using cached image " + imgProp + (imgProp.getStream() == null ? " without" : " with") + " binary data attached.");
-
         }
         serve(imgProp, out);
     }
@@ -143,9 +138,12 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
             if (!nodeData.isExist()) {
                 return null;
             }
-            if (nodeData.getStream() == null) {
+            InputStream in = nodeData.getStream();
+            if (in == null) {
                 // binary data were not stored yet
                 return null;
+            } else {
+                IOUtils.closeQuietly(in);
             }
 
             if (cachingStrategy.shouldRegenerate(nodeData, parameterProvider)) {
@@ -160,9 +158,11 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
     protected void serve(NodeData binary, OutputStream out) throws IOException {
         final InputStream in = binary.getStream();
         if (in == null) {
-            throw new IllegalStateException("Can't get InputStream from " + binary.getHandle() + " on " + Thread.currentThread().getName() + " at " + System.currentTimeMillis());
+            throw new IllegalStateException("Can't get InputStream from " + binary.getHandle());
         }
         IOUtils.copy(in, out);
+        IOUtils.closeQuietly(in);
+        IOUtils.closeQuietly(out);
     }
 
     protected NodeData generateAndStore(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> parameterProvider) throws IOException, ImagingException {

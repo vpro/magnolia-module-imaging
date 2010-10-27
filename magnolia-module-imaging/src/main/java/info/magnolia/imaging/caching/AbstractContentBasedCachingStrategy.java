@@ -47,8 +47,6 @@ public abstract class AbstractContentBasedCachingStrategy<P> implements CachingS
             // this is assuming our parameter's mgnl:metaData was updated when updating any of its properties/binaries
             final Calendar srcLastMod = getContent(parameterProvider.getParameter()).getMetaData().getModificationDate();
 
-            System.out.println(Thread.currentThread().getName() + ":: cache:" + cacheLastMod);
-            System.out.println(Thread.currentThread().getName() + ":: src  :" + srcLastMod);
             //we should always check for the other one anyway since getModificationDate() _can_ return null
             if (srcLastMod == null ) {
                 // no srcLastMod update, means likely also no source at all ...

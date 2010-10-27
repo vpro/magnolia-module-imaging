@@ -38,6 +38,7 @@ import java.io.IOException;
  */
 public class ImagingServletTest extends TestCase {
 
+    @Override
     protected void tearDown() throws Exception {
         MgnlContext.setInstance(null);
         super.tearDown();
@@ -46,6 +47,7 @@ public class ImagingServletTest extends TestCase {
     public void testRequestToFactoryToGeneratorToImage() throws Exception {
         final ByteArrayOutputStream fakedOut = new ByteArrayOutputStream();
         final ServletOutputStream servletOut = new ServletOutputStream() {
+            @Override
             public void write(int b) throws IOException {
                 fakedOut.write(b);
             }
@@ -64,8 +66,8 @@ public class ImagingServletTest extends TestCase {
 
         expect(node.getNodeData("generated-image")).andReturn(prop);
         expect(prop.isExist()).andReturn(true);
-        expect(prop.getStream()).andReturn(new ByteArrayInputStream(new byte[]{1,2,3}));
-//        expect(node.hasNodeData("generated-image")).andReturn(false);
+        expect(prop.getStream()).andReturn(new ByteArrayInputStream(new byte[]{1,2,3})).times(2);
+        //        expect(node.hasNodeData("generated-image")).andReturn(false);
         expect(req.getPathInfo()).andReturn("/myGenerator/someWorkspace/some/path/to/a/node");
         expect(req.getRequestURI()).andReturn("dummyUri");
         expect(res.getOutputStream()).andReturn(servletOut);
@@ -111,9 +113,9 @@ public class ImagingServletTest extends TestCase {
         // TODO - disabled for now
         // yes, we could instead feed the test with a FileOutputStream instead of doing the shenanigans of reading/saving, but this piece below shouldn't stay here
         // it just generates a small black jpeg...
-//        final BufferedImage img = ImageIO.read(new ByteArrayInputStream(fakedOut.toByteArray()));
-//        final String filename = getClass().getSimpleName() + ".jpg";
-//        ImageIO.write(img, "jpg", new File(filename));
+        //        final BufferedImage img = ImageIO.read(new ByteArrayInputStream(fakedOut.toByteArray()));
+        //        final String filename = getClass().getSimpleName() + ".jpg";
+        //        ImageIO.write(img, "jpg", new File(filename));
         // Runtime.getRuntime().exec("open " + filename);
     }
 

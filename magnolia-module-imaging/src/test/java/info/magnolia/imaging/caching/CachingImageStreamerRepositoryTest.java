@@ -45,6 +45,8 @@ import org.easymock.IMocksControl;
 
 import javax.imageio.ImageIO;
 import javax.jcr.RepositoryException;
+
+import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -82,6 +84,11 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
     }
 
     public void testRequestForSimilarUncachedImageOnlyGeneratesItOnce() throws Exception {
+        final GraphicsEnvironment ge =  GraphicsEnvironment.getLocalGraphicsEnvironment();
+        if (!ge.isHeadless()) {
+            log.warn("This test should run in headless mode as the server will likely run headless too!!!!!");
+        }
+
         final HierarchyManager srcHM = MgnlContext.getHierarchyManager("website");
         final String srcPath = "/foo/bar";
         ContentUtil.createPath(srcHM, srcPath);
@@ -132,7 +139,6 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
         }
         executor.shutdown();
         executor.awaitTermination(30, TimeUnit.SECONDS);
-        log.info(Thread.currentThread().getName() + ":: Executor terminated at " + System.currentTimeMillis());
 
         for (Future<?> future : futures) {
             assertTrue(future.isDone());
