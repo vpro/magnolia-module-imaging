@@ -47,7 +47,8 @@ public abstract class AbstractContentBasedCachingStrategy<P> implements CachingS
             // this is assuming our parameter's mgnl:metaData was updated when updating any of its properties/binaries
             final Calendar srcLastMod = getContent(parameterProvider.getParameter()).getMetaData().getModificationDate();
 
-            return cacheLastMod.before(srcLastMod);
+            // some JVM impls do not like if param date is null and we should always check for the other one anyway since getModificationDate() _can_ return null
+            return srcLastMod == null ? false : cacheLastMod == null ? true : cacheLastMod.before(srcLastMod);
         } catch (RepositoryException e) {
             throw new RuntimeException(e);
         }
