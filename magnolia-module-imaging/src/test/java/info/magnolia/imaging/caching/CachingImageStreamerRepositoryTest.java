@@ -258,9 +258,9 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
         for (Future<?> future : futures) {
             assertTrue(future.isDone());
             assertFalse(future.isCancelled());
-            // ignore the results of TestJob - all we care about is if an exception was thrown
-            // and if there was any, it is kept in Future until we call Future.get()
-            future.get();
+            // ignore the results of TestJob - but if there was an exception thrown by TestJob.call(),
+            // it is only thrown back at us when we call get() below. (so the test will fail badly if the job threw an exception)
+            Object ignored = future.get();
         }
 
         shutdownRepository(true);
