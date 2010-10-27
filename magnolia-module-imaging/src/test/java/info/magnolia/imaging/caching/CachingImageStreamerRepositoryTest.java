@@ -118,7 +118,7 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
         final ImageStreamer streamer = new CachingImageStreamer(hm, ppf.getCachingStrategy(), new DefaultImageStreamer());
 
         // Generator instances will always be the same (including paramProvFac)
-        // since they are instanciated with the module config and c2b.
+        // since they are instantiated with the module config and c2b.
         // ParamProv is a new instance every time.
         // streamer can (must) be the same - once single HM, one cache.
 
@@ -142,6 +142,10 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
         }
 
         final NodeData cachedNodeData = hm.getNodeData("/test/website/foo/bar/generated-image");
+        // update node meta data
+        Content cachedNode = hm.getContent("/test/website/foo/bar");
+        cachedNode.getMetaData().setModificationDate();
+        cachedNode.save();
         final InputStream res = cachedNodeData.getStream();
         final ByteArrayOutputStream cachedOut = new ByteArrayOutputStream();
         IOUtils.copy(res, cachedOut);
@@ -290,6 +294,7 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
     }
 
     // TODO - this is an ugly hack to workaround MAGNOLIA-2593 - we should review RepositoryTestCase
+    @Override
     protected void initDefaultImplementations() throws IOException {
         //MgnlTestCase clears factory before running this method, so we have to instrument factory here rather then in setUp() before calling super.setUp()
         ModuleRegistry registry = createNiceMock(ModuleRegistry.class);
@@ -311,6 +316,7 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
             }
         };
         final ModuleManagerImpl fakeModuleManager = new ModuleManagerImpl(null, fakeReader) {
+            @Override
             public List loadDefinitions() throws ModuleManagementException {
                 // TODO Auto-generated method stub
                 return new ArrayList();
@@ -357,7 +363,7 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
     }
 
     replay(hm, root, t, m, p, y);
-    */
+     */
 
     private static class TestParameterProviderFactory implements ParameterProviderFactory {
         private final HierarchyManager srcHM;
@@ -390,6 +396,7 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
             super(MgnlContext.getHierarchyManager(repositoryId));
         }
 
+        @Override
         public synchronized void save() throws RepositoryException {
             if (saved) {
                 fail("save() was called more than once");
