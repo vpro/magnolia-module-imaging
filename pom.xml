@@ -21,9 +21,9 @@
     <url>http://jira.magnolia-cms.com/browse/MGNLIMG</url>
   </issueManagement>
   <scm>
-    <connection>scm:svn:http://svn.magnolia-cms.com/svn/enterprise/imaging/trunk</connection>
-    <developerConnection>scm:svn:http://svn.magnolia-cms.com/svn/enterprise/imaging/trunk</developerConnection>
-    <url>http://svn.magnolia-cms.com/view/enterprise/imaging/trunk</url>
+    <connection>scm:svn:http://svn.magnolia-cms.com/svn/enterprise/imaging/branches/magnolia-module-imaging-2.0</connection>
+    <developerConnection>scm:svn:http://svn.magnolia-cms.com/svn/enterprise/imaging/branches/magnolia-module-imaging-2.0</developerConnection>
+    <url>http://svn.magnolia-cms.com/view/enterprise/imaging/branches/magnolia-module-imaging-2.0</url>
   </scm>
 
   <modules>
