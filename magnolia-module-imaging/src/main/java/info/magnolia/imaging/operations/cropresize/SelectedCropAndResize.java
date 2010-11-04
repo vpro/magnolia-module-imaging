@@ -80,7 +80,7 @@ public class SelectedCropAndResize extends AbstractCropAndResize<ParameterProvid
         if (StringUtils.isEmpty(jsonString)) {
             return null;
         }
-        final JSONObject json = new JSONObject(jsonString);
+        final JSONObject json = JSONObject.fromObject(jsonString);
         final Map map = (Map) JSONObject.toBean(json, Map.class, Collections.singletonMap("CropperInfo", CroppingInfo.class));
         return (CroppingInfo) map.get("CropperInfo");
     }
