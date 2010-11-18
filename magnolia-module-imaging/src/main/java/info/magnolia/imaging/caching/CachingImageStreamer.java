@@ -182,7 +182,7 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
             final ByteArrayInputStream tempIn = new ByteArrayInputStream(tempOut.toByteArray());
             imageData.setValue(tempIn);
             // TODO mimetype, lastmod, and other attributes ?
-            imageData.setAttribute(FileProperties.PROPERTY_CONTENTTYPE, "image/" + generator.getOutputFormat().getFormatName());
+            imageData.setAttribute(FileProperties.PROPERTY_CONTENTTYPE, "image/" + generator.getOutputFormat(parameterProvider).getFormatName());
             imageData.setAttribute(FileProperties.PROPERTY_LASTMODIFIED, Calendar.getInstance());
 
             // Update metadata of the cache *after* a succesfull image generation (creationDate has been set when creating

@@ -47,30 +47,13 @@ public class DefaultImageStreamer<P> implements ImageStreamer<P> {
 
     public void serveImage(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> params, OutputStream out) throws ImagingException, IOException {
         final BufferedImage img = generator.generate(params);
-               
-        if (generator.getOutputFormat().getDynamicFormatType() == true){
-            try {
-                P parameter = params.getParameter();
-                String extension = (String) parameter.getClass().getMethod("getExtension", null).invoke(parameter, null);
-                generator.getOutputFormat().setFormatName(extension);
-                if (StringUtils.lowerCase(extension).equals("gif")){
-                    generator.getOutputFormat().setCompressionType("lzw");
-                    }else{
-                        generator.getOutputFormat().setCompressionType(null);
-                    }
-            } catch (IllegalAccessException e) {
-                log.error("Exception caught: " + e.getMessage(), e);
-            } catch (InvocationTargetException e) {
-                log.error("Exception caught: " + e.getMessage(), e);
-            } catch (NoSuchMethodException e) {
-                log.error("Exception caught: " + e.getMessage(), e);
-            }
-        }
-                
-        // if source is transparent and format doesn't support transparency, we have to do some handy work
-        final BufferedImage fixedImg = ImageUtil.flattenTransparentImageForOpaqueFormat(img, generator.getOutputFormat());
 
-        write(fixedImg, out, generator.getOutputFormat());
+        OutputFormat outputFormat = generator.getOutputFormat(params);
+
+        // if source is transparent and format doesn't support transparency, we have to do some handy work
+        final BufferedImage fixedImg = ImageUtil.flattenTransparentImageForOpaqueFormat(img, outputFormat);
+
+        write(fixedImg, out, outputFormat);
     }
 
     protected void write(final BufferedImage img, final OutputStream out, final OutputFormat outputFormat) throws IOException {

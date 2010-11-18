@@ -25,25 +25,32 @@ import javax.imageio.ImageWriteParam;
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
-public class OutputFormat {
+public class OutputFormat implements Cloneable {
     private String formatName;
     private boolean progressive;
     private int quality;
     private String compressionType;
+
+    /**
+     * @deprecated since 2.1, implement {@link ImageGenerator#getOutputFormat(ParameterProvider)} instead
+     */
     private boolean dynamicFormatType;
 
     public OutputFormat() {
     }
 
     public OutputFormat(String formatName, boolean progressive, int quality, String compressionType) {
-        this(formatName, progressive, quality, compressionType, false);
-    }
-    
-    public OutputFormat(String formatName, boolean progressive, int quality, String compressionType, boolean dynamicFormatType) {
         this.formatName = formatName;
         this.progressive = progressive;
         this.quality = quality;
         this.compressionType = compressionType;
+    }
+
+    /**
+     * @deprecated since 2.1, implement {@link ImageGenerator#getOutputFormat(ParameterProvider)} instead
+     */
+    public OutputFormat(String formatName, boolean progressive, int quality, String compressionType, boolean dynamicFormatType) {
+        this(formatName, progressive, quality, compressionType);
         this.dynamicFormatType = dynamicFormatType;
     }
 
@@ -106,12 +113,23 @@ public class OutputFormat {
     public void setCompressionType(String compressionType) {
         this.compressionType = compressionType;
     }
-    
+
+    /**
+     * @deprecated since 2.1, implement {@link ImageGenerator#getOutputFormat(ParameterProvider)} instead
+     */
     public boolean getDynamicFormatType() {
         return dynamicFormatType;
     }
 
+    /**
+     * @deprecated since 2.1, implement {@link ImageGenerator#getOutputFormat(ParameterProvider)} instead
+     */
     public void setDynamicFormatType(boolean dynamicFormatType) {
         this.dynamicFormatType = dynamicFormatType;
+    }
+
+    @Override
+    public OutputFormat clone() throws CloneNotSupportedException {
+        return (OutputFormat) super.clone();
     }
 }

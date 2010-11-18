@@ -112,7 +112,7 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
         final ImageGenerator<ParameterProvider<Content>> generator = generatorCtrl.createMock(ImageGenerator.class);
         expect(generator.getParameterProviderFactory()).andReturn(ppf).anyTimes();
         expect(generator.getName()).andReturn("test").anyTimes();
-        expect(generator.getOutputFormat()).andReturn(png).anyTimes();
+        expect(generator.getOutputFormat(isA(ParameterProvider.class))).andReturn(png).anyTimes();
 
         // aaaaand finally, here's the real reason for this test !
         expect(generator.generate(isA(ParameterProvider.class))).andReturn(dummyImg).times(1);

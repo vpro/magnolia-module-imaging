@@ -140,7 +140,7 @@ public class ImagingServletTest extends TestCase {
             return ppFactory;
         }
 
-        public OutputFormat getOutputFormat() {
+        public OutputFormat getOutputFormat(P params) {
             return outputFormat;
         }
 

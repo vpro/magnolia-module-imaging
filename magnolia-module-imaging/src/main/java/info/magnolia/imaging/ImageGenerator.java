@@ -31,7 +31,7 @@ public interface ImageGenerator<P extends ParameterProvider<?>> {
 
     ParameterProviderFactory getParameterProviderFactory();
 
-    OutputFormat getOutputFormat();
+    OutputFormat getOutputFormat(P params);
 
     String getName();
 }

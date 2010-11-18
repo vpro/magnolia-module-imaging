@@ -34,6 +34,10 @@ import java.util.List;
 public class ImageOperationChain<P extends ParameterProvider<?>> implements ImageOperation<P>, ImageGenerator<P> {
     private final List<ImageOperation<P>> operations;
     private ParameterProviderFactory parameterProviderFactory;
+
+    /**
+     * The output format as configured by c2b.
+     */
     private OutputFormat outputFormat;
     private String name;
 
@@ -76,6 +80,13 @@ public class ImageOperationChain<P extends ParameterProvider<?>> implements Imag
 
     public OutputFormat getOutputFormat() {
         return outputFormat;
+    }
+
+    /**
+     * Returns the static output format as configured with c2b by delegating to {@link #getOutputFormat()}.
+     */
+    public OutputFormat getOutputFormat(P params) {
+        return getOutputFormat();
     }
 
     public void setOutputFormat(OutputFormat outputFormat) {
