@@ -23,14 +23,9 @@ import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
 
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 
 /**
@@ -42,8 +37,6 @@ import java.util.Iterator;
  * @version $Revision: $ ($Author: $)
  */
 public class DefaultImageStreamer<P> implements ImageStreamer<P> {
-
-    private static final Logger log = LoggerFactory.getLogger(DefaultImageStreamer.class);
 
     public void serveImage(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> params, OutputStream out) throws ImagingException, IOException {
         final BufferedImage img = generator.generate(params);
