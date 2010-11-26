@@ -8,7 +8,7 @@
   </parent>
   <artifactId>magnolia-module-imaging-fix-preload-awt</artifactId>
   <packaging>jar</packaging>
-  <name>magnolia-module-imaging-fix-preload-awt</name>
+  <name>Magnolia Imaging (Preload AWT Fix)</name>
   <description>Fix - ensure AWT is loaded on startup</description>
 
   <dependencies>
