@@ -17,7 +17,9 @@ package info.magnolia.imaging.parameters;
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.HierarchyManager;
 import info.magnolia.cms.core.NodeData;
+import info.magnolia.cms.core.NonExistingNodeData;
 import info.magnolia.cms.util.ContentUtil;
+import info.magnolia.cms.util.NodeDataWrapper;
 import info.magnolia.context.MgnlContext;
 import info.magnolia.imaging.AbstractRepositoryTestCase;
 import info.magnolia.imaging.ParameterProvider;
@@ -35,6 +37,7 @@ public class NodeDataParameterProviderFactoryTest extends AbstractRepositoryTest
     private NodeData srcProp;
     private HttpServletRequest req;
 
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         final HierarchyManager srcHM = MgnlContext.getHierarchyManager("website");
@@ -61,18 +64,13 @@ public class NodeDataParameterProviderFactoryTest extends AbstractRepositoryTest
         verify(req);
     }
 
-    public void testYieldsAProperExceptionIfPropertyDoesNotExist() throws Exception {
+    public void testReturnsWrappedNonExistingNodeDataIfPropertyDoesNotExist() throws Exception {
         expect(req.getPathInfo()).andReturn("/generator/website/some/node/booyah");
         replay(req);
         final NodeDataParameterProviderFactory factory = new NodeDataParameterProviderFactory();
-        try {
-            final ParameterProvider<NodeData> pp = factory.newParameterProviderFor(req);
-            final NodeData data = pp.getParameter();
-            fail();
-        } catch (RuntimeException t) {
-            // TODO - fix type of exception
-            assertEquals("Can't load source from /some/node/booyah from workspace website", t.getMessage());
-        }
+        final ParameterProvider<NodeData> pp = factory.newParameterProviderFor(req);
+        final NodeData data = pp.getParameter();
+        assertTrue(((NodeDataWrapper) data).getWrappedNodeData() instanceof NonExistingNodeData);
         verify(req);
     }
 

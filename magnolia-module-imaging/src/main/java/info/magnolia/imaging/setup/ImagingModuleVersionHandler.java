@@ -15,19 +15,18 @@
 package info.magnolia.imaging.setup;
 
 import info.magnolia.cms.core.Content;
-import info.magnolia.cms.security.Security;
-import info.magnolia.cms.security.User;
 import info.magnolia.module.DefaultModuleVersionHandler;
 import info.magnolia.module.InstallContext;
 import info.magnolia.module.delta.AbstractRepositoryTask;
-import info.magnolia.module.delta.AbstractTask;
+import info.magnolia.module.delta.AddRoleToUserTask;
 import info.magnolia.module.delta.BootstrapSingleResource;
 import info.magnolia.module.delta.DeltaBuilder;
 import info.magnolia.module.delta.TaskExecutionException;
 
-import javax.jcr.RepositoryException;
 import java.util.Collections;
 import java.util.List;
+
+import javax.jcr.RepositoryException;
 
 
 /**
@@ -47,13 +46,9 @@ public class ImagingModuleVersionHandler extends DefaultModuleVersionHandler {
     @Override
     protected List getExtraInstallTasks(InstallContext installContext) {
         // TODO - see MGNLIMG-36
-        return Collections.singletonList(new AbstractTask("Add the base role to the anonymous user", "The anonymous user needs write permission so that images can be cached on public instances.") {
-
-            public void execute(InstallContext installContext) throws TaskExecutionException {
-                User anonymous = Security.getUserManager().getUser("anonymous");
-                anonymous.addRole("imaging-base");
-            }
-        });
+        return Collections.singletonList(
+                new AddRoleToUserTask("Add the base role to the anonymous user", "anonymous", "imaging-base")
+        );
     }
 
     private static class CreateConfigNodeTask extends AbstractRepositoryTask {

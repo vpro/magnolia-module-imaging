@@ -12,7 +12,7 @@
   <name>magnolia-module-imaging-parent</name>
   <description>A Magnolia module that provides image generation and filtering capabilities.</description>
   <properties>
-    <magnoliaVersion>4.1</magnoliaVersion>
+    <magnoliaVersion>4.4</magnoliaVersion>
     <javaVersion>1.5</javaVersion>
     <documentationURL>http://documentation.magnolia-cms.com/modules/imaging.html</documentationURL>
   </properties>
