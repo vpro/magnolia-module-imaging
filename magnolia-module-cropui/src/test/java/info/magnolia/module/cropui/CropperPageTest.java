@@ -43,6 +43,11 @@ public class CropperPageTest extends TestCase {
         SystemProperty.setProperty(TypeMapping.class.getName(), TypeMappingImpl.class.getName());
     }
 
+    @Override
+    protected void tearDown() throws Exception {
+        SystemProperty.getProperties().clear();
+    }
+
     /**
      * testFromNodeAlwaysSetsConfigNameToNodeNameAndUsesLabelOrNameOrNodeNameToSetConfigLabel().
      */
