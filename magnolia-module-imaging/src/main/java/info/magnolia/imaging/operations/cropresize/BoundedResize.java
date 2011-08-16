@@ -30,10 +30,12 @@ public class BoundedResize extends AbstractCropAndResize {
     private int maxWidth;
     private int maxHeight;
 
+    @Override
     protected Coords getCroopCoords(BufferedImage source, ParameterProvider params) throws ImagingException {
         return new Coords(0, 0, source.getWidth(), source.getHeight());
     }
 
+    @Override
     protected Size getEffectiveTargetSize(BufferedImage source, Coords cropCoords, ParameterProvider params) {
         return Size.maxSizeComplyingWithSourceRatio(source.getWidth(), source.getHeight(), maxWidth, maxHeight);
     }

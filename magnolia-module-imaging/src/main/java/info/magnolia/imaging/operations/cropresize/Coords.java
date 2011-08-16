@@ -91,6 +91,7 @@ public class Coords implements Serializable {
 
     // generated methods:
 
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -117,6 +118,7 @@ public class Coords implements Serializable {
         return true;
     }
 
+    @Override
     public int hashCode() {
         int result;
         result = x1;
@@ -126,6 +128,7 @@ public class Coords implements Serializable {
         return result;
     }
 
+    @Override
     public String toString() {
         return "Coords{" +
                 "x1=" + x1 +

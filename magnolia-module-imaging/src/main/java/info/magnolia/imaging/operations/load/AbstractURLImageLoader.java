@@ -37,6 +37,7 @@ public abstract class AbstractURLImageLoader<P extends ParameterProvider<?>> ext
         super(backgroundColor);
     }
 
+    @Override
     protected BufferedImage loadSource(P filterParams) throws ImagingException {
         final URL url = getAndValidateUrl(filterParams);
         try {

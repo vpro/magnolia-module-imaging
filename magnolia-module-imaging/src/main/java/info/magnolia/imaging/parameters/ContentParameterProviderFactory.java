@@ -33,6 +33,7 @@ import javax.jcr.RepositoryException;
  */
 public class ContentParameterProviderFactory extends AbstractWorkspaceAndPathParameterProviderFactory<Content> {
 
+    @Override
     protected ParameterProvider<Content> newParameterProviderForPath(final HierarchyManager hm, final String path) throws RepositoryException {
         final Content node = hm.getContent(path);
         return new ContentParameterProvider(new SimpleEqualityContentWrapper(node));

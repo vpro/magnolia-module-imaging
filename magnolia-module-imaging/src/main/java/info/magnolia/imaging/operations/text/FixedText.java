@@ -24,6 +24,7 @@ import info.magnolia.imaging.ParameterProvider;
 public class FixedText<P extends ParameterProvider<?>> extends AbstractTextOverlay<P> {
     private String text;
 
+    @Override
     protected String getText(P params) {
         // TODO : i18n
         return getText();

@@ -41,11 +41,13 @@ import java.io.IOException;
 public class ImagingServlet extends HttpServlet {
     private boolean storeGeneratedImages = true;
 
+    @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         storeGeneratedImages = BooleanUtil.toBoolean(config.getInitParameter("storeGeneratedImages"), true);
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         final String generatorName = getImageGeneratorName(request);
         final ImageGenerator generator = getGenerator(generatorName);

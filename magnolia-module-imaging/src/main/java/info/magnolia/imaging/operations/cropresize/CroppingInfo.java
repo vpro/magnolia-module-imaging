@@ -54,6 +54,7 @@ public class CroppingInfo {
 
     // generated equals / hashcode
 
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -74,6 +75,7 @@ public class CroppingInfo {
         return true;
     }
 
+    @Override
     public int hashCode() {
         int result;
         result = (configName != null ? configName.hashCode() : 0);

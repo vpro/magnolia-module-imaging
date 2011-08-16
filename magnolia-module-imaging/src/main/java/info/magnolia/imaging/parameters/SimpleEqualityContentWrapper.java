@@ -36,6 +36,7 @@ public class SimpleEqualityContentWrapper extends ContentWrapper {
         return handle;
     }
 
+    @Override
     public boolean equals(Object o) {
         return isSame((Content) o);
     }
@@ -45,6 +46,7 @@ public class SimpleEqualityContentWrapper extends ContentWrapper {
                 && getHandle().equals(other.getHandle());
     }
 
+    @Override
     public int hashCode() {
         return (31 * getHandle().hashCode()) + getHierarchyManager().getName().hashCode();
     }

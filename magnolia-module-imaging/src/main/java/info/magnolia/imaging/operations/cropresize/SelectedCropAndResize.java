@@ -44,6 +44,7 @@ public class SelectedCropAndResize extends AbstractCropAndResize<ParameterProvid
     private int targetHeight;
     private String cropInfoSiblingPropertySuffix;
 
+    @Override
     protected Coords getCroopCoords(BufferedImage source, ParameterProvider<Content> params) throws ImagingException {
         try {
             final Content imageNode = params.getParameter();
@@ -60,6 +61,7 @@ public class SelectedCropAndResize extends AbstractCropAndResize<ParameterProvid
         }
     }
 
+    @Override
     protected Size getEffectiveTargetSize(BufferedImage source, Coords cropCoords, ParameterProvider<Content> params) {
         return Size.conformToCropRatio(cropCoords, targetWidth, targetHeight);
     }

@@ -25,6 +25,7 @@ import info.magnolia.imaging.parameters.ContentParameterProvider;
 public class TextFromNode extends AbstractTextOverlay<ContentParameterProvider> {
     private String propertyName = "text";
 
+    @Override
     protected String getText(ContentParameterProvider filterParams) {
         final Content node = filterParams.getParameter();
         return node.getNodeData(propertyName).getString();

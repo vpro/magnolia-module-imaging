@@ -41,6 +41,7 @@ public class ClasspathImageLoader<P extends ParameterProvider<?>> extends Abstra
         this.src = src;
     }
 
+    @Override
     protected URL getAndValidateUrl(P filterParams) throws ImagingException {
         final URL url = getClass().getResource(src);
         if (url == null) {

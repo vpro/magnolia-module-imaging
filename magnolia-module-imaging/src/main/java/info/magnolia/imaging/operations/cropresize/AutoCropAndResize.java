@@ -35,6 +35,7 @@ public class AutoCropAndResize extends AbstractCropAndResize {
     private int targetWidth;
     private int targetHeight;
 
+    @Override
     protected Coords getCroopCoords(BufferedImage source, ParameterProvider params) throws ImagingException {
         final int sourceWidth = source.getWidth();
         final int sourceHeight = source.getHeight();
@@ -71,6 +72,7 @@ public class AutoCropAndResize extends AbstractCropAndResize {
     // If either targetWidth or targetHeight is <=0, the ratio of the cropped image will be preserved.
     // If both targetWidth and targetHeight are >0, both will be used, even if they don't match the ratio of the cropped image (thus cropping it).
 
+    @Override
     protected Size getEffectiveTargetSize(BufferedImage source, Coords cropCoords, ParameterProvider params) {
         return Size.conformToCropRatio(cropCoords, targetWidth, targetHeight);
     }

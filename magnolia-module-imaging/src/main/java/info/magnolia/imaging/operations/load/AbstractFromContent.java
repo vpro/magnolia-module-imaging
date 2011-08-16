@@ -30,6 +30,7 @@ import java.io.InputStream;
  */
 public abstract class AbstractFromContent<PT> extends AbstractLoader<ParameterProvider<PT>> {
 
+    @Override
     protected BufferedImage loadSource(ParameterProvider<PT> param) throws ImagingException {
         final NodeData data = getNodeData(param);
         if (!data.isExist() || data.getType() != PropertyType.BINARY) {

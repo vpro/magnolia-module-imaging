@@ -30,6 +30,7 @@ import javax.jcr.RepositoryException;
  */
 public class NodeDataParameterProviderFactory extends AbstractWorkspaceAndPathParameterProviderFactory<NodeData> {
 
+    @Override
     protected ParameterProvider<NodeData> newParameterProviderForPath(final HierarchyManager hm, String path) throws RepositoryException {
         final NodeData nodeData;
         // working around info.magnolia.cms.beans.config.URI2RepositoryMapping's adding of the binary's filename in links...

@@ -36,6 +36,7 @@ public class SimpleEqualityNodeDataWrapper extends NodeDataWrapper {
         return handle;
     }
 
+    @Override
     public boolean equals(Object o) {
         return isSame((NodeData) o);
     }
@@ -45,6 +46,7 @@ public class SimpleEqualityNodeDataWrapper extends NodeDataWrapper {
                 && getHandle().equals(other.getHandle());
     }
 
+    @Override
     public int hashCode() {
         return (31 * getHandle().hashCode()) + getHierarchyManager().getName().hashCode();
     }

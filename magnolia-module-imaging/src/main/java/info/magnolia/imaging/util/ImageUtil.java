@@ -72,6 +72,7 @@ public class ImageUtil {
 
     public static BufferedInputStream newBufferedInputStream(InputStream in) {
         return new BufferedInputStream(in) {
+            @Override
             public String toString() {
                 final StringBuilder sb = new StringBuilder();
                 sb.append("BufferedInputStream");

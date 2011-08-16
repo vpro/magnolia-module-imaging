@@ -45,6 +45,7 @@ class ImageGenerationJob<P> {
         return params;
     }
 
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -57,6 +58,7 @@ class ImageGenerationJob<P> {
         return true;
     }
 
+    @Override
     public int hashCode() {
         int result = generator.hashCode();
         result = 31 * result + params.getParameter().hashCode();

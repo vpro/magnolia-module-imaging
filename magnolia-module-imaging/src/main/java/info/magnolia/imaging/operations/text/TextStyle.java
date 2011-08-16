@@ -40,7 +40,7 @@ public class TextStyle {
     }
 
     public float calculateCharSpacing() {
-        return (float) ((double) getCharSpacing() / TextStyle.CHARSPACING_DIV_FACTOR);
+        return (float) (getCharSpacing() / TextStyle.CHARSPACING_DIV_FACTOR);
     }
 
     //    public Font deriveFont() {

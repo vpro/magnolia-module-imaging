@@ -31,6 +31,7 @@ public class FromContent extends AbstractFromContent<Content> {
 
     private String propertyName = "binary";
 
+    @Override
     protected NodeData getNodeData(ParameterProvider<Content> param) throws ImagingException {
         try {
             final Content node = param.getParameter();

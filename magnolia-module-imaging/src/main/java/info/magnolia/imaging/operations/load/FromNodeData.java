@@ -26,6 +26,7 @@ import info.magnolia.imaging.ParameterProvider;
  */
 public class FromNodeData extends AbstractFromContent<NodeData> {
 
+    @Override
     protected NodeData getNodeData(ParameterProvider<NodeData> param) throws ImagingException {
         return param.getParameter();
     }

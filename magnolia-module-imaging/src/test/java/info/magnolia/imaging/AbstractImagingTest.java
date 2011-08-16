@@ -56,12 +56,14 @@ public abstract class AbstractImagingTest extends TestCase {
     protected static final OutputFormat BASIC_JPEG = new OutputFormat("jpeg", false, 80, null, false);
     private static final Set<String> generatedFiles = new HashSet<String>();
 
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         // this is set via the module descriptor (imaging.xml)
         FactoryUtil.setDefaultImplementation(ImageDecoder.class, DefaultImageIOImageDecoder.class);
     }
 
+    @Override
     protected void tearDown() throws Exception {
         FactoryUtil.clear();
         super.tearDown();
@@ -192,6 +194,7 @@ public abstract class AbstractImagingTest extends TestCase {
      * info.magnolia.imaging.DefaultImageStreamer#write
      */
     private static class SampleImageStreamer extends DefaultImageStreamer {
+        @Override
         protected void write(BufferedImage img, OutputStream out, OutputFormat outputFormat) throws IOException {
             super.write(img, out, outputFormat);
         }
@@ -200,6 +203,7 @@ public abstract class AbstractImagingTest extends TestCase {
     static {
         if (KEEP_GENERATED_FILES_FOR_INSPECTION && OPEN_GENERATED_FILES_FOR_INSPECTION) {
             Runtime.getRuntime().addShutdownHook(new Thread() {
+                @Override
                 public void run() {
                     final StringBuilder command = new StringBuilder("open");
                     for (String file : generatedFiles) {

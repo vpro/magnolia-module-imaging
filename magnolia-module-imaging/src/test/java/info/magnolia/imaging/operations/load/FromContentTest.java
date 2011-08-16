@@ -34,6 +34,7 @@ import info.magnolia.imaging.parameters.ContentParameterProvider;
 public class FromContentTest extends AbstractRepositoryTestCase {
     private Content src;
 
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         final HierarchyManager srcHM = MgnlContext.getHierarchyManager("website");

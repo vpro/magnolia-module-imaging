@@ -30,6 +30,7 @@ import java.net.URL;
 public class URLImageLoader<P extends ParameterProvider<?>> extends AbstractURLImageLoader<P> {
     private String url;
 
+    @Override
     protected URL getAndValidateUrl(P filterParams) throws ImagingException {
         try {
             return new URL(url);

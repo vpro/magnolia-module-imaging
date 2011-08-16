@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
  * @version $Revision: $ ($Author: $)
  */
 public class ContentParameterProviderFactoryTest extends TestCase {
+    @Override
     protected void tearDown() throws Exception {
         MgnlContext.setInstance(null);
         super.tearDown();

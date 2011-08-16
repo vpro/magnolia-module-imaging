@@ -49,6 +49,7 @@ public abstract class AbstractRepositoryTestCase extends RepositoryTestCase {
         FactoryUtil.setDefaultImplementation(ImageDecoder.class, DefaultImageIOImageDecoder.class);
     }
 
+    @Override
     protected void tearDown() throws Exception {
         FactoryUtil.clear();
         super.tearDown();
@@ -56,6 +57,7 @@ public abstract class AbstractRepositoryTestCase extends RepositoryTestCase {
 
     // TODO - this is an ugly hack to workaround MAGNOLIA-2593 - we should review RepositoryTestCase
 
+    @Override
     protected void initDefaultImplementations() throws IOException {
         //MgnlTestCase clears factory before running this method, so we have to instrument factory here rather then in setUp() before calling super.setUp()
         ModuleRegistry registry = createNiceMock(ModuleRegistry.class);
@@ -77,6 +79,7 @@ public abstract class AbstractRepositoryTestCase extends RepositoryTestCase {
             }
         };
         final ModuleManagerImpl fakeModuleManager = new ModuleManagerImpl(null, fakeReader) {
+            @Override
             public List loadDefinitions() throws ModuleManagementException {
                 // TODO Auto-generated method stub
                 return new ArrayList();
