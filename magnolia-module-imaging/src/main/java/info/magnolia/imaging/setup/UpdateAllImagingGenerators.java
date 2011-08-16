@@ -25,8 +25,8 @@ import java.util.Collection;
 import javax.jcr.RepositoryException;
 
 /**
- * Visits all imaging generators
- * 
+ * Visits all imaging generators.
+ *
  * @author ochytil
  * @version $Revision: $ ($Author: $)
  */
