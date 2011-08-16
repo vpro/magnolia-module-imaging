@@ -38,6 +38,7 @@ import java.io.Writer;
 public class CropAndResizeControl extends DialogBox {
     private Content configNode;
 
+    @Override
     public void init(HttpServletRequest request, HttpServletResponse response, Content websiteNode, Content configNode) throws RepositoryException {
         super.init(request, response, websiteNode, configNode);
         this.configNode = configNode;
@@ -47,6 +48,7 @@ public class CropAndResizeControl extends DialogBox {
         return configNode;
     }
 
+    @Override
     public void drawHtml(Writer out) throws IOException {
         drawHtmlPre(out);
 

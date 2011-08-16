@@ -58,6 +58,7 @@ public class CropperPage extends TemplatedMVCHandler {
         super(name, request, response);
     }
 
+    @Override
     public void init() {
         super.init();
 
@@ -103,6 +104,7 @@ public class CropperPage extends TemplatedMVCHandler {
 
     }
 
+    @Override
     public void renderHtml(String view) throws IOException {
         try {
             // let's fake a dialog for the sake of its layout ... and save button.
@@ -149,6 +151,7 @@ public class CropperPage extends TemplatedMVCHandler {
     }
 
     private final class CropperDialog extends Dialog {
+        @Override
         protected void drawHtmlPreSubsHead(Writer out) throws IOException {
             super.drawHtmlPreSubsHead(out);
             renderTemplate("/info/magnolia/module/cropui/CropperPage.head.html", out);
@@ -157,6 +160,7 @@ public class CropperPage extends TemplatedMVCHandler {
     }
 
     private final class CropperControl extends DialogControlImpl {
+        @Override
         public void drawHtml(Writer out) throws IOException {
             out.write("<tbody><tr><td>");
             out.flush();

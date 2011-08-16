@@ -34,6 +34,7 @@ import junit.framework.TestCase;
  */
 public class CropperPageTest extends TestCase {
 
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         SystemProperty.setProperty(Content2BeanTransformer.class.getName(), Content2BeanTransformerImpl.class.getName());
