@@ -122,6 +122,8 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
     /**
      * Gets the binary property (NodeData) for the appropriate image, ready to be served,
      * or null if the image should be regenerated.
+     *
+     * Caution: for best performance we don't want to lock here (get-operation)
      */
     protected NodeData fetchFromCache(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> parameterProvider) {
         final String cachePath = cachingStrategy.getCachePath(generator, parameterProvider);
