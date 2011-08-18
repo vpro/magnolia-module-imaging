@@ -122,8 +122,6 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
     /**
      * Gets the binary property (NodeData) for the appropriate image, ready to be served,
      * or null if the image should be regenerated.
-     *
-     * Caution: for best performance we don't want to lock here (get-operation)
      */
     protected NodeData fetchFromCache(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> parameterProvider) {
         final String cachePath = cachingStrategy.getCachePath(generator, parameterProvider);
@@ -140,13 +138,15 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
             if (!nodeData.isExist()) {
                 return null;
             }
-            InputStream in = nodeData.getStream();
-            if (in == null) {
-                // binary data were not stored yet
+            InputStream in = null;
+            try {
+                in = nodeData.getStream();
+            } catch (Exception e) {
+                // will happen, when stream is not yet stored properly (generateAndStore)
+                // we prefer this handling over having to lock because of better performance especially with big images
                 return null;
-            } else {
-                IOUtils.closeQuietly(in);
             }
+            IOUtils.closeQuietly(in);
 
             if (cachingStrategy.shouldRegenerate(nodeData, parameterProvider)) {
                 return null;
@@ -156,6 +156,7 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
             throw new RuntimeException(e); // TODO
         }
     }
+
 
     protected void serve(NodeData binary, OutputStream out) throws IOException {
         final InputStream in = binary.getStream();
