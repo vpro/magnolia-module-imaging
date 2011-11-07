@@ -9,7 +9,7 @@
   <artifactId>magnolia-module-cropui</artifactId>
   <packaging>jar</packaging>
   <name>magnolia-module-cropui</name>
-  <description>TODO</description>
+  <description>Provides a cropping UI component to use in conjunction with the imaging module.</description>
 
   <dependencies>
     <dependency>

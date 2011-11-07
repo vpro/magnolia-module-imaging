@@ -8,7 +8,7 @@
   </parent>
   <artifactId>magnolia-module-imaging</artifactId>
   <packaging>jar</packaging>
-  <name>Magnolia Imaging</name>
+  <name>Magnolia Imaging Module</name>
   <description>A Magnolia module that provides image generation and filtering capabilities.</description>
 
   <dependencies>
@@ -27,7 +27,6 @@
     <dependency>
       <groupId>net.sf.json-lib</groupId>
       <artifactId>json-lib</artifactId>
-      <version>2.3</version>
       <classifier>jdk15</classifier>
     </dependency>
     <dependency>

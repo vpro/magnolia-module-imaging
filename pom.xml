@@ -2,15 +2,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd ">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>magnolia-parent-pom-enterprise</artifactId>
     <groupId>info.magnolia</groupId>
-    <version>19</version>
+    <artifactId>magnolia-parent-pom-enterprise</artifactId>
+    <version>20</version>
   </parent>
   <artifactId>magnolia-module-imaging-parent</artifactId>
   <version>2.2-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <name>magnolia-module-imaging-parent</name>
-  <description>A Magnolia module that provides image generation and filtering capabilities.</description>
+  <name>Magnolia Imaging</name>
+  <description>A set of Magnolia modules which provide image generation, filtering and manipulation capabilities.</description>
   <properties>
     <magnoliaVersion>4.4</magnoliaVersion>
     <javaVersion>1.5</javaVersion>
@@ -101,6 +101,12 @@
       <dependency>
         <groupId>org.easymock</groupId>
         <artifactId>easymock</artifactId>
+        <version>2.5.1</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.easymock</groupId>
+        <artifactId>easymockclassextension</artifactId>
         <version>2.5.1</version>
         <scope>test</scope>
       </dependency>
