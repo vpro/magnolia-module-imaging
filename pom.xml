@@ -9,7 +9,7 @@
   <artifactId>magnolia-module-imaging-parent</artifactId>
   <version>2.2-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <name>Magnolia Imaging</name>
+  <name>Magnolia Imaging (parent)</name>
   <description>A set of Magnolia modules which provide image generation, filtering and manipulation capabilities.</description>
   <properties>
     <magnoliaVersion>4.4</magnoliaVersion>
