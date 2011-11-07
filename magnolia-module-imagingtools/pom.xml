@@ -8,7 +8,7 @@
   </parent>
   <artifactId>magnolia-module-imagingtools</artifactId>
   <packaging>jar</packaging>
-  <name>magnolia-module-imagingtools</name>
+  <name>Magnolia Imaging Tools Module</name>
   <description>Provides tools and utilities related to the imaging module.</description>
 
   <dependencies>

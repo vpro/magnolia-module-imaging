@@ -8,7 +8,7 @@
   </parent>
   <artifactId>magnolia-module-cropui</artifactId>
   <packaging>jar</packaging>
-  <name>magnolia-module-cropui</name>
+  <name>Magnolia Crop UI for Imaging Module</name>
   <description>Provides a cropping UI component to use in conjunction with the imaging module.</description>
 
   <dependencies>
