@@ -36,9 +36,9 @@ package info.magnolia.module.cropui.setup;
 import info.magnolia.module.DefaultModuleVersionHandler;
 
 /**
+ * VersionHandler of the CropUIModule.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class CropUIModuleVersionHandler extends DefaultModuleVersionHandler {
 }

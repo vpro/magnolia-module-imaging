@@ -48,8 +48,9 @@ import java.awt.image.BufferedImage;
  *
  * TODO -- maybe merge this into ImageGenerator. At least provide a simpler way for non-transparent images...
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @param <P> type of the ParameterProvider
+ *
+ * @version $Id$
  */
 public class Blank<P extends ParameterProvider<?>> implements ImageOperation<P> {
     private static final int DEFAULT_TYPE = BufferedImage.TYPE_INT_ARGB_PRE;
@@ -78,6 +79,7 @@ public class Blank<P extends ParameterProvider<?>> implements ImageOperation<P> 
         this.height = height;
     }
 
+    @Override
     public BufferedImage apply(BufferedImage source, P params) throws ImagingException {
         if (source != null) {
             throw new ImagingException("This operation currently does not support overlaying images");

@@ -42,8 +42,7 @@ import java.io.InputStream;
 /**
  * A simple abstraction to allow loading BufferedImages using other mechanisms than the default ImageIO.read().
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $) 
+ * @version $Id$
  */
 public interface ImageDecoder {
     BufferedImage read(InputStream in) throws IOException, ImagingException;

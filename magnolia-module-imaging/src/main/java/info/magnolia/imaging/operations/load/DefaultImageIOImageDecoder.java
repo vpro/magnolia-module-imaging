@@ -39,11 +39,12 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
+ * Default implementation of an ImageDecoder.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class DefaultImageIOImageDecoder implements ImageDecoder {
+    @Override
     public BufferedImage read(InputStream in) throws IOException {
         return ImageIO.read(in);
     }

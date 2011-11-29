@@ -37,10 +37,9 @@ import java.awt.Color;
 import java.awt.Font;
 
 /**
- * A simple bean holding font-related configuration. 
+ * A simple bean holding font-related configuration.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class TextStyle {
     public static final double SHEARING_DIV_FACTOR = 20D;

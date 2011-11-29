@@ -10,6 +10,9 @@
   <packaging>jar</packaging>
   <name>Magnolia Imaging Tools Module</name>
   <description>Provides tools and utilities related to the imaging module.</description>
+  <properties>
+  	<cloverCoverageThreshold>40</cloverCoverageThreshold>
+  </properties>
 
   <dependencies>
     <dependency>
@@ -28,8 +31,14 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
+      <artifactId>junit-dep</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>

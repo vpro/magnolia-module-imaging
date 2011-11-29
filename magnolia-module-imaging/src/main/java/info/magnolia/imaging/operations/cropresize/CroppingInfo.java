@@ -38,8 +38,7 @@ package info.magnolia.imaging.operations.cropresize;
  *
  * The cropui module, for instance, stores instances of this (in the form of a JSon string) into the repository.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class CroppingInfo {
     private String configName;

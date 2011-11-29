@@ -38,9 +38,11 @@ import info.magnolia.imaging.ImageGenerator;
 import info.magnolia.imaging.ParameterProvider;
 
 /**
+ * Defines a CachingStrategy.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @param <P> type of ParameterProvider's parameter
+ *
+ * @version $Id$
  */
 public interface CachingStrategy<P> {
 

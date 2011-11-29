@@ -34,9 +34,9 @@
 package info.magnolia.imaging.operations.text;
 
 /**
+ * Defines an Alignment for an image.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 interface Alignment {
     float getPositionFor(double content, double container, double delta);

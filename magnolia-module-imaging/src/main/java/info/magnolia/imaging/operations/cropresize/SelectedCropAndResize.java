@@ -55,8 +55,7 @@ import java.util.Map;
  * same nade as the ParameterProvider's node, suffixed, and which is a *sibling* of the image's node,
  * not a children.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class SelectedCropAndResize extends AbstractCropAndResize<ParameterProvider<Content>> {
     private int targetWidth;

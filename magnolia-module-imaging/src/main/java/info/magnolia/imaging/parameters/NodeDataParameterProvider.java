@@ -38,9 +38,9 @@ import info.magnolia.imaging.ParameterProvider;
 
 
 /**
- * @author pbracher
- * @version $Id$
+ * ParameterProvider for NodeData's.
  *
+ * @version $Id$
  */
 public class NodeDataParameterProvider implements ParameterProvider<NodeData> {
     private final NodeData nd;
@@ -49,6 +49,7 @@ public class NodeDataParameterProvider implements ParameterProvider<NodeData> {
         this.nd = nd;
     }
 
+    @Override
     public NodeData getParameter() {
         return nd;
     }

@@ -54,8 +54,7 @@ import java.io.IOException;
  *
  * During development / tests of generators, set the storeGeneratedImages parameter to "false".
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class ImagingServlet extends HttpServlet {
     private boolean storeGeneratedImages = true;

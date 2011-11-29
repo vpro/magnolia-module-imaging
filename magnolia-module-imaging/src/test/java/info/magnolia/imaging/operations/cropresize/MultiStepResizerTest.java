@@ -44,11 +44,14 @@ import info.magnolia.imaging.operations.load.ClasspathImageLoader;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.junit.Test;
+
 /**
  * Test for resizing using multi step in all directions.
  */
 public class MultiStepResizerTest extends AbstractImagingTest {
 
+    @Test
     public void testJpgNeedsAnEyeToCheck() throws IOException, ImagingException {
 
         final String originalRes = "/quality1/original.jpg";

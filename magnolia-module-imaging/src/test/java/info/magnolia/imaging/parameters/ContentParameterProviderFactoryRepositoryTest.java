@@ -33,23 +33,25 @@
  */
 package info.magnolia.imaging.parameters;
 
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.HierarchyManager;
 import info.magnolia.cms.util.ContentUtil;
 import info.magnolia.context.MgnlContext;
 import info.magnolia.imaging.AbstractRepositoryTestCase;
 import info.magnolia.imaging.ParameterProvider;
-import static org.easymock.EasyMock.*;
 
 import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
 
+import org.junit.Test;
 /**
- *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class ContentParameterProviderFactoryRepositoryTest extends AbstractRepositoryTestCase {
+
+    @Test
     public void testWrapsContentSuchThatEqualsAndHashCodeAreImplementedBasedOnPathAndHierarchyManagerName() throws RepositoryException {
         final HierarchyManager hm = MgnlContext.getHierarchyManager("website");
         ContentUtil.createPath(hm, "/some/node");

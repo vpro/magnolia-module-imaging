@@ -10,6 +10,9 @@
   <packaging>jar</packaging>
   <name>Magnolia Crop UI for Imaging Module</name>
   <description>Provides a cropping UI component to use in conjunction with the imaging module.</description>
+  <properties>
+    <cloverCoverageThreshold>10</cloverCoverageThreshold>
+  </properties>
 
   <dependencies>
     <dependency>
@@ -29,6 +32,11 @@
       <groupId>info.magnolia</groupId>
       <artifactId>magnolia-module-admininterface</artifactId>
     </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
 
     <dependency>
       <groupId>info.magnolia</groupId>
@@ -37,7 +45,7 @@
     </dependency>
     <dependency>
       <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
+      <artifactId>junit-dep</artifactId>
     </dependency>
   </dependencies>
 </project>

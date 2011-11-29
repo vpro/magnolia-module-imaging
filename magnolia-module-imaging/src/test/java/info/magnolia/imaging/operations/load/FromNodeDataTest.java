@@ -33,6 +33,11 @@
  */
 package info.magnolia.imaging.operations.load;
 
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.HierarchyManager;
 import info.magnolia.cms.core.NodeData;
@@ -47,11 +52,11 @@ import info.magnolia.imaging.caching.ContentBasedCachingStrategy;
 import info.magnolia.imaging.parameters.NodeDataParameterProvider;
 
 /**
- *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class FromNodeDataTest extends AbstractRepositoryTestCase {
+
+    @Test
     public void testNonBinaryPropertyYieldsAProperException() throws Exception {
         final HierarchyManager srcHM = MgnlContext.getHierarchyManager("website");
         final Content src = ContentUtil.createPath(srcHM, "/some/node");
@@ -59,10 +64,12 @@ public class FromNodeDataTest extends AbstractRepositoryTestCase {
         srcHM.save();
 
         final ParameterProviderFactory<Object, NodeData> ppf = new ParameterProviderFactory<Object, NodeData>() {
+            @Override
             public ParameterProvider<NodeData> newParameterProviderFor(Object environment) {
                 return new NodeDataParameterProvider(srcProp);
             }
 
+            @Override
             public CachingStrategy getCachingStrategy() {
                 return new ContentBasedCachingStrategy();
             }

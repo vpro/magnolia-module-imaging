@@ -49,8 +49,9 @@ import javax.jcr.RepositoryException;
 
 
 /**
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * VersionHandler for the imaging module.
+ *
+ * @version $Id$
  */
 public class ImagingModuleVersionHandler extends DefaultModuleVersionHandler {
     public ImagingModuleVersionHandler() {

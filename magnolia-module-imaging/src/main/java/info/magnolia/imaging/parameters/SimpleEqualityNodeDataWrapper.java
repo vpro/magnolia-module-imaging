@@ -41,6 +41,8 @@ import info.magnolia.cms.util.NodeDataWrapper;
  * based on the property's path and HierarchyManager name.
  * It also caches the handle of the node, so that equals() and hashCode()
  * can be used even if the node's JCR session was terminated.
+ *
+ * @version $Id$
  */
 public class SimpleEqualityNodeDataWrapper extends NodeDataWrapper {
     private final String handle;

@@ -37,9 +37,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
+ * Keeps the configuration of the imaging module.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class ImagingModuleConfig {
     private final Map<String, ImageGenerator> generators = new LinkedHashMap<String, ImageGenerator>();

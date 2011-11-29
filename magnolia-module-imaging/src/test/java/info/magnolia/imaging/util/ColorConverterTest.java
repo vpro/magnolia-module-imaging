@@ -33,17 +33,21 @@
  */
 package info.magnolia.imaging.util;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
 import java.awt.Color;
+
+import org.junit.Ignore;
+import org.junit.Test;
 
 /**
  * TODO : accept formats such as "255, 0, 0" ?
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
-public class ColorConverterTest extends TestCase {
+public class ColorConverterTest {
+
+    @Test
     public void testCanDecodeHexa() {
         assertEquals(Color.white, ColorConverter.toColor("#ffffff"));
         assertEquals(Color.black, ColorConverter.toColor("#000000"));
@@ -51,10 +55,13 @@ public class ColorConverterTest extends TestCase {
         assertEquals(new Color(128, 64, 23), ColorConverter.toColor("#804017"));
     }
 
-//    public void testCanDecodeHexaWithAlphaChannel() {
-//        assertEquals(new Color(128, 64, 23, 35), ColorConverter.toColor("#80401723"));
-//    }
+    @Ignore
+    @Test
+    public void testCanDecodeHexaWithAlphaChannel() {
+        assertEquals(new Color(128, 64, 23, 35), ColorConverter.toColor("#80401723"));
+    }
 
+    @Test
     public void testCanDecodeNames() {
         assertEquals(Color.white, ColorConverter.toColor("white"));
         assertEquals(Color.black, ColorConverter.toColor("Black"));
@@ -62,6 +69,7 @@ public class ColorConverterTest extends TestCase {
         assertEquals(Color.yellow, ColorConverter.toColor("yelLoW"));
     }
 
+    @Test
     public void testFailsOnUnknownName() {
         try {
             ColorConverter.toColor("foo");
@@ -71,7 +79,4 @@ public class ColorConverterTest extends TestCase {
         }
     }
 
-//    public void testCanEncodeToHexa() {
-//        assertEquals("#0000ff", ColorConverter.toString(Color.blue));
-//    }
 }

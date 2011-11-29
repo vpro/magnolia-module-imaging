@@ -33,20 +33,22 @@
  */
 package info.magnolia.imaging;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+
+import java.util.Locale;
 
 import javax.imageio.ImageWriteParam;
 import javax.imageio.plugins.bmp.BMPImageWriteParam;
 import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
-import java.util.Locale;
+
+import org.junit.Test;
 
 /**
- *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
-public class OutputFormatTest extends TestCase {
+public class OutputFormatTest {
 
+    @Test
     public void testQualityIsProperlyConvertedToOneZeroRangeAndSetsCompressionModeToExplicit() {
         final ImageWriteParam param = new JPEGImageWriteParam(Locale.getDefault());
         final OutputFormat f = new OutputFormat();
@@ -57,6 +59,7 @@ public class OutputFormatTest extends TestCase {
         assertEquals(ImageWriteParam.MODE_EXPLICIT, param.getCompressionMode());
     }
 
+    @Test
     public void testCompressionTypeIsProperlyConvertedToOneZeroRangeAndSetsCompressionModeToExplicit() {
         final ImageWriteParam param = new JPEGImageWriteParam(Locale.getDefault());
         final OutputFormat f = new OutputFormat();
@@ -67,6 +70,7 @@ public class OutputFormatTest extends TestCase {
         assertEquals(ImageWriteParam.MODE_EXPLICIT, param.getCompressionMode());
     }
 
+    @Test
     public void testProgressiveFlagIsSetProperlyWhenTrue() {
         final ImageWriteParam param = new JPEGImageWriteParam(Locale.getDefault());
         final OutputFormat f = new OutputFormat();
@@ -76,6 +80,7 @@ public class OutputFormatTest extends TestCase {
         assertEquals(ImageWriteParam.MODE_DEFAULT, param.getProgressiveMode());
     }
 
+    @Test
     public void testProgressiveFlagIsSetProperlyWhenFalse() {
         final ImageWriteParam param = new JPEGImageWriteParam(Locale.getDefault());
         final OutputFormat f = new OutputFormat();
@@ -85,6 +90,7 @@ public class OutputFormatTest extends TestCase {
         assertEquals(ImageWriteParam.MODE_DISABLED, param.getProgressiveMode());
     }
 
+    @Test
     public void testCompressionSettingsAreNotResetWhenBothTypeAndQualityAreApplied() {
         final ImageWriteParam param = new BMPImageWriteParam(Locale.getDefault());
         final OutputFormat f = new OutputFormat();
@@ -96,5 +102,4 @@ public class OutputFormatTest extends TestCase {
         assertEquals(0.42f, param.getCompressionQuality(), 0f);
         assertEquals(ImageWriteParam.MODE_EXPLICIT, param.getCompressionMode());
     }
-
 }

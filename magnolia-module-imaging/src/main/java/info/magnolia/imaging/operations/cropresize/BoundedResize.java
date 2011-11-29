@@ -40,10 +40,9 @@ import java.awt.image.BufferedImage;
 
 /**
  * A CropAndResize implementation which will never crop, and resize to either
- * maxHeight or maxWidth while keeping the original image's ratio. 
+ * maxHeight or maxWidth while keeping the original image's ratio.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class BoundedResize extends AbstractCropAndResize {
     private int maxWidth;

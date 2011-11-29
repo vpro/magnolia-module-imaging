@@ -33,13 +33,16 @@
  */
 package info.magnolia.imaging.operations.cropresize;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
+
+import org.junit.Test;
 
 /**
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
-public class CoordsTest extends TestCase {
+public class CoordsTest {
+
+    @Test
     public void testCalculatesWidthAndHeightProperly() {
         final Coords ci = new Coords();
         ci.setX1(10);
@@ -51,6 +54,7 @@ public class CoordsTest extends TestCase {
         assertEquals(20, ci.getHeight());
     }
 
+    @Test
     public void testThrowsExceptionWhenCalculatingWidthAndHeightWithInvalidCoordinates() {
         final Coords ci = new Coords();
         ci.setX1(10);
@@ -71,5 +75,4 @@ public class CoordsTest extends TestCase {
             assertEquals("Invalid coordinates, negative height: y1 = 30, y2 = 20", e.getMessage());
         }
     }
-
 }

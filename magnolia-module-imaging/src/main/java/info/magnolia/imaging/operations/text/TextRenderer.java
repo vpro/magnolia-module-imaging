@@ -36,9 +36,9 @@ package info.magnolia.imaging.operations.text;
 import java.awt.image.BufferedImage;
 
 /**
+ * Defines a TextRenderer.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public interface TextRenderer {
 

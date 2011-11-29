@@ -33,11 +33,12 @@
  */
 package info.magnolia.imaging.caching;
 
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.HierarchyManager;
 import info.magnolia.cms.core.NodeData;
 import info.magnolia.cms.util.ContentUtil;
-import info.magnolia.cms.util.FactoryUtil;
 import info.magnolia.cms.util.HierarchyManagerWrapper;
 import info.magnolia.context.MgnlContext;
 import info.magnolia.imaging.AbstractRepositoryTestCase;
@@ -58,12 +59,7 @@ import info.magnolia.module.ModuleManagerImpl;
 import info.magnolia.module.ModuleRegistry;
 import info.magnolia.module.model.ModuleDefinition;
 import info.magnolia.module.model.reader.ModuleDefinitionReader;
-import org.apache.commons.io.IOUtils;
-import static org.easymock.EasyMock.*;
-import org.easymock.IMocksControl;
-
-import javax.imageio.ImageIO;
-import javax.jcr.RepositoryException;
+import info.magnolia.test.ComponentsTestUtil;
 
 import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
@@ -83,25 +79,35 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
+import javax.imageio.ImageIO;
+import javax.jcr.RepositoryException;
+
+import org.apache.commons.io.IOUtils;
+import org.easymock.IMocksControl;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+
 /**
  * TODO : this is sort of a load test and uses a real (in memory) repository.
  * TODO : cleanup.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCase {
     private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(CachingImageStreamerRepositoryTest.class);
 
     @Override
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         // this used to set autostart to false, but I'm not sure why.
         // It seems fine as is.
 
         super.setUp();
-        FactoryUtil.setInstance(AuditLoggingManager.class, new AuditLoggingManager());
+        ComponentsTestUtil.setInstance(AuditLoggingManager.class, new AuditLoggingManager());
     }
 
+    @Test
     public void testRequestForSimilarUncachedImageOnlyGeneratesItOnce() throws Exception {
         final GraphicsEnvironment ge =  GraphicsEnvironment.getLocalGraphicsEnvironment();
         if (!ge.isHeadless()) {
@@ -239,7 +245,9 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
      * Set the "expiration" property of the jobs map in CachingImageStreamer to a longer value
      * to have more chances of reproducing the problem.
      */
-    public void /*test*/ConcurrencyAndJCRSessions() throws Exception {
+    @Ignore
+    @Test
+    public void testConcurrencyAndJCRSessions() throws Exception {
         final HierarchyManager srcHM = MgnlContext.getHierarchyManager("website");
         final String srcPath = "/foo/bar";
         ContentUtil.createPath(srcHM, srcPath);
@@ -272,6 +280,7 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
             final int ii = i;
             outs[i] = new ByteArrayOutputStream();
             futures[i] = executor.submit(new Runnable() {
+                @Override
                 public void run() {
                     final ParameterProvider p = generator.getParameterProviderFactory().newParameterProviderFor(null);
                     try {
@@ -312,6 +321,7 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
             this.out = out;
         }
 
+        @Override
         public Object call() throws Exception {
             final ParameterProvider p = generator.getParameterProviderFactory().newParameterProviderFor(null);
             streamer.serveImage(generator, p, out);
@@ -321,22 +331,25 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
 
     // TODO - this is an ugly hack to workaround MAGNOLIA-2593 - we should review RepositoryTestCase
     @Override
-    protected void initDefaultImplementations() throws IOException {
+    protected void initDefaultImplementations() throws IOException, ModuleManagementException {
         //MgnlTestCase clears factory before running this method, so we have to instrument factory here rather then in setUp() before calling super.setUp()
         ModuleRegistry registry = createNiceMock(ModuleRegistry.class);
-        FactoryUtil.setInstance(ModuleRegistry.class, registry);
+        ComponentsTestUtil.setInstance(ModuleRegistry.class, registry);
 
         final ModuleDefinitionReader fakeReader = new ModuleDefinitionReader() {
+            @Override
             public ModuleDefinition read(Reader in) throws ModuleManagementException {
                 return null;
             }
 
+            @Override
             public Map readAll() throws ModuleManagementException {
                 Map m = new HashMap();
                 m.put("moduleDef", "dummy");
                 return m;
             }
 
+            @Override
             public ModuleDefinition readFromResource(String resourcePath) throws ModuleManagementException {
                 return null;
             }
@@ -348,7 +361,7 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
                 return new ArrayList();
             }
         };
-        FactoryUtil.setInstance(ModuleManager.class, fakeModuleManager);
+        ComponentsTestUtil.setInstance(ModuleManager.class, fakeModuleManager);
         super.initDefaultImplementations();
     }
 
@@ -400,6 +413,7 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
             this.srcPath = srcPath;
         }
 
+        @Override
         public ParameterProvider<Content> newParameterProviderFor(Object environment) {
             try {
                 final Content src = srcHM.getContent(srcPath);
@@ -410,6 +424,7 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
             }
         }
 
+        @Override
         public CachingStrategy getCachingStrategy() {
             return new ContentBasedCachingStrategy();
         }

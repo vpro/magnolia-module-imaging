@@ -33,36 +33,38 @@
  */
 package info.magnolia.imaging;
 
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.HierarchyManager;
 import info.magnolia.cms.core.NodeData;
 import info.magnolia.context.Context;
 import info.magnolia.context.MgnlContext;
 import info.magnolia.imaging.caching.CachingStrategy;
-import junit.framework.TestCase;
-import static org.easymock.EasyMock.*;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-/**
- *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
- */
-public class ImagingServletTest extends TestCase {
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-    @Override
-    protected void tearDown() throws Exception {
+import org.junit.After;
+import org.junit.Test;
+
+/**
+ * @version $Id$
+ */
+public class ImagingServletTest {
+
+    @After
+    public void tearDown() throws Exception {
         MgnlContext.setInstance(null);
-        super.tearDown();
     }
 
+    @Test
     public void testRequestToFactoryToGeneratorToImage() throws Exception {
         final ByteArrayOutputStream fakedOut = new ByteArrayOutputStream();
         final ServletOutputStream servletOut = new ServletOutputStream() {
@@ -93,10 +95,12 @@ public class ImagingServletTest extends TestCase {
         res.flushBuffer();
 
         final ParameterProviderFactory<HttpServletRequest, String> ppFactory = new ParameterProviderFactory<HttpServletRequest, String>() {
+            @Override
             public ParameterProvider<String> newParameterProviderFor(HttpServletRequest context) {
                 return new StringParameterProvider(context.getRequestURI());
             }
 
+            @Override
             public CachingStrategy<String> getCachingStrategy() {
                 return new StringBasedCachingStrategy();
             }
@@ -149,20 +153,24 @@ public class ImagingServletTest extends TestCase {
             imageGeneratorWasCalled = false;
         }
 
+        @Override
         public BufferedImage generate(P params) {
             assertEquals("dummyUri", params.getParameter());
             imageGeneratorWasCalled = true;
             return new BufferedImage(10, 10, BufferedImage.TYPE_INT_RGB);
         }
 
+        @Override
         public ParameterProviderFactory getParameterProviderFactory() {
             return ppFactory;
         }
 
+        @Override
         public OutputFormat getOutputFormat(P params) {
             return outputFormat;
         }
 
+        @Override
         public String getName() {
             return "myGenerator";
         }

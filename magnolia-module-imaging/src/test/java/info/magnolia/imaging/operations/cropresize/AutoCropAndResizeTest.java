@@ -35,10 +35,12 @@ package info.magnolia.imaging.operations.cropresize;
 
 import info.magnolia.imaging.AbstractImagingTest;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+import javax.imageio.ImageIO;
+
+import static org.junit.Assert.*;
 /**
  *
  * @author gjoseph

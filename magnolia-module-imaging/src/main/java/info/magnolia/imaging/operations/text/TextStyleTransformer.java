@@ -40,9 +40,7 @@ import info.magnolia.imaging.util.ColorConverter;
 import java.awt.Color;
 
 /**
- *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class TextStyleTransformer extends Content2BeanTransformerImpl {
     @Override

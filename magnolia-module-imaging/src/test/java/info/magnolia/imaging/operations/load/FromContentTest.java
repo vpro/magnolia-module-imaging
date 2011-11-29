@@ -33,6 +33,7 @@
  */
 package info.magnolia.imaging.operations.load;
 
+import static org.junit.Assert.*;
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.HierarchyManager;
 import info.magnolia.cms.util.ContentUtil;
@@ -45,16 +46,18 @@ import info.magnolia.imaging.caching.CachingStrategy;
 import info.magnolia.imaging.caching.ContentBasedCachingStrategy;
 import info.magnolia.imaging.parameters.ContentParameterProvider;
 
+import org.junit.Before;
+import org.junit.Test;
+
 /**
- *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class FromContentTest extends AbstractRepositoryTestCase {
     private Content src;
 
     @Override
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         super.setUp();
         final HierarchyManager srcHM = MgnlContext.getHierarchyManager("website");
         src = ContentUtil.createPath(srcHM, "/some/node");
@@ -62,6 +65,7 @@ public class FromContentTest extends AbstractRepositoryTestCase {
         srcHM.save();
     }
 
+    @Test
     public void testNonBinaryPropertyYieldsAProperException() throws Exception {
         final ParameterProviderFactory<Object, Content> ppf = new TestParameterProviderFactory(src);
 
@@ -76,6 +80,7 @@ public class FromContentTest extends AbstractRepositoryTestCase {
         }
     }
 
+    @Test
     public void testUnexistingPropertyYieldsAProperException() throws Exception {
         final ParameterProviderFactory<Object, Content> ppf = new TestParameterProviderFactory(src);
 
@@ -97,10 +102,12 @@ public class FromContentTest extends AbstractRepositoryTestCase {
             this.src = src;
         }
 
+        @Override
         public ParameterProvider<Content> newParameterProviderFor(Object environment) {
             return new ContentParameterProvider(src);
         }
 
+        @Override
         public CachingStrategy getCachingStrategy() {
             return new ContentBasedCachingStrategy();
         }

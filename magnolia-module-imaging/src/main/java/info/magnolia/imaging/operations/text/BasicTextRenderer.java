@@ -44,9 +44,9 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 /**
+ * Basic implementation of a TextRenderer.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class BasicTextRenderer implements TextRenderer {
     /** for debugging purposes. */
@@ -54,6 +54,7 @@ public class BasicTextRenderer implements TextRenderer {
 
     // TODO this currently does not allow specifying text/character spacing
 
+    @Override
     public void renderText(BufferedImage img, String txt, TextStyle style, HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment, int txtPositionX, int txtPositionY) {
         final Graphics2D g = img.createGraphics();
 

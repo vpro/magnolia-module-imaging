@@ -38,10 +38,9 @@ import java.io.Serializable;
 /**
  * A simple bean holding the coordinates of 2 points, determining an area for cropping an image, providing
  * helper methods calculating and validating the width and height of the area.
- * This class is not immutable because it must be instantiatable through content2bean. 
+ * This class is not immutable because it must be instantiable through content2bean.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class Coords implements Serializable {
     private int x1, y1, x2, y2;

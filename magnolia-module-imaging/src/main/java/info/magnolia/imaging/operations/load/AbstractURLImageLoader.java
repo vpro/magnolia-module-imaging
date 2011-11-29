@@ -43,9 +43,9 @@ import java.io.InputStream;
 import java.net.URL;
 
 /**
+ * @param <P> type of ParameterProvider
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public abstract class AbstractURLImageLoader<P extends ParameterProvider<?>> extends AbstractLoader<P> {
     protected AbstractURLImageLoader() {

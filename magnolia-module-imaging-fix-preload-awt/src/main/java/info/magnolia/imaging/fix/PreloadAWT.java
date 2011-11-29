@@ -39,19 +39,22 @@ import info.magnolia.module.ModuleLifecycleContext;
 import java.awt.Toolkit;
 
 /**
+ * Forces loading of AWT on start of the module.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class PreloadAWT implements ModuleLifecycle {
     private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(PreloadAWT.class);
 
+    @Override
     public void start(ModuleLifecycleContext moduleLifecycleContext) {
         log.info("Starting up" + this);
         final Toolkit defaultToolkit = Toolkit.getDefaultToolkit();
         log.info("Lib loaded, defaultToolkit is " + defaultToolkit);
     }
 
+    @Override
     public void stop(ModuleLifecycleContext moduleLifecycleContext) {
+        // no action
     }
 }

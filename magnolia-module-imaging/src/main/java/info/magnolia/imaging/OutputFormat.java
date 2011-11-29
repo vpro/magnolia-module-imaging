@@ -40,9 +40,7 @@ import javax.imageio.ImageWriteParam;
  * ImageWriter and applied to its  underlying <code>javax.imageio.ImageWriteParam</code>.
  * It's also exposing a simpler API, making it easier to configure through a tree/gui.
  *
- *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class OutputFormat implements Cloneable {
     private String formatName;

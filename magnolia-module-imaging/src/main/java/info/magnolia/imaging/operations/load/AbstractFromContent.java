@@ -43,9 +43,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
+ * @param <PT> type of ParameterProvider's parameter
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public abstract class AbstractFromContent<PT> extends AbstractLoader<ParameterProvider<PT>> {
 

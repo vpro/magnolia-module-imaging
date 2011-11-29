@@ -33,10 +33,10 @@
  */
 package info.magnolia.imaging.operations.load;
 
-import info.magnolia.cms.util.FactoryUtil;
 import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.operations.ImageOperation;
+import info.magnolia.objectfactory.Components;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -50,11 +50,12 @@ import java.io.InputStream;
  * to the appropriate type. (ImageIO.read() will return a different image type depending on the
  * source format). Overhead is negligible.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @param <P> type of ParameterProvider's parameter
+ *
+ * @version $Id$
  */
 public abstract class AbstractLoader<P extends ParameterProvider<?>> implements ImageOperation<P> {
-    private ImageDecoder imageDecoder = (ImageDecoder) FactoryUtil.newInstance(ImageDecoder.class);
+    private ImageDecoder imageDecoder = Components.getComponentProvider().newInstance(ImageDecoder.class);
     private Color backgroundColor;
 
     protected AbstractLoader() {
@@ -64,6 +65,7 @@ public abstract class AbstractLoader<P extends ParameterProvider<?>> implements 
         this.backgroundColor = backgroundColor;
     }
 
+    @Override
     public BufferedImage apply(BufferedImage source, P filterParams) throws ImagingException {
         if (source != null) {
             throw new ImagingException("This operation currently does not support overlaying images");

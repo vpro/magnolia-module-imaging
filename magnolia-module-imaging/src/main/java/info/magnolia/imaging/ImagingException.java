@@ -34,9 +34,9 @@
 package info.magnolia.imaging;
 
 /**
+ * Exception occuring in Imaging module.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class ImagingException extends Exception {
     public ImagingException(String message) {

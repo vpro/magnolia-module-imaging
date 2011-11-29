@@ -42,9 +42,7 @@ import javax.jcr.RepositoryException;
 
 
 /**
- * @author pbracher
  * @version $Id$
- *
  */
 public class FromContent extends AbstractFromContent<Content> {
 

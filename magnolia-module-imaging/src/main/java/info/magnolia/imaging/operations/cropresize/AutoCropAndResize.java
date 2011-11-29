@@ -47,8 +47,7 @@ import java.awt.image.BufferedImage;
  * If either targetWidth or targetHeight is <=0, the ratio of the source image will be preserved.
  * If both targetWidth and targetHeight are >0, both will be used, even if they don't match the ratio of the source image (thus cropping it).
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class AutoCropAndResize extends AbstractCropAndResize {
     private int targetWidth;

@@ -33,46 +33,51 @@
  */
 package info.magnolia.imaging.parameters;
 
+import static org.easymock.EasyMock.*;
 import info.magnolia.cms.core.Content;
+import static org.junit.Assert.*;
 import info.magnolia.cms.core.HierarchyManager;
 import info.magnolia.cms.util.ContentWrapper;
 import info.magnolia.context.Context;
 import info.magnolia.context.MgnlContext;
 import info.magnolia.imaging.ParameterProvider;
-import junit.framework.TestCase;
-import static org.easymock.EasyMock.*;
 
 import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
 
+import org.junit.After;
+import org.junit.Test;
+
 /**
- *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
-public class ContentParameterProviderFactoryTest extends TestCase {
-    @Override
-    protected void tearDown() throws Exception {
+public class ContentParameterProviderFactoryTest {
+    @After
+    public void tearDown() throws Exception {
         MgnlContext.setInstance(null);
-        super.tearDown();
     }
 
+    @Test
     public void testExtensionIsIgnored() throws Exception {
         validPathsTests("/myGenerator/dummyWS/foo/bar/baz.jpg", "dummyWS", "/foo/bar/baz");
     }
 
+    @Test
     public void testExtensionIsIgnoredAlsoForTopLevelNode() throws Exception {
         validPathsTests("/myGenerator/dummyWS/foo.jpg", "dummyWS", "/foo");
     }
 
+    @Test
     public void testDeepNodeIsRetrieved() throws Exception {
         validPathsTests("/myGenerator/dummyWS/foo/bar/baz", "dummyWS", "/foo/bar/baz");
     }
 
+    @Test
     public void testNodeAtFirstLevelIsRetrievedToo() throws Exception {
         validPathsTests("/myGenerator/dummyWS/foo", "dummyWS", "/foo");
     }
 
+    @Test
     public void testCanGetTheRootNodeIfNeededButWhoWantsThis() throws Exception {
         validPathsTests("/myGenerator/dummyWS", "dummyWS", "/");
     }
@@ -101,10 +106,12 @@ public class ContentParameterProviderFactoryTest extends TestCase {
         verify(ctx, hm, mockNode, req);
     }
 
+    @Test
     public void testFailsIfNoPathInfo() throws Exception {
         failureTestForIncompletePaths(null, "Can't determine node, no pathInfo is available for uri /chalala");
     }
 
+    @Test
     public void testFailsIfWorkspaceNorNodePath() throws Exception {
         failureTestForIncompletePaths("/dummy", "Can't determine node from pathInfo: /dummy");
     }

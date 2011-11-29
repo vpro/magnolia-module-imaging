@@ -52,11 +52,13 @@ import java.util.Iterator;
  * It also knows about some of the javax.imageio quirks, so other
  * implementations should consider subclassing or wrapping it.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @param <P> type of ParameterProvider's parameter
+ *
+ * @version $Id$
  */
 public class DefaultImageStreamer<P> implements ImageStreamer<P> {
 
+    @Override
     public void serveImage(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> params, OutputStream out) throws ImagingException, IOException {
         final BufferedImage img = generator.generate(params);
 

@@ -40,14 +40,17 @@ import info.magnolia.imaging.ParameterProvider;
 /**
  * A CachingStrategy implementation that will ... never cache !
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @param <P> type of ParameterProvider's parameter
+ *
+ * @version $Id$
  */
 public class NullCachingStrategy<P> implements CachingStrategy<P> {
+    @Override
     public String getCachePath(ImageGenerator<ParameterProvider<P>> parameterProviderImageGenerator, ParameterProvider<P> parameterProvider) {
         return null;
     }
 
+    @Override
     public boolean shouldRegenerate(NodeData cachedBinary, ParameterProvider<P> parameterProvider) {
         return true;
     }
