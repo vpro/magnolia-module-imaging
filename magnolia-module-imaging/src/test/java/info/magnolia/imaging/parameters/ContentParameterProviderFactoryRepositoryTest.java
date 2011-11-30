@@ -68,6 +68,5 @@ public class ContentParameterProviderFactoryRepositoryTest extends AbstractRepos
                 param1.getParameter(), param2.getParameter());
         assertEquals("2 calls to ParameterProviderFactory should return 2 *equivalent instances*.",
                 param1.getParameter(), param2.getParameter());
-        verify(req);
     }
 }
