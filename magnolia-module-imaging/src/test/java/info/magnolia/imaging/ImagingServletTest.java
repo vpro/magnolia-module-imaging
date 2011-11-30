@@ -33,7 +33,7 @@
  */
 package info.magnolia.imaging;
 
-import static org.easymock.EasyMock.*;
+import static org.mockito.Mockito.*;
 import static org.junit.Assert.assertEquals;
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.HierarchyManager;
@@ -73,25 +73,24 @@ public class ImagingServletTest {
                 fakedOut.write(b);
             }
         };
-        final Context ctx = createStrictMock(Context.class);
-        final HierarchyManager hm = createStrictMock(HierarchyManager.class);
-        final Content node = createStrictMock(Content.class);
-        final NodeData prop = createStrictMock(NodeData.class);
-        final HttpServletRequest req = createStrictMock(HttpServletRequest.class);
-        final HttpServletResponse res = createStrictMock(HttpServletResponse.class);
-        expect(ctx.getHierarchyManager("imaging")).andReturn(hm);
+        final Context ctx = mock(Context.class);
+        final HierarchyManager hm = mock(HierarchyManager.class);
+        final Content node = mock(Content.class);
+        final NodeData prop = mock(NodeData.class);
+        final HttpServletRequest req = mock(HttpServletRequest.class);
+        final HttpServletResponse res = mock(HttpServletResponse.class);
+        when(ctx.getHierarchyManager("imaging")).thenReturn(hm);
         // TODO -- test should substitute another implementation of CachingImageStreamer
         // TODO -- either extract an interface, or make it an ImageGenerator
-        expect(hm.isExist("/myGenerator/path-to/dummyUri/generated")).andReturn(true);
-        expect(hm.getContent("/myGenerator/path-to/dummyUri/generated")).andReturn(node);
+        when(hm.isExist("/myGenerator/path-to/dummyUri/generated")).thenReturn(true);
+        when(hm.getContent("/myGenerator/path-to/dummyUri/generated")).thenReturn(node);
 
-        expect(node.getNodeData("generated-image")).andReturn(prop);
-        expect(prop.isExist()).andReturn(true);
-        expect(prop.getStream()).andReturn(new ByteArrayInputStream(new byte[]{1,2,3})).times(2);
-        //        expect(node.hasNodeData("generated-image")).andReturn(false);
-        expect(req.getPathInfo()).andReturn("/myGenerator/someWorkspace/some/path/to/a/node");
-        expect(req.getRequestURI()).andReturn("dummyUri");
-        expect(res.getOutputStream()).andReturn(servletOut);
+        when(node.getNodeData("generated-image")).thenReturn(prop);
+        when(prop.isExist()).thenReturn(true);
+        when(prop.getStream()).thenReturn(new ByteArrayInputStream(new byte[]{1,2,3}));
+        when(req.getPathInfo()).thenReturn("/myGenerator/someWorkspace/some/path/to/a/node");
+        when(req.getRequestURI()).thenReturn("dummyUri");
+        when(res.getOutputStream()).thenReturn(servletOut);
         res.flushBuffer();
 
         final ParameterProviderFactory<HttpServletRequest, String> ppFactory = new ParameterProviderFactory<HttpServletRequest, String>() {
@@ -119,10 +118,9 @@ public class ImagingServletTest {
             }
         };
 
-        replay(ctx, hm, node, prop, req, res);
         MgnlContext.setInstance(ctx);
         imagingServlet.doGet(req, res);
-        verify(ctx, hm, node, prop, req, res);
+        verify(res, atMost(2)).flushBuffer();
 
         // TODO - disabled for now
         // assertTrue("ImageGenerator.generate() wasn't called !", generator.imageGeneratorWasCalled);

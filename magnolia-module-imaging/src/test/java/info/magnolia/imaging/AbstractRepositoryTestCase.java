@@ -33,7 +33,7 @@
  */
 package info.magnolia.imaging;
 
-import static org.easymock.EasyMock.createNiceMock;
+import static org.mockito.Mockito.*;
 import info.magnolia.context.SystemContext;
 import info.magnolia.imaging.operations.load.DefaultImageIOImageDecoder;
 import info.magnolia.imaging.operations.load.ImageDecoder;
@@ -85,7 +85,7 @@ public abstract class AbstractRepositoryTestCase extends RepositoryTestCase {
     @Override
     protected void initDefaultImplementations() throws IOException, ModuleManagementException {
         //MgnlTestCase clears factory before running this method, so we have to instrument factory here rather then in setUp() before calling super.setUp()
-        ModuleRegistry registry = createNiceMock(ModuleRegistry.class);
+        ModuleRegistry registry = mock(ModuleRegistry.class);
         ComponentsTestUtil.setInstance(ModuleRegistry.class, registry);
 
         final ModuleDefinitionReader fakeReader = new ModuleDefinitionReader() {

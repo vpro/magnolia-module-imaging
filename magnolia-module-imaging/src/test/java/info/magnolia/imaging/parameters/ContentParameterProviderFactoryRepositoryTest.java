@@ -33,7 +33,7 @@
  */
 package info.magnolia.imaging.parameters;
 
-import static org.easymock.EasyMock.*;
+import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.HierarchyManager;
@@ -59,9 +59,8 @@ public class ContentParameterProviderFactoryRepositoryTest extends AbstractRepos
         assertNotSame(hm.getContent("/some/node"), hm.getContent("/some/node"));
         assertFalse(hm.getContent("/some/node").equals(hm.getContent("/some/node")));
 
-        final HttpServletRequest req = createStrictMock(HttpServletRequest.class);
-        expect(req.getPathInfo()).andReturn("/generator/website/some/node").times(2);
-        replay(req);
+        final HttpServletRequest req = mock(HttpServletRequest.class);
+        when(req.getPathInfo()).thenReturn("/generator/website/some/node");
         final ContentParameterProviderFactory factory = new ContentParameterProviderFactory();
         final ParameterProvider<Content> param1 = factory.newParameterProviderFor(req);
         final ParameterProvider<Content> param2 = factory.newParameterProviderFor(req);

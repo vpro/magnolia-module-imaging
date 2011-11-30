@@ -33,8 +33,9 @@
  */
 package info.magnolia.imaging.caching;
 
-import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.isA;
+import static org.mockito.Mockito.*;
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.HierarchyManager;
 import info.magnolia.cms.core.NodeData;
@@ -83,7 +84,6 @@ import javax.imageio.ImageIO;
 import javax.jcr.RepositoryException;
 
 import org.apache.commons.io.IOUtils;
-import org.easymock.IMocksControl;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -128,21 +128,13 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
         final BufferedImage dummyImg = ImageIO.read(getClass().getResourceAsStream("/funnel.gif"));
         assertNotNull("Couldn't load dummy test image", dummyImg);
 
-        final IMocksControl generatorCtrl = createStrictControl();
-        generatorCtrl.checkOrder(false);
-        // we don't want to synchronize calls to the Generator mock
-        generatorCtrl.makeThreadSafe(false);
-        // all methods of the generator (except generate()) can be called from various threads
-        generatorCtrl.checkIsUsedInOneThread(false);
-        final ImageGenerator<ParameterProvider<Content>> generator = generatorCtrl.createMock(ImageGenerator.class);
-        expect(generator.getParameterProviderFactory()).andReturn(ppf).anyTimes();
-        expect(generator.getName()).andReturn("test").anyTimes();
-        expect(generator.getOutputFormat(isA(ParameterProvider.class))).andReturn(png).anyTimes();
+        final ImageGenerator<ParameterProvider<Content>> generator = mock(ImageGenerator.class);
+        when(generator.getParameterProviderFactory()).thenReturn(ppf);
+        when(generator.getName()).thenReturn("test");
+        when(generator.getOutputFormat(isA(ParameterProvider.class))).thenReturn(png);
 
         // aaaaand finally, here's the real reason for this test !
-        expect(generator.generate(isA(ParameterProvider.class))).andReturn(dummyImg).times(1);
-
-        replay(generator);
+        when(generator.generate(isA(ParameterProvider.class))).thenReturn(dummyImg);
 
         // yeah, we're using a "wrong" workspace for the image cache, to avoid having to setup a custom one in this test
         final HierarchyManager hm = new SingleSaveHierarchyManagerWrapper("config");
@@ -234,9 +226,6 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
                 Arrays.equals(outs2[outs2.length - 1].toByteArray(), cachedOut2.toByteArray()));
 
         outs2[outs2.length - 1] = null;
-
-        verify(generator);
-        /* verify(hm, root, t, m, p, y); */
     }
 
     /**
@@ -333,7 +322,7 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
     @Override
     protected void initDefaultImplementations() throws IOException, ModuleManagementException {
         //MgnlTestCase clears factory before running this method, so we have to instrument factory here rather then in setUp() before calling super.setUp()
-        ModuleRegistry registry = createNiceMock(ModuleRegistry.class);
+        ModuleRegistry registry = mock(ModuleRegistry.class);
         ComponentsTestUtil.setInstance(ModuleRegistry.class, registry);
 
         final ModuleDefinitionReader fakeReader = new ModuleDefinitionReader() {

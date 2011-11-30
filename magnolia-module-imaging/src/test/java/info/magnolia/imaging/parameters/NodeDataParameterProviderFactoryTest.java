@@ -33,7 +33,7 @@
  */
 package info.magnolia.imaging.parameters;
 
-import static org.easymock.EasyMock.*;
+import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.HierarchyManager;
@@ -68,7 +68,7 @@ public class NodeDataParameterProviderFactoryTest extends AbstractRepositoryTest
         srcProp = src.createNodeData("chalala", "tralala");
         srcHM.save();
 
-        req = createStrictMock(HttpServletRequest.class);
+        req = mock(HttpServletRequest.class);
     }
 
     @Test
@@ -76,8 +76,7 @@ public class NodeDataParameterProviderFactoryTest extends AbstractRepositoryTest
         final HierarchyManager hm = MgnlContext.getHierarchyManager("website");
         assertNotSame(srcProp, hm.getNodeData("/some/node/chalala"));
 
-        expect(req.getPathInfo()).andReturn("/generator/website/some/node/chalala").times(2);
-        replay(req);
+        when(req.getPathInfo()).thenReturn("/generator/website/some/node/chalala");
         final NodeDataParameterProviderFactory factory = new NodeDataParameterProviderFactory();
         final ParameterProvider<NodeData> param1 = factory.newParameterProviderFor(req);
         final ParameterProvider<NodeData> param2 = factory.newParameterProviderFor(req);
@@ -85,26 +84,22 @@ public class NodeDataParameterProviderFactoryTest extends AbstractRepositoryTest
                 param1.getParameter(), param2.getParameter());
         assertEquals("2 calls to ParameterProviderFactory should return 2 *equivalent instances*.",
                 param1.getParameter(), param2.getParameter());
-        verify(req);
     }
 
     @Test
     public void testReturnsWrappedNonExistingNodeDataIfPropertyDoesNotExist() throws Exception {
-        expect(req.getPathInfo()).andReturn("/generator/website/some/node/booyah");
-        replay(req);
+        when(req.getPathInfo()).thenReturn("/generator/website/some/node/booyah");
         final NodeDataParameterProviderFactory factory = new NodeDataParameterProviderFactory();
         final ParameterProvider<NodeData> pp = factory.newParameterProviderFor(req);
         final NodeData data = pp.getParameter();
         assertTrue(((NodeDataWrapper) data).getWrappedNodeData() instanceof NonExistingNodeData);
-        verify(req);
     }
 
     /** TODO this currently ends up in a miserable NPE - see MAGNOLIA-2745 */
     @Ignore
     @Test
     public void testYieldsAProperExceptionIfGeneratorNameIsOmmitted() throws Exception {
-        expect(req.getPathInfo()).andReturn("/website/some/node/chalala");
-        replay(req);
+        when(req.getPathInfo()).thenReturn("/website/some/node/chalala");
         final NodeDataParameterProviderFactory factory = new NodeDataParameterProviderFactory();
         try {
             final ParameterProvider<NodeData> pp = factory.newParameterProviderFor(req);
@@ -119,11 +114,9 @@ public class NodeDataParameterProviderFactoryTest extends AbstractRepositoryTest
 
     @Test
     public void testExistingPropertyJustWorks() throws RepositoryException {
-        expect(req.getPathInfo()).andReturn("/generator/website/some/node/chalala");
-        replay(req);
+        when(req.getPathInfo()).thenReturn("/generator/website/some/node/chalala");
         final NodeDataParameterProviderFactory factory = new NodeDataParameterProviderFactory();
         final ParameterProvider<NodeData> pp = factory.newParameterProviderFor(req);
         final NodeData data = pp.getParameter();
-        verify(req);
     }
 }

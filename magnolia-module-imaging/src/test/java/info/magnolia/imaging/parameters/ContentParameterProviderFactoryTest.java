@@ -33,7 +33,7 @@
  */
 package info.magnolia.imaging.parameters;
 
-import static org.easymock.EasyMock.*;
+import static org.mockito.Mockito.*;
 import info.magnolia.cms.core.Content;
 import static org.junit.Assert.*;
 import info.magnolia.cms.core.HierarchyManager;
@@ -83,18 +83,17 @@ public class ContentParameterProviderFactoryTest {
     }
 
     private void validPathsTests(final String pathInfo, final String expectedWorkspaceName, final String expectedNodePath) throws RepositoryException {
-        final Context ctx = createStrictMock(Context.class);
-        final HierarchyManager hm = createStrictMock(HierarchyManager.class);
-        final Content mockNode = createStrictMock(Content.class);
-        final HttpServletRequest req = createStrictMock(HttpServletRequest.class);
+        final Context ctx = mock(Context.class);
+        final HierarchyManager hm = mock(HierarchyManager.class);
+        final Content mockNode = mock(Content.class);
+        final HttpServletRequest req = mock(HttpServletRequest.class);
         MgnlContext.setInstance(ctx);
 
-        expect(req.getPathInfo()).andReturn(pathInfo);
-        expect(ctx.getHierarchyManager(expectedWorkspaceName)).andReturn(hm);
-        expect(hm.getContent(expectedNodePath)).andReturn(mockNode);
-        expect(mockNode.getHandle()).andReturn("/does/not/matter"); // see SimpleEqualityContentWrapper
+        when(req.getPathInfo()).thenReturn(pathInfo);
+        when(ctx.getHierarchyManager(expectedWorkspaceName)).thenReturn(hm);
+        when(hm.getContent(expectedNodePath)).thenReturn(mockNode);
+        when(mockNode.getHandle()).thenReturn("/does/not/matter"); // see SimpleEqualityContentWrapper
 
-        replay(ctx, hm, mockNode, req);
         final ContentParameterProviderFactory f = new ContentParameterProviderFactory();
         final ParameterProvider<Content> pp = f.newParameterProviderFor(req);
         final Content result = pp.getParameter();
@@ -103,7 +102,6 @@ public class ContentParameterProviderFactoryTest {
         // now that we know its wrapped, we also check that, and assertEquals against the unwrapped instance
         assertTrue(result instanceof SimpleEqualityContentWrapper);
         assertEquals(mockNode, ((ContentWrapper)result).getWrappedContent());
-        verify(ctx, hm, mockNode, req);
     }
 
     @Test
@@ -117,11 +115,10 @@ public class ContentParameterProviderFactoryTest {
     }
 
     private void failureTestForIncompletePaths(final String pathInfo, final String expectedExceptionMsg) {
-        final HttpServletRequest req = createStrictMock(HttpServletRequest.class);
-        expect(req.getPathInfo()).andReturn(pathInfo);
-        expect(req.getRequestURI()).andReturn("/chalala" + (pathInfo == null ? "" : pathInfo)).anyTimes();
+        final HttpServletRequest req = mock(HttpServletRequest.class);
+        when(req.getPathInfo()).thenReturn(pathInfo);
+        when(req.getRequestURI()).thenReturn("/chalala" + (pathInfo == null ? "" : pathInfo));
 
-        replay(req);
         final ContentParameterProviderFactory f = new ContentParameterProviderFactory();
         try {
             f.newParameterProviderFor(req);
@@ -129,6 +126,5 @@ public class ContentParameterProviderFactoryTest {
         } catch (IllegalArgumentException e) {
             assertEquals(expectedExceptionMsg, e.getMessage());
         }
-        verify(req);
     }
 }
