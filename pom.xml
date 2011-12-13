@@ -21,9 +21,9 @@
     <url>http://jira.magnolia-cms.com/browse/MGNLIMG</url>
   </issueManagement>
   <scm>
-    <connection>scm:svn:http://svn.magnolia-cms.com/svn/enterprise/imaging/branches/imaging-2.1.1_for_4.4.6</connection>
-    <developerConnection>scm:svn:http://svn.magnolia-cms.com/svn/enterprise/imaging/branches/imaging-2.1.1_for_4.4.6</developerConnection>
-    <url>http://svn.magnolia-cms.com/svn/enterprise/imaging/branches/imaging-2.1.1_for_4.4.6</url>
+    <connection>scm:svn:http://svn.magnolia-cms.com/svn/enterprise/imaging/branches/magnolia-module-imaging-2.1</connection>
+    <developerConnection>scm:svn:http://svn.magnolia-cms.com/svn/enterprise/imaging/branches/magnolia-module-imaging-2.1</developerConnection>
+    <url>http://svn.magnolia-cms.com/svn/enterprise/imaging/branches/magnolia-module-imaging-2.1</url>
   </scm>
 
   <modules>
