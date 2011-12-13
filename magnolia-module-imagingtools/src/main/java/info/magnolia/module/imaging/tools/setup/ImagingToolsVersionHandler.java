@@ -1,5 +1,5 @@
 /**
- * This file Copyright (c) 2009-2011 Magnolia International
+ * This file Copyright (c) 2009-2010 Magnolia International
  * Ltd.  (http://www.magnolia-cms.com). All rights reserved.
  *
  *
@@ -17,10 +17,11 @@ package info.magnolia.module.imaging.tools.setup;
 import info.magnolia.module.DefaultModuleVersionHandler;
 
 /**
- * {@link info.magnolia.module.ModuleVersionHandler} for the Imaging Tools module.
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $)
  */
 public class ImagingToolsVersionHandler extends DefaultModuleVersionHandler {
+    // TODO - update task for plugins page ? can't do much since the module name is different, although we *could*.
+    // besides, 1.0 was never released...
 }
