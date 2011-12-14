@@ -7,7 +7,7 @@
     <version>20</version>
   </parent>
   <artifactId>magnolia-module-imaging-parent</artifactId>
-  <version>2.2-beta3</version>
+  <version>2.2-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Magnolia Imaging (parent)</name>
   <description>A set of Magnolia modules which provide image generation, filtering and manipulation capabilities.</description>
@@ -21,9 +21,9 @@
     <url>http://jira.magnolia-cms.com/browse/MGNLIMG</url>
   </issueManagement>
   <scm>
-    <connection>scm:svn:http://svn.magnolia-cms.com/svn/community/modules/imaging/tags/magnolia-imaging-2.3-beta3</connection>
-    <developerConnection>scm:svn:http://svn.magnolia-cms.com/svn/community/modules/imaging/tags/magnolia-imaging-2.3-beta3</developerConnection>
-    <url>http://svn.magnolia-cms.com/view/community/modules/imaging/tags/magnolia-imaging-2.3-beta3</url>
+    <connection>scm:svn:http://svn.magnolia-cms.com/svn/community/modules/imaging/trunk</connection>
+    <developerConnection>scm:svn:http://svn.magnolia-cms.com/svn/community/modules/imaging/trunk</developerConnection>
+    <url>http://svn.magnolia-cms.com/view/community/modules/imaging/trunk</url>
   </scm>
 
   <modules>
