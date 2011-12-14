@@ -77,7 +77,7 @@ public class OutputFormat implements Cloneable {
     // there's probably a better way ...
 
     public boolean supportsTransparency() {
-        return !"jpg".equalsIgnoreCase(formatName) && !"jpeg".equalsIgnoreCase(formatName);
+        return !"jpg".equalsIgnoreCase(formatName) && !"jpeg".equalsIgnoreCase(formatName) && !"bmp".equalsIgnoreCase(formatName);
     }
 
     // -- generated getters and setters
