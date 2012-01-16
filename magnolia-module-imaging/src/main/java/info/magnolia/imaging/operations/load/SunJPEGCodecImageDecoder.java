@@ -27,7 +27,7 @@ import java.io.InputStream;
 
 /**
  * An {@link ImageDecoder} implementation which uses {@link com.sun.image.codec.jpeg.JPEGImageDecoder}
- * (which might not be present on all systems), and if failing, falls back on {@link info.magnolia.imaging.operations.load.DefaultImageIOImageDecoder}
+ * (which might not be present on all systems), and if failing, falls back on {@link info.magnolia.imaging.operations.load.DefaultImageIOImageDecoder}.
  *
  * @author gjoseph
  * @version $Revision: $ ($Author: $) 
