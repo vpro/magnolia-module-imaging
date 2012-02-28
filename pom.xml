@@ -15,7 +15,7 @@
     <magnoliaVersion>4.5-SNAPSHOT</magnoliaVersion>
     <javaVersion>1.6</javaVersion>
     <documentationURL>http://documentation.magnolia-cms.com/modules/imaging.html</documentationURL>
-    <scmTagPrefix>standard-templating-kit</scmTagPrefix>
+    <scmTagPrefix>magnolia-imaging</scmTagPrefix>
   </properties>
   <issueManagement>
     <system>Jira</system>
