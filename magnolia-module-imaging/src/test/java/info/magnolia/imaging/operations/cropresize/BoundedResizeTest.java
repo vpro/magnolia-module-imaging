@@ -33,14 +33,12 @@
  */
 package info.magnolia.imaging.operations.cropresize;
 
+import static org.junit.Assert.assertEquals;
 import info.magnolia.imaging.AbstractImagingTest;
 
 import java.awt.image.BufferedImage;
 
-import org.junit.Ignore;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * @version $Id$
@@ -85,11 +83,9 @@ public class BoundedResizeTest extends AbstractImagingTest {
         doTestKeepsOriginalRatioAndCompliesToSmallestMaximumDimension(img, 160, 160, 160, 40);
     }
 
-    @Ignore("We could implement this for consistency's sake")
-    @Test
+    @Test(expected=IllegalArgumentException.class)
     public void testWhatHappensIfWeOnlySpecifyMaxWidth() throws Exception {
         doTestKeepsOriginalRatioAndCompliesToSmallestMaximumDimension(getHorizontalTestImage(), 400, 0, 400, 300);
-        doTestKeepsOriginalRatioAndCompliesToSmallestMaximumDimension(getHorizontalTestImage(), 0, 400, 400, 300);
     }
 
     private void doTestKeepsOriginalRatioAndCompliesToSmallestMaximumDimension(final BufferedImage src, final int maxWidth, final int maxHeight, final int expectedWith, final int expectedHeight) throws Exception {

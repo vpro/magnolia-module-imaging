@@ -33,8 +33,8 @@
  */
 package info.magnolia.imaging.parameters;
 
-import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.HierarchyManager;
 import info.magnolia.cms.core.NodeData;
@@ -45,11 +45,11 @@ import info.magnolia.context.MgnlContext;
 import info.magnolia.imaging.AbstractRepositoryTestCase;
 import info.magnolia.imaging.ParameterProvider;
 
+import javax.jcr.NoSuchWorkspaceException;
 import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -95,21 +95,16 @@ public class NodeDataParameterProviderFactoryTest extends AbstractRepositoryTest
         assertTrue(((NodeDataWrapper) data).getWrappedNodeData() instanceof NonExistingNodeData);
     }
 
-    /** TODO this currently ends up in a miserable NPE - see MAGNOLIA-2745 */
-    @Ignore
     @Test
     public void testYieldsAProperExceptionIfGeneratorNameIsOmmitted() throws Exception {
         when(req.getPathInfo()).thenReturn("/website/some/node/chalala");
         final NodeDataParameterProviderFactory factory = new NodeDataParameterProviderFactory();
         try {
-            final ParameterProvider<NodeData> pp = factory.newParameterProviderFor(req);
-            final NodeData data = pp.getParameter();
+            factory.newParameterProviderFor(req);
         } catch (Throwable t) {
-            t.printStackTrace();
-            // since "website" would be the generator name:
-            assertEquals("No repository mapped to 'some'", t.getMessage());
+            assertTrue(t.getCause() instanceof NoSuchWorkspaceException);
+            assertTrue(t.getMessage().contains("some"));
         }
-        verify(req);
     }
 
     @Test
