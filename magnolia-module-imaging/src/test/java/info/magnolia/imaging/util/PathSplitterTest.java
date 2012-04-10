@@ -146,12 +146,12 @@ public class PathSplitterTest {
         assertEquals("", ps.remaining());
     }
 
-    @Ignore("Reactivate ASAP")
+    @Ignore("reactivate when solving MGNLIMG-95")
     @Test
-    public void testThereIsCertainlyABugIfADotIsPresentBeforeTheLastSlash() {
-        final PathSplitter ps = new PathSplitter("/foo.html/bar", '/', true);
+    public void testDotsInPathNotAtTheEndAreNotTrimmed() {
+        final PathSplitter ps = new PathSplitter("/foo.something/bar", '/', true);
         assertEquals(2, ps.count());
-        assertEquals("foo.html", ps.next());
+        assertEquals("foo.something", ps.next());
         assertEquals("bar", ps.next());
         assertEquals("", ps.remaining());
     }
