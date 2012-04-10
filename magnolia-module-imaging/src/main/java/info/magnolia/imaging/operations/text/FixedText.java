@@ -36,6 +36,8 @@ package info.magnolia.imaging.operations.text;
 import info.magnolia.imaging.ParameterProvider;
 
 /**
+ * Overlay based on fixed text.
+ *
  * @param <P> type of ParameterProvider
  *
  * @version $Id$

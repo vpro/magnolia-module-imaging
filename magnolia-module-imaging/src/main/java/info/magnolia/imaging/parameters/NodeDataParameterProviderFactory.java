@@ -43,6 +43,8 @@ import javax.jcr.RepositoryException;
 
 
 /**
+ * Factory for NodeDataParameterProviders.
+ *
  * @version $Id$
  */
 public class NodeDataParameterProviderFactory extends AbstractWorkspaceAndPathParameterProviderFactory<NodeData> {

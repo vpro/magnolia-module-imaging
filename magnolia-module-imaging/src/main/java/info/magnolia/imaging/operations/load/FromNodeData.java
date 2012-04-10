@@ -39,6 +39,8 @@ import info.magnolia.imaging.ParameterProvider;
 
 
 /**
+ * ImageOperation loading from NodeData.
+ *
  * @version $Id$
  */
 public class FromNodeData extends AbstractFromContent<NodeData> {

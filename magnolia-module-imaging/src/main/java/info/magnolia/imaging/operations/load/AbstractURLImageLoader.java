@@ -43,6 +43,8 @@ import java.io.InputStream;
 import java.net.URL;
 
 /**
+ * Loads images from a URL.
+ *
  * @param <P> type of ParameterProvider
  *
  * @version $Id$

@@ -42,6 +42,8 @@ import javax.jcr.RepositoryException;
 
 
 /**
+ * ImageOperation loading from content.
+ *
  * @version $Id$
  */
 public class FromContent extends AbstractFromContent<Content> {

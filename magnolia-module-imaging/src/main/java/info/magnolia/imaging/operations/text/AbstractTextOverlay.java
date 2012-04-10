@@ -39,6 +39,8 @@ import info.magnolia.imaging.operations.ImageOperation;
 import java.awt.image.BufferedImage;
 
 /**
+ * Superclass for ImageOperations based on Text Overlays.
+ *
  * @param <P> type of ParameterProvider
  *
  * @version $Id$

@@ -37,6 +37,8 @@ import info.magnolia.cms.core.Content;
 import info.magnolia.imaging.parameters.ContentParameterProvider;
 
 /**
+ * Overlay based on Text provided from a Node(Data).
+ *
  * @version $Id$
  */
 public class TextFromNode extends AbstractTextOverlay<ContentParameterProvider> {
