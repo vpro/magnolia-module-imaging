@@ -37,7 +37,6 @@ import static org.junit.Assert.*;
 
 import java.awt.Color;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -53,12 +52,6 @@ public class ColorConverterTest {
         assertEquals(Color.black, ColorConverter.toColor("#000000"));
         assertEquals(Color.red, ColorConverter.toColor("#ff0000"));
         assertEquals(new Color(128, 64, 23), ColorConverter.toColor("#804017"));
-    }
-
-    @Ignore
-    @Test
-    public void testCanDecodeHexaWithAlphaChannel() {
-        assertEquals(new Color(128, 64, 23, 35), ColorConverter.toColor("#80401723"));
     }
 
     @Test
