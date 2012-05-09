@@ -22,9 +22,9 @@
     <url>http://jira.magnolia-cms.com/browse/MGNLIMG</url>
   </issueManagement>
   <scm>
-    <connection>scm:svn:http://svn.magnolia-cms.com/svn/community/modules/imaging/trunk</connection>
-    <developerConnection>scm:svn:http://svn.magnolia-cms.com/svn/community/modules/imaging/trunk</developerConnection>
-    <url>http://svn.magnolia-cms.com/view/community/modules/imaging/trunk</url>
+    <connection>scm:git:http://git.magnolia-cms.com/modules/imaging</connection>
+    <developerConnection>scm:git:https://git.magnolia-cms.com/modules/imaging</developerConnection>
+    <url>http://git.magnolia-cms.com/gitweb/?p=modules/imaging.git</url>
   </scm>
 
   <modules>
