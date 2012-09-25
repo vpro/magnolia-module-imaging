@@ -41,8 +41,9 @@ import info.magnolia.imaging.ParameterProvider;
 /**
  * ImageOperation loading from NodeData.
  *
- * @version $Id$
+ * @deprecated since 5.0, use {@code FromBinaryNode} instead.
  */
+@Deprecated
 public class FromNodeData extends AbstractFromContent<NodeData> {
 
     @Override

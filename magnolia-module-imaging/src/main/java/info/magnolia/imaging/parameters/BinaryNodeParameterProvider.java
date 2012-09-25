@@ -1,5 +1,5 @@
 /**
- * This file Copyright (c) 2009-2011 Magnolia International
+ * This file Copyright (c) 2010-2012 Magnolia International
  * Ltd.  (http://www.magnolia-cms.com). All rights reserved.
  *
  *
@@ -31,45 +31,26 @@
  * intact.
  *
  */
-package info.magnolia.imaging.operations.load;
+package info.magnolia.imaging.parameters;
 
-import info.magnolia.cms.core.Content;
-import info.magnolia.cms.core.NodeData;
-import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.ParameterProvider;
 
-import javax.jcr.RepositoryException;
-
+import javax.jcr.Node;
 
 /**
- * ImageOperation loading from content.
- *
- * @deprecated since 5.0, use {@code FromBinaryNode} instead.
+ * BinaryNodeParameterProvider.
  */
-@Deprecated
-public class FromContent extends AbstractFromContent<Content> {
+public class BinaryNodeParameterProvider implements ParameterProvider<Node> {
 
-    private String propertyName = "binary";
+    private final Node node;
+
+    public BinaryNodeParameterProvider(Node node) {
+        this.node = node;
+    }
 
     @Override
-    protected NodeData getNodeData(ParameterProvider<Content> param) throws ImagingException {
-        try {
-            final Content node = param.getParameter();
-            if (!node.hasNodeData(propertyName)) {
-                throw new ImagingException("There is no '" + propertyName + "' property at " + node.getHandle());
-            }
-            return node.getNodeData(propertyName);
-        } catch (RepositoryException e) {
-            throw new RuntimeException(e); // TODO - MAGNOLIA-2746
-        }
-    }
-
-    public String getPropertyName() {
-        return propertyName;
-    }
-
-    public void setPropertyName(String propertyName) {
-        this.propertyName = propertyName;
+    public Node getParameter() {
+        return node;
     }
 
 }

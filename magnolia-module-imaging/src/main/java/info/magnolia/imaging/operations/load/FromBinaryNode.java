@@ -1,5 +1,5 @@
 /**
- * This file Copyright (c) 2009-2011 Magnolia International
+ * This file Copyright (c) 2010-2012 Magnolia International
  * Ltd.  (http://www.magnolia-cms.com). All rights reserved.
  *
  *
@@ -33,47 +33,30 @@
  */
 package info.magnolia.imaging.operations.load;
 
-import info.magnolia.cms.core.NodeData;
 import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.ParameterProvider;
 
-import javax.jcr.PropertyType;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
 
 /**
- * Superclass for ImageOperations loading from Content.
- *
- * @param <PT> type of ParameterProvider's parameter
- *
- * @deprecated since 5.0, use {@code AbstractFromNode} instead.
+ * ImageOperation loading from binary node of parent.
  */
-@Deprecated
-public abstract class AbstractFromContent<PT> extends AbstractLoader<ParameterProvider<PT>> {
+public class FromBinaryNode extends AbstractFromNode<Node> {
+
+    private final String BINARY_NODE_NAME = "photo";
 
     @Override
-    protected BufferedImage loadSource(ParameterProvider<PT> param) throws ImagingException {
-        final NodeData data = getNodeData(param);
-        if (!data.isExist() || data.getType() != PropertyType.BINARY) {
-            throw new ImagingException("Nodedata " + data.getHandle() + " doesn't exist or is not of type binary.");
-        }
-        final InputStream in = data.getStream();
-        if (in == null) {
-            throw new ImagingException("Can't get InputStream from " + data.getHandle());
-        }
+    protected Node getBinaryNode(ParameterProvider<Node> param) throws ImagingException {
         try {
-            return doReadAndClose(in);
-        } catch (IOException e) {
-            throw new ImagingException("Can't load image from " + data.getHandle());
+            final Node node = param.getParameter();
+            if (!node.hasNode(BINARY_NODE_NAME)) {
+                throw new ImagingException("There is no '" + BINARY_NODE_NAME + "' node at " + node.getPath());
+            }
+            return node.getNode(BINARY_NODE_NAME);
+
+        } catch (RepositoryException e) {
+            throw new RuntimeException(e);
         }
     }
-
-    /**
-     * Gets the appropriate NodeData instance based on the given ParameterProvider.
-     * If possible, the implementation should throw exceptions early, for instance if
-     * the NodeData can't be loaded.
-     */
-    protected abstract NodeData getNodeData(ParameterProvider<PT> param) throws ImagingException;
-
 }
