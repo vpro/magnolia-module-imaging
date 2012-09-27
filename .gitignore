@@ -27,6 +27,10 @@
 /magnolia-module-imaging/.project
 /magnolia-module-imaging/.classpath
 /magnolia-module-imaging/.settings
+# some tests write files into module
+/magnolia-module-imaging/*.jpg
+/magnolia-module-imaging/*.png
+/magnolia-module-imaging/*.gif
 
 # /magnolia-dev-project/
 /magnolia-dev-project/target
