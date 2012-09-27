@@ -44,8 +44,9 @@ import info.magnolia.imaging.ParameterProvider;
  * the actual parameter and not the ParameterProvider instance: we're assuming that whatever parameter
  * is used provides an appropriate equals/hashCode() implementation.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @param <P> type of ParameterProvider's parameter
+ *
+ * @version $Id$
  */
 class ImageGenerationJob<P> {
     private final ImageGenerator<ParameterProvider<P>> generator;

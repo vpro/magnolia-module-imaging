@@ -54,9 +54,10 @@ import info.magnolia.imaging.caching.CachingStrategy;
  *
  * @see info.magnolia.imaging.caching.ImageGenerationJob
  *
+ * @param <E> type of the environment
+ * @param <PT> type of ParameterProvider's parameter
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public interface ParameterProviderFactory<E, PT> {
 

@@ -42,8 +42,9 @@ import java.io.OutputStream;
  *
  * This isn't the best name, because really, it doesn't "stream" much.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @param <P> type of ParameterProvider's parameter
+ *
+ * @version $Id$
  */
 public interface ImageStreamer<P> {
 

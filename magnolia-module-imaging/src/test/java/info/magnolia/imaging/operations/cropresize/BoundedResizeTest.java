@@ -33,54 +33,60 @@
  */
 package info.magnolia.imaging.operations.cropresize;
 
+import static org.junit.Assert.assertEquals;
 import info.magnolia.imaging.AbstractImagingTest;
 
 import java.awt.image.BufferedImage;
 
+import org.junit.Test;
+
 /**
- *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class BoundedResizeTest extends AbstractImagingTest {
+
+    @Test
     public void testJustResizeIfTargetRatioIsEquivalentToSourceRatio() throws Exception {
         doTestKeepsOriginalRatioAndCompliesToSmallestMaximumDimension(getHorizontalTestImage(), 400, 300, 400, 300);
     }
 
+    @Test
     public void testKeepsOriginalRatioAndCompliesToSmallestMaximumDimension() throws Exception {
         // source is w:1600*h:1200
         doTestKeepsOriginalRatioAndCompliesToSmallestMaximumDimension(getHorizontalTestImage(), 2500, 300, 400, 300);
         doTestKeepsOriginalRatioAndCompliesToSmallestMaximumDimension(getHorizontalTestImage(), 200, 3000, 200, 150);
     }
 
+    @Test
     public void testKeepsOriginalRatioAndCompliesToSmallestMaximumDimensionForVerticalSourceToo() throws Exception {
         // source is w:1200*h:1600
         doTestKeepsOriginalRatioAndCompliesToSmallestMaximumDimension(getVerticalTestImage(), 2500, 400, 300, 400);
         doTestKeepsOriginalRatioAndCompliesToSmallestMaximumDimension(getVerticalTestImage(), 300, 4000, 300, 400);
     }
 
+    @Test
     public void testKeepsOriginalRatioAndCompliesToSmallestMaximumDimensionForSquareSourceToo() throws Exception {
         // source is w:500*h:500
         doTestKeepsOriginalRatioAndCompliesToSmallestMaximumDimension(getSquareTestImage(), 2500, 400, 400, 400);
         doTestKeepsOriginalRatioAndCompliesToSmallestMaximumDimension(getSquareTestImage(), 300, 4000, 300, 300);
     }
 
+    @Test
     public void testAlsoWorksWithOblongImages() throws Exception {
         final BufferedImage img = generateArbitraryTestImage(228, 700);
         doTestKeepsOriginalRatioAndCompliesToSmallestMaximumDimension(img, 160, 260, 84, 260);
     }
 
+    @Test
     public void testAnotherOblongCase() throws Exception {
         final BufferedImage img = generateArbitraryTestImage(800, 200);
         doTestKeepsOriginalRatioAndCompliesToSmallestMaximumDimension(img, 160, 160, 160, 40);
     }
 
-    // TODO - we could implement this for consistency's sake
-//    public void testWhatHappensIfWeOnlySpecifyMaxWidth() throws Exception {
-//        doTestKeepsOriginalRatioAndCompliesToSmallestMaximumDimension(getHorizontalTestImage(), 400, 0, 400, 300);
-//        doTestKeepsOriginalRatioAndCompliesToSmallestMaximumDimension(getHorizontalTestImage(), 0, 400, 400, 300);
-//    }
-
+    @Test(expected=IllegalArgumentException.class)
+    public void testWhatHappensIfWeOnlySpecifyMaxWidth() throws Exception {
+        doTestKeepsOriginalRatioAndCompliesToSmallestMaximumDimension(getHorizontalTestImage(), 400, 0, 400, 300);
+    }
 
     private void doTestKeepsOriginalRatioAndCompliesToSmallestMaximumDimension(final BufferedImage src, final int maxWidth, final int maxHeight, final int expectedWith, final int expectedHeight) throws Exception {
         final BoundedResize op = new BoundedResize();

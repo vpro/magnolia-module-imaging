@@ -41,14 +41,16 @@ import java.awt.image.BufferedImageOp;
 /**
  * An implementation of ImageFilter which delegates to a java.awt.image.BufferedImageOp.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @param <P> type of ParameterProvider
+ *
+ * @version $Id$
  */
 public class BufferedImageOpDelegate<P extends ParameterProvider<?>> implements ImageOperation<P> {
     private BufferedImageOp delegate;
     // TODO -- some content2bean magic to automatically wrap BufferedImageOp into ImageOperation ?
     // -- or vice-versa ...
 
+    @Override
     public BufferedImage apply(BufferedImage source, P filterParams) {
         return getDelegate().filter(source, null);
     }

@@ -45,18 +45,20 @@ import info.magnolia.imaging.operations.text.TextStyle;
 import info.magnolia.imaging.operations.text.VerticalAlignment;
 
 import javax.imageio.ImageIO;
+
+import org.junit.Test;
+
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.FileOutputStream;
 
 /**
- * .
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class ImageOperationChainTest extends AbstractImagingTest {
-    //TODO - test that nested chains on several level work too
 
+    //TODO - test that nested chains on several level work too
+    @Test
     public void testBlankAndWood() throws Exception {
         final ImageOperationChain<StringParameterProvider> filterChain = new ImageOperationChain<StringParameterProvider>();
 
@@ -89,6 +91,7 @@ public class ImageOperationChainTest extends AbstractImagingTest {
         // Runtime.getRuntime().exec("open test-blank.jpg test-blank.png");
     }
 
+    @Test
     public void testSomeTransformations() throws Exception {
 
         final ImageOperationChain<StringParameterProvider> filterChain = new ImageOperationChain<StringParameterProvider>();

@@ -63,9 +63,11 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * An ImageStreamer which stores and serves generated images to/from a specific workspace.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @param <P> type of ParameterProvider's parameter
+ *
+ * @version $Id$
  */
+
 public class CachingImageStreamer<P> implements ImageStreamer<P> {
     private static final String GENERATED_IMAGE_PROPERTY = "generated-image";
 
@@ -110,6 +112,7 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
         .expiration(500, TimeUnit.MILLISECONDS)
 
         .makeComputingMap(new Function<ImageGenerationJob<P>, NodeData>() {
+            @Override
             public NodeData apply(ImageGenerationJob<P> job) {
                 try {
                     return generateAndStore(job.getGenerator(), job.getParams());
@@ -124,6 +127,7 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
         });
     }
 
+    @Override
     public void serveImage(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> params, OutputStream out) throws IOException, ImagingException {
         NodeData imgProp = fetchFromCache(generator, params);
         if (imgProp == null) {

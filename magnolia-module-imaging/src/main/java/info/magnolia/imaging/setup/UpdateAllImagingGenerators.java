@@ -46,8 +46,7 @@ import javax.jcr.RepositoryException;
 /**
  * Visits all imaging generators.
  *
- * @author ochytil
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public abstract class UpdateAllImagingGenerators extends AbstractRepositoryTask {
 

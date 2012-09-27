@@ -46,6 +46,7 @@ import info.magnolia.imaging.ParameterProvider;
  */
 public class AggregationStateParameterProvider implements ParameterProvider<AggregationState> {
 
+    @Override
     public AggregationState getParameter() {
         return MgnlContext.getAggregationState();
     }

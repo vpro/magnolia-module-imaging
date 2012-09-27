@@ -34,21 +34,24 @@
 package info.magnolia.imaging.operations.text;
 
 /**
+ * Horizontal Alignment for images.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public enum HorizontalAlignment implements Alignment {
     left {
+        @Override
         public float getPositionFor(double content, double container, double delta) {
             return (float) delta;
         }},
     /** delta is ignored for center. */
     center {
+        @Override
         public float getPositionFor(double content, double container, double delta) {
             return (float) (container / 2) - (float) (content / 2);
         }},
     right {
+        @Override
         public float getPositionFor(double content, double container, double delta) {
             return (float) (container - content - delta);
         }}

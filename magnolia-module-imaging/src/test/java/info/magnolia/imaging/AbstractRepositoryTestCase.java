@@ -33,7 +33,8 @@
  */
 package info.magnolia.imaging;
 
-import info.magnolia.cms.util.FactoryUtil;
+import static org.mockito.Mockito.*;
+import info.magnolia.context.SystemContext;
 import info.magnolia.imaging.operations.load.DefaultImageIOImageDecoder;
 import info.magnolia.imaging.operations.load.ImageDecoder;
 import info.magnolia.logging.AuditLoggingManager;
@@ -43,9 +44,9 @@ import info.magnolia.module.ModuleManagerImpl;
 import info.magnolia.module.ModuleRegistry;
 import info.magnolia.module.model.ModuleDefinition;
 import info.magnolia.module.model.reader.ModuleDefinitionReader;
+import info.magnolia.test.ComponentsTestUtil;
 import info.magnolia.test.RepositoryTestCase;
-
-import static org.easymock.EasyMock.createNiceMock;
+import info.magnolia.test.mock.MockContext;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -54,45 +55,53 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.After;
+import org.junit.Before;
+
 /**
- *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public abstract class AbstractRepositoryTestCase extends RepositoryTestCase {
+
     @Override
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         super.setUp();
-        FactoryUtil.setInstance(AuditLoggingManager.class, new AuditLoggingManager());
+        ComponentsTestUtil.setInstance(AuditLoggingManager.class, new AuditLoggingManager());
         // this is set via the module descriptor (imaging.xml)
-        FactoryUtil.setDefaultImplementation(ImageDecoder.class, DefaultImageIOImageDecoder.class);
+        ComponentsTestUtil.setImplementation(ImageDecoder.class, DefaultImageIOImageDecoder.class);
+        ComponentsTestUtil.setInstance(SystemContext.class, new MockContext());
     }
 
     @Override
-    protected void tearDown() throws Exception {
-        FactoryUtil.clear();
+    @After
+    public void tearDown() throws Exception {
+        // super tearDown needs a Ctx so we have to call it prior to resetting MgnlContext instance
         super.tearDown();
+        ComponentsTestUtil.clear();
     }
 
     // TODO - this is an ugly hack to workaround MAGNOLIA-2593 - we should review RepositoryTestCase
-
     @Override
-    protected void initDefaultImplementations() throws IOException {
+    protected void initDefaultImplementations() throws IOException, ModuleManagementException {
         //MgnlTestCase clears factory before running this method, so we have to instrument factory here rather then in setUp() before calling super.setUp()
-        ModuleRegistry registry = createNiceMock(ModuleRegistry.class);
-        FactoryUtil.setInstance(ModuleRegistry.class, registry);
+        ModuleRegistry registry = mock(ModuleRegistry.class);
+        ComponentsTestUtil.setInstance(ModuleRegistry.class, registry);
 
         final ModuleDefinitionReader fakeReader = new ModuleDefinitionReader() {
+            @Override
             public ModuleDefinition read(Reader in) throws ModuleManagementException {
                 return null;
             }
 
+            @Override
             public Map readAll() throws ModuleManagementException {
                 Map m = new HashMap();
                 m.put("moduleDef", "dummy");
                 return m;
             }
 
+            @Override
             public ModuleDefinition readFromResource(String resourcePath) throws ModuleManagementException {
                 return null;
             }
@@ -104,7 +113,7 @@ public abstract class AbstractRepositoryTestCase extends RepositoryTestCase {
                 return new ArrayList();
             }
         };
-        FactoryUtil.setInstance(ModuleManager.class, fakeModuleManager);
+        ComponentsTestUtil.setInstance(ModuleManager.class, fakeModuleManager);
         super.initDefaultImplementations();
     }
 }

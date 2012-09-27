@@ -33,16 +33,18 @@
  */
 package info.magnolia.imaging.caching;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertFalse;
 
 import java.util.Calendar;
 
+import org.junit.Test;
+
 /**
- *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
-public class AbstractContentBasedCachingStrategyTest extends TestCase {
+public class AbstractContentBasedCachingStrategyTest {
+
+    @Test
     public void testSelfSanity() {
         final Calendar cal = Calendar.getInstance();
 

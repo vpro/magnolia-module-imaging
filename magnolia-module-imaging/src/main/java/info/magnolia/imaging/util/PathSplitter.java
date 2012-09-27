@@ -47,8 +47,8 @@ import org.apache.commons.lang.StringUtils;
  * <li>next() : return "a"
  * <li>remaining() : "b/c/d/e"
  * </ul>
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ *
+ * @version $Id$
  */
 public class PathSplitter {
     private static final String[] EMPTY = new String[0];

@@ -33,19 +33,17 @@
  */
 package info.magnolia.imaging;
 
-import com.jhlabs.image.FlipFilter;
-import info.magnolia.cms.util.FactoryUtil;
+import static org.junit.Assert.assertEquals;
 import info.magnolia.imaging.operations.load.ClasspathImageLoader;
 import info.magnolia.imaging.operations.load.DefaultImageIOImageDecoder;
 import info.magnolia.imaging.operations.load.ImageDecoder;
 import info.magnolia.imaging.util.ImageUtil;
-import junit.framework.TestCase;
+import info.magnolia.test.ComponentsTestUtil;
 
-import javax.imageio.ImageIO;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.BasicStroke;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -53,6 +51,13 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.imageio.ImageIO;
+
+import org.junit.After;
+import org.junit.Before;
+
+import com.jhlabs.image.FlipFilter;
 
 /**
  * Provides utility/convenience methods to load and write images.
@@ -65,27 +70,24 @@ import java.util.Set;
  * can open them easily after all tests have run, if human verification
  * is necessary.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
-public abstract class AbstractImagingTest extends TestCase {
+public abstract class AbstractImagingTest {
     private static final boolean KEEP_GENERATED_FILES_FOR_INSPECTION = false;
     private static final boolean OPEN_GENERATED_FILES_FOR_INSPECTION = false;
 
     protected static final OutputFormat BASIC_JPEG = new OutputFormat("jpeg", false, 80, null, false);
     private static final Set<String> generatedFiles = new HashSet<String>();
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         // this is set via the module descriptor (imaging.xml)
-        FactoryUtil.setDefaultImplementation(ImageDecoder.class, DefaultImageIOImageDecoder.class);
+        ComponentsTestUtil.setImplementation(ImageDecoder.class, DefaultImageIOImageDecoder.class);
     }
 
-    @Override
-    protected void tearDown() throws Exception {
-        FactoryUtil.clear();
-        super.tearDown();
+    @After
+    public void tearDown() throws Exception {
+        ComponentsTestUtil.clear();
     }
 
     protected BufferedImage loadFromResource(String source) throws ImagingException {

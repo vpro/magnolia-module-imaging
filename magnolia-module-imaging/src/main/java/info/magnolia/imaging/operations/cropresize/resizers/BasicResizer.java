@@ -46,9 +46,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Basic implementation of a {@link info.magnolia.imaging.operations.cropresize.Resizer}.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class BasicResizer implements Resizer {
     /**
@@ -62,6 +62,7 @@ public class BasicResizer implements Resizer {
 
     private String interpolation = "bilinear";
 
+    @Override
     public BufferedImage resize(BufferedImage src, Coords srcCoords, Size targetSize) {
         final ColorModel cm = src.getColorModel();
         final WritableRaster raster = cm.createCompatibleWritableRaster(targetSize.getWidth(), targetSize.getHeight());

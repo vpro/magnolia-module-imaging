@@ -57,12 +57,11 @@ import java.util.Iterator;
  * TODO - Need to analyze differences in behaviour and performance between this and
  * {@link info.magnolia.imaging.operations.load.SunJPEGCodecImageDecoder}.
  *
- *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class SunJPEGCodecImageDecoderAlt implements ImageDecoder {
 
+    @Override
     public BufferedImage read(final InputStream in) throws IOException, ImagingException {
         final BufferedInputStream buff = ImageUtil.newBufferedInputStream(in);
         // Haven't observed ImageIO's preliminary usage of the stream (before we do the actual loading)

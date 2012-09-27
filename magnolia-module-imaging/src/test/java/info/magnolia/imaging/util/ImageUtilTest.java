@@ -43,6 +43,9 @@ import info.magnolia.imaging.operations.load.SunJPEGCodecImageDecoder;
 import info.magnolia.imaging.operations.load.SunJPEGCodecImageDecoderAlt;
 
 import javax.imageio.ImageIO;
+
+import org.junit.Test;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -51,19 +54,19 @@ import java.io.IOException;
 import java.net.URL;
 
 /**
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class ImageUtilTest extends AbstractImagingTest {
 
     // not exactly sure what differentiates this jpeg yet - but com.sun.image.codec.jpeg.JPEGImageDecoder handles it correctly for us
     // while the imageio's built-in jpeg support will only "work" if we pass the image's metadata back to the write (which is not
     // practical since we might want to overlay another image on top for instance)
-
+    @Test
     public void testDecodingHuffmanImage() throws Exception {
         doTestDecodingHuffmanImage(new SunJPEGCodecImageDecoder());
     }
 
+    @Test
     public void testDecodingHuffmanImageAlt() throws Exception {
         doTestDecodingHuffmanImage(new SunJPEGCodecImageDecoderAlt());
     }
@@ -108,7 +111,7 @@ public class ImageUtilTest extends AbstractImagingTest {
 //        iw.write(iioImage.getMetadata(), iioImage, writerParam);
 //        imageOutputStream.close();
 
-        
+
     }
 //
 //        ImageIO.write(iioImage.getRenderedImage(), "jpeg", new File("/Users/gjoseph/Downloads/34348371-broken.jpg"));
@@ -161,7 +164,7 @@ public class ImageUtilTest extends AbstractImagingTest {
         imageOutputStream.close();
 
         ImageIO.write(iioImage.getRenderedImage(), "jpeg", new File("/Users/gjoseph/Downloads/34348371-broken.jpg"));
-        
+
         ir.setInput(ImageIO.createImageInputStream(new FileInputStream("/Users/gjoseph/Downloads/34348371-test.jpg")));
         final IIOMetadata mdOK = ir.getImageMetadata(0);
 
@@ -173,6 +176,7 @@ public class ImageUtilTest extends AbstractImagingTest {
 
     }*/
 
+    @Test
     public void testCanHandleImageCreatedByBlankOperationWithoutBackgroundColor() throws Exception {
         final Blank blank = new Blank(200, 200);
         final BufferedImage img = blank.apply(null, null);
@@ -181,6 +185,7 @@ public class ImageUtilTest extends AbstractImagingTest {
         write(res, BASIC_JPEG);
     }
 
+    @Test
     public void testCanHandleImageCreatedByBlankOperationWithBackgroundColor() throws Exception {
         final Blank blank = new Blank(Color.orange, 200, 200);
         final BufferedImage img = blank.apply(null, null);
@@ -189,22 +194,27 @@ public class ImageUtilTest extends AbstractImagingTest {
         write(res, BASIC_JPEG);
     }
 
+    @Test
     public void testCanHandleOpaqueGIFSourceWhenFlatteningForJPEG() throws Exception {
         doTestFlattenTransparentImageForOpaqueFormat("/some_opaque.gif");
     }
 
+    @Test
     public void testCanHandleTransparentGIFSourceWhenFlatteningForJPEG() throws Exception {
         doTestFlattenTransparentImageForOpaqueFormat("/cookies.gif");
     }
 
+    @Test
     public void testCanHandleOpaquePNGSourceWhenFlatteningForJPEG() throws Exception {
         doTestFlattenTransparentImageForOpaqueFormat("/random_screenshot.png");
     }
 
+    @Test
     public void testCanHandleTransparentPNGSourceWhenFlatteningForJPEG() throws Exception {
         doTestFlattenTransparentImageForOpaqueFormat("/some_transparent.png");
     }
 
+    @Test
     public void testCanHandleTranslucentPNGSourceWhenFlatteningForJPEG() throws Exception {
         doTestFlattenTransparentImageForOpaqueFormat("/pngtrans/rgba16.png");
     }
@@ -226,6 +236,7 @@ public class ImageUtilTest extends AbstractImagingTest {
     /**
      * A test case that shows something odd with the jpeg encoder when saving a transparent image.
      */
+    @Test
     public void testJpegOddity() throws IOException {
         // create a transparent image of 300x300 pixels
         final BufferedImage img = new BufferedImage(300, 300, BufferedImage.TYPE_INT_ARGB);
@@ -247,6 +258,7 @@ public class ImageUtilTest extends AbstractImagingTest {
         write("fillTransparentPixels", filled, BASIC_JPEG);
     }
 
+    @Test
     public void testPerformance() throws Exception {
         final Blank blank = new Blank(200, 200);
         final BufferedImage src = blank.apply(null, null);
@@ -267,6 +279,7 @@ public class ImageUtilTest extends AbstractImagingTest {
         }
     }
 
+    @Test
     public void testLoadingPerformance() throws Exception {
         final URL smallPng = getClass().getResource("/pngtrans/rgba16.png");
         final URL largeJpeg = getClass().getResource("/IMG_1937.JPG");
@@ -336,6 +349,4 @@ public class ImageUtilTest extends AbstractImagingTest {
             System.out.println("with ClasspathImageLoader - large jpeg: " + (System.currentTimeMillis() - start) + "ms.");
         }
     }
-
-
 }

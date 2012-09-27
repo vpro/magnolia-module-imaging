@@ -45,9 +45,9 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 
 /**
+ * Keeps utility functions for imaging.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class ImageUtil {
     /**

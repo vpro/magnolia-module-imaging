@@ -33,23 +33,25 @@
  */
 package info.magnolia.imaging.parameters;
 
+import static org.mockito.Mockito.*;
+import static org.junit.Assert.*;
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.HierarchyManager;
 import info.magnolia.cms.util.ContentUtil;
 import info.magnolia.context.MgnlContext;
 import info.magnolia.imaging.AbstractRepositoryTestCase;
 import info.magnolia.imaging.ParameterProvider;
-import static org.easymock.EasyMock.*;
 
 import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
 
+import org.junit.Test;
 /**
- *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class ContentParameterProviderFactoryRepositoryTest extends AbstractRepositoryTestCase {
+
+    @Test
     public void testWrapsContentSuchThatEqualsAndHashCodeAreImplementedBasedOnPathAndHierarchyManagerName() throws RepositoryException {
         final HierarchyManager hm = MgnlContext.getHierarchyManager("website");
         ContentUtil.createPath(hm, "/some/node");
@@ -57,9 +59,8 @@ public class ContentParameterProviderFactoryRepositoryTest extends AbstractRepos
         assertNotSame(hm.getContent("/some/node"), hm.getContent("/some/node"));
         assertFalse(hm.getContent("/some/node").equals(hm.getContent("/some/node")));
 
-        final HttpServletRequest req = createStrictMock(HttpServletRequest.class);
-        expect(req.getPathInfo()).andReturn("/generator/website/some/node").times(2);
-        replay(req);
+        final HttpServletRequest req = mock(HttpServletRequest.class);
+        when(req.getPathInfo()).thenReturn("/generator/website/some/node");
         final ContentParameterProviderFactory factory = new ContentParameterProviderFactory();
         final ParameterProvider<Content> param1 = factory.newParameterProviderFor(req);
         final ParameterProvider<Content> param2 = factory.newParameterProviderFor(req);
@@ -67,6 +68,5 @@ public class ContentParameterProviderFactoryRepositoryTest extends AbstractRepos
                 param1.getParameter(), param2.getParameter());
         assertEquals("2 calls to ParameterProviderFactory should return 2 *equivalent instances*.",
                 param1.getParameter(), param2.getParameter());
-        verify(req);
     }
 }

@@ -42,8 +42,9 @@ import java.net.URL;
 /**
  * An ImageFilter which loads an image from the classpath.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @param <P> type of ParameterProvider
+ *
+ * @version $Id$
  */
 public class ClasspathImageLoader<P extends ParameterProvider<?>> extends AbstractURLImageLoader<P> {
     private String src;

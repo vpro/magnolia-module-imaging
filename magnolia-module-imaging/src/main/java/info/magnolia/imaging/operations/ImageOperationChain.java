@@ -47,8 +47,9 @@ import java.util.List;
  * An implementation of ImageOperation and ImageGenerator which delegates
  * to a list of other ImageOperation instances.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @param <P> type of ParameterProvider
+ *
+ * @version $Id$
  */
 public class ImageOperationChain<P extends ParameterProvider<?>> implements ImageOperation<P>, ImageGenerator<P> {
     private final List<ImageOperation<P>> operations;
@@ -64,6 +65,7 @@ public class ImageOperationChain<P extends ParameterProvider<?>> implements Imag
         this.operations = new ArrayList<ImageOperation<P>>();
     }
 
+    @Override
     public BufferedImage generate(P params) throws ImagingException {
         // We don't create an empty Image instance here, we're relying on operations
         // from the info.magnolia.imaging.operations.load package to do so
@@ -73,6 +75,7 @@ public class ImageOperationChain<P extends ParameterProvider<?>> implements Imag
         return apply(null, params);
     }
 
+    @Override
     public BufferedImage apply(BufferedImage source, P params) throws ImagingException {
         BufferedImage result = source;
         for (ImageOperation<P> op : operations) {
@@ -81,6 +84,7 @@ public class ImageOperationChain<P extends ParameterProvider<?>> implements Imag
         return result;
     }
 
+    @Override
     public String getName() {
         return name;
     }
@@ -89,6 +93,7 @@ public class ImageOperationChain<P extends ParameterProvider<?>> implements Imag
         this.name = name;
     }
 
+    @Override
     public ParameterProviderFactory getParameterProviderFactory() {
         return parameterProviderFactory;
     }
@@ -104,6 +109,7 @@ public class ImageOperationChain<P extends ParameterProvider<?>> implements Imag
     /**
      * Returns the static output format as configured with c2b by delegating to {@link #getOutputFormat()}.
      */
+    @Override
     public OutputFormat getOutputFormat(P params) {
         return getOutputFormat();
     }

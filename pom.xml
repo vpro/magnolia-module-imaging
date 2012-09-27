@@ -4,26 +4,27 @@
   <parent>
     <groupId>info.magnolia</groupId>
     <artifactId>magnolia-parent-pom-community-module</artifactId>
-    <version>20</version>
+    <version>23</version>
   </parent>
   <artifactId>magnolia-module-imaging-parent</artifactId>
-  <version>2.2-SNAPSHOT</version>
+  <version>2.2.2-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Magnolia Imaging (parent)</name>
   <description>A set of Magnolia modules which provide image generation, filtering and manipulation capabilities.</description>
   <properties>
-    <magnoliaVersion>4.4</magnoliaVersion>
-    <javaVersion>1.5</javaVersion>
+    <magnoliaVersion>4.5.1</magnoliaVersion>
+    <javaVersion>1.6</javaVersion>
     <documentationURL>http://documentation.magnolia-cms.com/modules/imaging.html</documentationURL>
+    <scmTagPrefix>magnolia-imaging</scmTagPrefix>
   </properties>
   <issueManagement>
     <system>Jira</system>
     <url>http://jira.magnolia-cms.com/browse/MGNLIMG</url>
   </issueManagement>
   <scm>
-    <connection>scm:svn:http://svn.magnolia-cms.com/svn/community/modules/imaging/branches/magnolia-imaging-2.2</connection>
-    <developerConnection>scm:svn:http://svn.magnolia-cms.com/svn/community/modules/imaging/branches/magnolia-imaging-2.2</developerConnection>
-    <url>http://svn.magnolia-cms.com/view/community/modules/imaging/branches/magnolia-imaging-2.2</url>
+    <connection>scm:git:http://git.magnolia-cms.com/modules/imaging</connection>
+    <developerConnection>scm:git:https://git.magnolia-cms.com/modules/imaging</developerConnection>
+    <url>http://git.magnolia-cms.com/gitweb/?p=modules/imaging.git</url>
   </scm>
 
   <modules>
@@ -51,6 +52,12 @@
         <groupId>info.magnolia</groupId>
         <artifactId>magnolia-module-admininterface</artifactId>
         <version>${magnoliaVersion}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>servlet-api</artifactId>
+        <version>2.5</version>
         <scope>provided</scope>
       </dependency>
       <dependency>
@@ -99,21 +106,15 @@
         <scope>test</scope>
       </dependency>
       <dependency>
-        <groupId>org.easymock</groupId>
-        <artifactId>easymock</artifactId>
-        <version>2.5.1</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.easymock</groupId>
-        <artifactId>easymockclassextension</artifactId>
-        <version>2.5.1</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
         <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>3.8.2</version>
+        <artifactId>junit-dep</artifactId>
+        <version>4.10</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-core</artifactId>
+        <version>1.8.5</version>
         <scope>test</scope>
       </dependency>
     </dependencies>

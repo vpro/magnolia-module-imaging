@@ -46,8 +46,7 @@ import java.util.TreeMap;
  *
  * TODO - and vice-versa.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class ColorConverter {
     private static final Map<String, Color> namedColors = reflectivelyGetNamedColors();

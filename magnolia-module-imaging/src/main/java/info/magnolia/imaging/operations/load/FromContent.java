@@ -42,9 +42,9 @@ import javax.jcr.RepositoryException;
 
 
 /**
- * @author pbracher
- * @version $Id$
+ * ImageOperation loading from content.
  *
+ * @version $Id$
  */
 public class FromContent extends AbstractFromContent<Content> {
 

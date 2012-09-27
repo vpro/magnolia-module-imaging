@@ -42,14 +42,16 @@ import info.magnolia.imaging.util.PathSplitter;
 import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
- * @author pbracher
- * @version $Id$
+ * Superclass for ParameterProviderFactories that are based on Workspace and Path.
  *
+ * @param <PT> type of ParameterProvider's parameter
+ *
+ * @version $Id$
  */
 public abstract class AbstractWorkspaceAndPathParameterProviderFactory<PT> implements ParameterProviderFactory<HttpServletRequest, PT> {
 
+    @Override
     public ParameterProvider<PT> newParameterProviderFor(HttpServletRequest req) {
         String pathInfo = req.getPathInfo();
         if (pathInfo == null) {

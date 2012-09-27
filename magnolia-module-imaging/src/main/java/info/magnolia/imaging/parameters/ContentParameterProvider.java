@@ -37,9 +37,9 @@ import info.magnolia.cms.core.Content;
 import info.magnolia.imaging.ParameterProvider;
 
 /**
+ * ParameterProvider for Content.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class ContentParameterProvider implements ParameterProvider<Content> {
     private final Content node;
@@ -48,6 +48,7 @@ public class ContentParameterProvider implements ParameterProvider<Content> {
         this.node = node;
     }
 
+    @Override
     public Content getParameter() {
         return node;
     }

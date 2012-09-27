@@ -36,9 +36,9 @@ package info.magnolia.imaging.operations.cropresize;
 import java.awt.image.BufferedImage;
 
 /**
+ * Interfaces for Types able to resize BufferedImages.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public interface Resizer {
 

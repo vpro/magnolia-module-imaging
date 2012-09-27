@@ -46,9 +46,6 @@ import java.util.TreeSet;
 
 /**
  * A page displaying the list of available input and output formats for javax.imageio.ImageIO.
- *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
  */
 public class ImageIOPluginsPage extends TemplatedMVCHandler {
 
@@ -79,6 +76,7 @@ public class ImageIOPluginsPage extends TemplatedMVCHandler {
         final TreeSet<String> set = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
         set.addAll(Arrays.asList(formats));
         CollectionUtils.transform(set, new Transformer() {
+            @Override
             public Object transform(Object input) {
                 return ((String) input).toLowerCase();
             }

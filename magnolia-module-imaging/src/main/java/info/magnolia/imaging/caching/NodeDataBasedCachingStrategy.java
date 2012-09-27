@@ -40,9 +40,9 @@ import javax.jcr.RepositoryException;
 
 
 /**
- * @author pbracher
- * @version $Id$
+ * NodeData based CachingStrategy.
  *
+ * @version $Id$
  */
 public class NodeDataBasedCachingStrategy extends AbstractContentBasedCachingStrategy<NodeData> {
     @Override

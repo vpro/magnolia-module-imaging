@@ -33,19 +33,20 @@
  */
 package info.magnolia.imaging.operations.cropresize;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
-public class SelectedCropAndResizeTest extends TestCase {
+public class SelectedCropAndResizeTest {
 
     /**
      * This is how cropper info was stored with the now defunct imagefiltering module.
      * The syntax/structure might change in the future, but we should still be able to decode such
      * strings at least until the next major version.
      */
+    @Test
     public void testCanDecodeLegacyCropInfoStrings() {
         final String legacyJsonString = "{\"CropperInfo\":{\"configName\":\"screenshot\",\"coords\":{\"x1\":424,\"y1\":174,\"x2\":1138,\"y2\":650}}}";
         final CroppingInfo croppingInfo = new SelectedCropAndResize().decode(legacyJsonString);

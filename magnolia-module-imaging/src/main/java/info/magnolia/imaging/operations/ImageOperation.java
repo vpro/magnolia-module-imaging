@@ -58,8 +58,9 @@ import java.awt.image.BufferedImage;
  * @see info.magnolia.module.imaging.ImagesProcessor
  * @see java.awt.image.BufferedImageOp
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @param <P> type of ParameterProvider
+ *
+ * @version $Id$
  */
 public interface ImageOperation<P extends ParameterProvider<?>> {
 

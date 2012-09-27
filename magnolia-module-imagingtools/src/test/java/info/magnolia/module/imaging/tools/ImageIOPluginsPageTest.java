@@ -33,17 +33,19 @@
  */
 package info.magnolia.module.imaging.tools;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.junit.Test;
+
 /**
- *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
-public class ImageIOPluginsPageTest extends TestCase {
+public class ImageIOPluginsPageTest {
+
+    @Test
     public void testFilterDuplicatesAndReturnsLowercase() {
         final Collection<String> res = ImageIOPluginsPage.filter("png", "JPG", "PNG", "jpg", "fOo");
         assertEquals(3, res.size());

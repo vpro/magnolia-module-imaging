@@ -44,6 +44,7 @@ import info.magnolia.imaging.caching.CachingStrategy;
 import info.magnolia.imaging.caching.ContentBasedCachingStrategy;
 import info.magnolia.imaging.parameters.ContentParameterProvider;
 import org.apache.commons.io.IOUtils;
+import org.junit.Test;
 
 import javax.jcr.PropertyType;
 import java.io.ByteArrayInputStream;
@@ -52,13 +53,14 @@ import java.io.InputStream;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
+import static org.junit.Assert.*;
+
 /**
- *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class SelfTest extends AbstractRepositoryTestCase {
 
+    @Test
     public void testCanGetBinaryStreamOutOfTheSamePropertyInstanceTwice() throws Exception {
         final HierarchyManager hm = MgnlContext.getHierarchyManager("website");
         final Content content = ContentUtil.createPath(hm, "/foo/bar");
@@ -82,6 +84,7 @@ public class SelfTest extends AbstractRepositoryTestCase {
         assertEquals("HELLOHELLO", out.toString());
     }
 
+    @Test
     public void testNodeParameterProviderHandlesTimestampsProperly() throws Exception {
         final HierarchyManager hm = MgnlContext.getHierarchyManager("website");
 

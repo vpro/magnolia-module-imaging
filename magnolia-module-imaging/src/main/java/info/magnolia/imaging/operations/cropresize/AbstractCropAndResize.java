@@ -44,12 +44,14 @@ import java.awt.image.BufferedImage;
  * Subclasses of this determine which portion of the source image is taken into account,
  * and what final dimensions the image needs to be resized to.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @param <P> type of ParameterProvider
+ *
+ * @version $Id$
  */
 public abstract class AbstractCropAndResize<P extends ParameterProvider<?>> implements ImageOperation<P> {
     private Resizer resizer = new BasicResizer();
 
+    @Override
     public BufferedImage apply(BufferedImage source, P params) throws ImagingException {
         final Coords coords = getCroopCoords(source, params);
         final Size effectiveTargetSize = getEffectiveTargetSize(source, coords, params);
@@ -58,7 +60,7 @@ public abstract class AbstractCropAndResize<P extends ParameterProvider<?>> impl
 
     /**
      * Determines the coordinates of the cropping to apply on the source image.
-     * If no cropping needs to happen, return new Coords(0, 0, source.getWidth(), source.getHeight()). 
+     * If no cropping needs to happen, return new Coords(0, 0, source.getWidth(), source.getHeight()).
      */
     protected abstract Coords getCroopCoords(BufferedImage source, P params) throws ImagingException;
 

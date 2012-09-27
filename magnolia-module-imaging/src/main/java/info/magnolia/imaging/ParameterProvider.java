@@ -38,8 +38,9 @@ package info.magnolia.imaging;
  *
  * TODO - this might actually be removed in a future version
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @param <T> type of the provided parameter
+ *
+ * @version $Id$
  */
 public interface ParameterProvider<T> {
     T getParameter();

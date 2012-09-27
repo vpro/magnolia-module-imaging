@@ -4,18 +4,21 @@
   <parent>
     <groupId>info.magnolia</groupId>
     <artifactId>magnolia-module-imaging-parent</artifactId>
-    <version>2.2-SNAPSHOT</version>
+    <version>2.2.2-SNAPSHOT</version>
   </parent>
   <artifactId>magnolia-module-imagingtools</artifactId>
   <packaging>jar</packaging>
   <name>Magnolia Imaging Tools Module</name>
   <description>Provides tools and utilities related to the imaging module.</description>
+  <properties>
+  	<cloverCoverageThreshold>40</cloverCoverageThreshold>
+  </properties>
 
   <dependencies>
     <dependency>
       <groupId>info.magnolia</groupId>
       <artifactId>magnolia-module-imaging</artifactId>
-      <version>2.2-SNAPSHOT</version>
+      <version>2.2.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>info.magnolia</groupId>
@@ -28,8 +31,14 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
+      <artifactId>junit-dep</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>

@@ -43,8 +43,9 @@ import java.net.URL;
  * Loads an image off an arbitrary URL. So, yes, this can load images off the internet, and yes, it could be
  * painfully slow.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @param <P> type of ParameterProvider
+ *
+ * @version $Id$
  */
 public class URLImageLoader<P extends ParameterProvider<?>> extends AbstractURLImageLoader<P> {
     private String url;

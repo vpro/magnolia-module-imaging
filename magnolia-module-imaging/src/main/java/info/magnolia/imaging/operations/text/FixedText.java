@@ -36,9 +36,11 @@ package info.magnolia.imaging.operations.text;
 import info.magnolia.imaging.ParameterProvider;
 
 /**
+ * Overlay based on fixed text.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @param <P> type of ParameterProvider
+ *
+ * @version $Id$
  */
 public class FixedText<P extends ParameterProvider<?>> extends AbstractTextOverlay<P> {
     private String text;

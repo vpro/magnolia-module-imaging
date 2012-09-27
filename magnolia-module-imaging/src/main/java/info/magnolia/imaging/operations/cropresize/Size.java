@@ -41,8 +41,7 @@ import java.io.Serializable;
  * dependencies.
  * Provides factory methods to calculate sizes based on ratios, source dimensions, crop coordinates.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class Size implements Serializable {
     private final int width;

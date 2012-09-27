@@ -33,43 +33,44 @@
  */
 package info.magnolia.module.cropui;
 
-import info.magnolia.test.mock.MockContent;
-import info.magnolia.test.mock.MockNodeData;
+import static org.junit.Assert.assertEquals;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import info.magnolia.content2bean.Content2BeanException;
-import info.magnolia.content2bean.Content2BeanTransformer;
 import info.magnolia.content2bean.Content2BeanProcessor;
+import info.magnolia.content2bean.Content2BeanTransformer;
 import info.magnolia.content2bean.TransformationState;
 import info.magnolia.content2bean.TypeMapping;
-import info.magnolia.content2bean.impl.Content2BeanTransformerImpl;
 import info.magnolia.content2bean.impl.Content2BeanProcessorImpl;
+import info.magnolia.content2bean.impl.Content2BeanTransformerImpl;
 import info.magnolia.content2bean.impl.TransformationStateImpl;
 import info.magnolia.content2bean.impl.TypeMappingImpl;
-import info.magnolia.cms.core.SystemProperty;
-import junit.framework.TestCase;
+import info.magnolia.objectfactory.Components;
+import info.magnolia.test.ComponentsTestUtil;
+import info.magnolia.test.mock.MockContent;
 
 /**
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
-public class CropperPageTest extends TestCase {
+public class CropperPageTest {
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        SystemProperty.setProperty(Content2BeanTransformer.class.getName(), Content2BeanTransformerImpl.class.getName());
-        SystemProperty.setProperty(Content2BeanProcessor.class.getName(), Content2BeanProcessorImpl.class.getName());
-        SystemProperty.setProperty(TransformationState.class.getName(), TransformationStateImpl.class.getName());
-        SystemProperty.setProperty(TypeMapping.class.getName(), TypeMappingImpl.class.getName());
+    @Before
+    public void setUp() throws Exception {
+        ComponentsTestUtil.setImplementation(Content2BeanTransformer.class, Content2BeanTransformerImpl.class);
+        ComponentsTestUtil.setImplementation(Content2BeanProcessor.class, Content2BeanProcessorImpl.class);
+        ComponentsTestUtil.setImplementation(TransformationState.class, TransformationStateImpl.class);
+        ComponentsTestUtil.setImplementation(TypeMapping.class, TypeMappingImpl.class);
     }
 
-    @Override
-    protected void tearDown() throws Exception {
-        SystemProperty.getProperties().clear();
+    @After
+    public void tearDown() throws Exception {
+        Components.setComponentProvider(null);
     }
 
-    /**
-     * testFromNodeAlwaysSetsConfigNameToNodeNameAndUsesLabelOrNameOrNodeNameToSetConfigLabel().
-     */
+    @Test
     public void testFromNodeHasNameAndLabelProperlySet() throws Content2BeanException {
         doTestFromNode("myName", "myLabel", "myLabel");
         doTestFromNode(null, "myLabel", "myLabel");
@@ -84,14 +85,13 @@ public class CropperPageTest extends TestCase {
     private void doTestFromNode(String namePropOrNull, String labelPropOrNull, String expectedLabel) throws Content2BeanException {
         final MockContent node = new MockContent("theNodeName");
         if (namePropOrNull != null) {
-            node.addNodeData(new MockNodeData("name", namePropOrNull));
+            node.addNodeData("name", namePropOrNull);
         }
         if (labelPropOrNull != null) {
-            node.addNodeData(new MockNodeData("label", labelPropOrNull));
+            node.addNodeData("label", labelPropOrNull);
         }
         final CropAndResizeConfig result = CropperPage.fromNode(node);
         assertEquals(expectedLabel, result.getLabel());
         assertEquals("theNodeName", result.getName());
     }
-
 }

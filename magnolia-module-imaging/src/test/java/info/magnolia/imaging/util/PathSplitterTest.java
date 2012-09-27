@@ -33,15 +33,17 @@
  */
 package info.magnolia.imaging.util;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
 
+import org.junit.Ignore;
+import org.junit.Test;
 /**
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
-public class PathSplitterTest extends TestCase {
+public class PathSplitterTest {
 
+    @Test
     public void testEmptyStringYieldsNoResults() {
         assertEquals(0, new PathSplitter("").count());
         // unless we'd start checking the position against the elements array length and return null, this can't work:
@@ -50,6 +52,7 @@ public class PathSplitterTest extends TestCase {
         assertEquals("", new PathSplitter("").remaining());*/
     }
 
+    @Test
     public void testNullsAreHandledGracefullyCauseWeAreThatNice() {
         assertEquals(0, new PathSplitter(null).count());
         // unless we'd start checking the position against the elements array length and return null, this can't work:
@@ -58,6 +61,7 @@ public class PathSplitterTest extends TestCase {
         assertEquals("", new PathSplitter(null).remaining());*/
     }
 
+    @Test
     public void testLeadingAndTralingslahesAreIgnored() {
         PathSplitter ps = new PathSplitter("/foo/bar");
         assertEquals(2, ps.count());
@@ -75,6 +79,7 @@ public class PathSplitterTest extends TestCase {
         assertEquals("bar", ps.next());
     }
 
+    @Test
     public void testEmptyElementsMatter() {
         final PathSplitter ps = new PathSplitter("/foo//bar/");
         assertEquals(3, ps.count());
@@ -84,6 +89,7 @@ public class PathSplitterTest extends TestCase {
     }
 
     // although maybe this isn't desired ?
+    @Test
     public void testEmptyElementsBeforeTrailingSlashWorkToo() {
         final PathSplitter ps = new PathSplitter("/foo/bar//");
         assertEquals(3, ps.count());
@@ -93,6 +99,7 @@ public class PathSplitterTest extends TestCase {
     }
 
     // although maybe this isn't desired ?
+    @Test
     public void testEmptyElementsAfterLeadingSlashWorkToo() {
         final PathSplitter ps = new PathSplitter("//foo/bar/");
         assertEquals(3, ps.count());
@@ -101,6 +108,7 @@ public class PathSplitterTest extends TestCase {
         assertEquals("bar", ps.skipTo(2));
     }
 
+    @Test
     public void testDocumentedExample() {
         final PathSplitter ps = new PathSplitter("/foo/bar/baz/a/b/c/d/e");
         assertEquals(8, ps.count());
@@ -109,16 +117,19 @@ public class PathSplitterTest extends TestCase {
         assertEquals("b/c/d/e", ps.remaining());
     }
 
+    @Test
     public void testRemainingCanBeCalledFromTheStartEvenIfThisSeemsQuiteUseless() {
         assertEquals("foo/bar/baz/a/b/c/d/e", new PathSplitter("/foo/bar/baz/a/b/c/d/e").remaining());
     }
 
+    @Test
     public void testRemainingCanBeCalledEvenIfWeAlreadyReachedTheLastElement() {
         final PathSplitter ps = new PathSplitter("/foo/bar");
         assertEquals("bar", ps.skipTo(1));
         assertEquals("", ps.remaining());
     }
 
+    @Test
     public void testExtensionIsTrimmedByDefault() {
         final PathSplitter ps = new PathSplitter("/foo/bar.html");
         assertEquals(2, ps.count());
@@ -126,6 +137,7 @@ public class PathSplitterTest extends TestCase {
         assertEquals("", ps.remaining());
     }
 
+    @Test
     public void testExtensionCanBeKeptAndIsNotCountingAsAnElement() {
         final PathSplitter ps = new PathSplitter("/foo/bar.html", '/', false);
         assertEquals(2, ps.count());
@@ -134,16 +146,17 @@ public class PathSplitterTest extends TestCase {
         assertEquals("", ps.remaining());
     }
 
-    /* TODO
-    public void testThereIsCertainlyABugIfADotIsPresentBeforeTheLastSlash() {
-        final PathSplitter ps = new PathSplitter("/foo.html/bar", '/', true);
+    @Ignore("reactivate when solving MGNLIMG-95")
+    @Test
+    public void testDotsInPathNotAtTheEndAreNotTrimmed() {
+        final PathSplitter ps = new PathSplitter("/foo.something/bar", '/', true);
         assertEquals(2, ps.count());
-        assertEquals("foo.html", ps.next());
+        assertEquals("foo.something", ps.next());
         assertEquals("bar", ps.next());
         assertEquals("", ps.remaining());
     }
-    */
 
+    @Test
     public void testNextAndSkipCallsDontOverlapEachOther() {
         final PathSplitter ps = new PathSplitter("/foo/bar");
         assertEquals("foo", ps.next());

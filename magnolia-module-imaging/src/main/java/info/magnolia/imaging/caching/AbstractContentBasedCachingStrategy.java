@@ -43,12 +43,15 @@ import java.util.Calendar;
 
 
 /**
- * @author pbracher
- * @version $Id$
+ * Superclass for Content based CachingStrategies.
  *
+ * @param <P> type of ParameterProvider's parameter
+ *
+ * @version $Id$
  */
 public abstract class AbstractContentBasedCachingStrategy<P> implements CachingStrategy<P> {
 
+    @Override
     public String getCachePath(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> parameterProvider) {
         final P param = parameterProvider.getParameter();
         return "/" + generator.getName() + "/" + getWorkspaceName(param) + getPathOf(param);
@@ -58,6 +61,7 @@ public abstract class AbstractContentBasedCachingStrategy<P> implements CachingS
      * The default implementation simply delegates this decision to ParameterProvider.
      * @return true if the image should be regenerated.
      */
+    @Override
     public boolean shouldRegenerate(NodeData cachedBinary, ParameterProvider<P> parameterProvider) {
         try {
             // this is assuming the cached node's metadata was updated, not just the binary

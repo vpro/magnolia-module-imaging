@@ -47,8 +47,7 @@ import javax.jcr.RepositoryException;
  * It assumes that the first path element is the name of the ImageGenerator in use; that the second is the name
  * of the workspace where the node we want is, and that the rest is the path to the node in question.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class ContentParameterProviderFactory extends AbstractWorkspaceAndPathParameterProviderFactory<Content> {
 
@@ -58,6 +57,7 @@ public class ContentParameterProviderFactory extends AbstractWorkspaceAndPathPar
         return new ContentParameterProvider(new SimpleEqualityContentWrapper(node));
     }
 
+    @Override
     public CachingStrategy<Content> getCachingStrategy() {
         return new ContentBasedCachingStrategy();
     }

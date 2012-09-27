@@ -41,8 +41,9 @@ import java.awt.image.BufferedImage;
  * @see info.magnolia.imaging.operations.ImageOperationChain
  * @see info.magnolia.imaging.operations.ImageOperation
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @param <P> type of ParameterProvider
+ *
+ * @version $Id$
  */
 public interface ImageGenerator<P extends ParameterProvider<?>> {
 

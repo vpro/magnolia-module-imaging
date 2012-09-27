@@ -34,21 +34,24 @@
 package info.magnolia.imaging.operations.text;
 
 /**
+ * Vertical Alignment for Images.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public enum VerticalAlignment implements Alignment {
     top {
+        @Override
         public float getPositionFor(double content, double container, double delta) {
             return (float) content + (float) delta;
         }},
     /** delta is ignored for middle. */
     middle {
+        @Override
         public float getPositionFor(double content, double container, double delta) {
             return (float) (container / 2) + (float) (content / 2);
         }},
     bottom {
+        @Override
         public float getPositionFor(double content, double container, double delta) {
             return (float) (container - delta);
         }}

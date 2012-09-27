@@ -39,8 +39,11 @@ import info.magnolia.imaging.operations.ImageOperation;
 import java.awt.image.BufferedImage;
 
 /**
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * Superclass for ImageOperations based on Text Overlays.
+ *
+ * @param <P> type of ParameterProvider
+ *
+ * @version $Id$
  */
 public abstract class AbstractTextOverlay<P extends ParameterProvider<?>> implements ImageOperation<P> {
     private TextRenderer textRenderer = new BasicTextRenderer();
@@ -50,6 +53,7 @@ public abstract class AbstractTextOverlay<P extends ParameterProvider<?>> implem
     private int x;
     private int y;
 
+    @Override
     public BufferedImage apply(BufferedImage source, P filterParams) {
         final String txt = getText(filterParams);
 

@@ -43,9 +43,11 @@ import java.io.InputStream;
 import java.net.URL;
 
 /**
+ * Loads images from a URL.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @param <P> type of ParameterProvider
+ *
+ * @version $Id$
  */
 public abstract class AbstractURLImageLoader<P extends ParameterProvider<?>> extends AbstractLoader<P> {
     protected AbstractURLImageLoader() {

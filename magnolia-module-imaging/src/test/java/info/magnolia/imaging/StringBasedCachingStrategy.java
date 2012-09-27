@@ -42,11 +42,13 @@ import info.magnolia.imaging.caching.CachingStrategy;
  * @version $Revision: $ ($Author: $)
  */
 public class StringBasedCachingStrategy implements CachingStrategy<String> {
+    @Override
     public String getCachePath(ImageGenerator<ParameterProvider<String>> generator, ParameterProvider<String> params) {
         final String p = params.getParameter();
         return "/" + generator.getName() + "/path-to/" + p.replace(' ', '-') + "/generated";
     }
 
+    @Override
     public boolean shouldRegenerate(NodeData cachedBinary, ParameterProvider<String> stringParameterProvider) {
         // Never regenerate ? Well. That's probably not right.
         // But we're in a test here.

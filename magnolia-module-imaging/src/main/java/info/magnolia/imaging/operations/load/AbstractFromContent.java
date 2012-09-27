@@ -43,9 +43,11 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
+ * Superclass for ImageOperations loading from Content.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @param <PT> type of ParameterProvider's parameter
+ *
+ * @version $Id$
  */
 public abstract class AbstractFromContent<PT> extends AbstractLoader<ParameterProvider<PT>> {
 

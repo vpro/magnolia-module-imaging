@@ -48,8 +48,7 @@ import java.awt.image.BufferedImage;
  * one-step technique (only useful in downscaling cases, where {@code targetWidth} or {@code targetHeight} is
  * smaller than the original dimensions, and generally only when the {@code BILINEAR} hint is specified).
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class MultiStepResizer extends BasicResizer {
     @Override

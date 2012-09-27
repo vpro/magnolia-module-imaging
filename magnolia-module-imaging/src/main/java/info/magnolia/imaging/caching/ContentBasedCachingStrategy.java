@@ -37,9 +37,9 @@ import info.magnolia.cms.core.Content;
 
 
 /**
+ * Content based CachingStrategy.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class ContentBasedCachingStrategy extends AbstractContentBasedCachingStrategy<Content> {
     @Override

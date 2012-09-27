@@ -34,9 +34,9 @@
 package info.magnolia.imaging;
 
 /**
+ * ParameterProvider for Strings.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class StringParameterProvider implements ParameterProvider<String> {
     private final String string;
@@ -45,6 +45,7 @@ public class StringParameterProvider implements ParameterProvider<String> {
         this.string = string;
     }
 
+    @Override
     public String getParameter() {
         return string;
     }

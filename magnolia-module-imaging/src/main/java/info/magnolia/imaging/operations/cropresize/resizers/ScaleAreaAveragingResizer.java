@@ -47,10 +47,10 @@ import java.awt.image.WritableRaster;
  * This implementation uses the discouraged java.awt.Image#getScaledInstance method,
  * which has rather poor performance, but unmatched quality.
  *
- * @author gjoseph
- * @version $Revision: $ ($Author: $)
+ * @version $Id$
  */
 public class ScaleAreaAveragingResizer implements Resizer {
+    @Override
     public BufferedImage resize(BufferedImage src, Coords srcCoords, Size targetSize) {
 
         final BufferedImage cropped = src.getSubimage(srcCoords.getX1(), srcCoords.getY1(), srcCoords.getWidth(), srcCoords.getHeight());

@@ -43,9 +43,9 @@ import javax.jcr.RepositoryException;
 
 
 /**
- * @author pbracher
- * @version $Id$
+ * Factory for NodeDataParameterProviders.
  *
+ * @version $Id$
  */
 public class NodeDataParameterProviderFactory extends AbstractWorkspaceAndPathParameterProviderFactory<NodeData> {
 
@@ -63,6 +63,7 @@ public class NodeDataParameterProviderFactory extends AbstractWorkspaceAndPathPa
         return new NodeDataParameterProvider(new SimpleEqualityNodeDataWrapper(nodeData));
     }
 
+    @Override
     public CachingStrategy<NodeData> getCachingStrategy() {
         return new NodeDataBasedCachingStrategy();
     }
