@@ -35,10 +35,8 @@ package info.magnolia.imaging.operations.load;
 
 import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.ParameterProvider;
-import org.apache.jackrabbit.JcrConstants;
 
 import javax.jcr.Binary;
-import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -52,22 +50,22 @@ public abstract class AbstractFromNode<PT> extends AbstractLoader<ParameterProvi
 
     @Override
     protected BufferedImage loadSource(ParameterProvider<PT> param) throws ImagingException {
-        Node node = getBinaryNode(param);
         InputStream is = null;
+
         try {
-            Binary binary = node.getProperty(JcrConstants.JCR_DATA).getBinary();
+            Binary binary = getBinaryFromNode(param);
             is = binary.getStream();
         } catch (RepositoryException e) {
-            e.printStackTrace();
+            throw new ImagingException("Can't load binary from node.");
         }
 
         try {
             return doReadAndClose(is);
         }
         catch (IOException e) {
-            throw new ImagingException("Can't load image from node.");
+            throw new ImagingException("Can't read image stream from node.");
         }
     }
 
-    protected abstract Node getBinaryNode(ParameterProvider<PT> param) throws ImagingException;
+    protected abstract Binary getBinaryFromNode(ParameterProvider<PT> param) throws RepositoryException;
 }

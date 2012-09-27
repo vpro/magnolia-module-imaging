@@ -43,7 +43,8 @@ import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * AbstractWorkspaceAndUuidParamaterProviderFactory.
+ * AbstractWorkspaceAndUuidParamaterProviderFactory. This class extracts workspace and uuid from the path.
+ * Everything after the uuid is ignored so that one can pass e.g. a properly named filename to the image.
  * @param <PT> type of ParameterProvider's parameter
  */
 public abstract class AbstractWorkspaceAndUuidParamaterProviderFactory<PT>  implements ParameterProviderFactory<HttpServletRequest, PT> {
@@ -62,7 +63,7 @@ public abstract class AbstractWorkspaceAndUuidParamaterProviderFactory<PT>  impl
 
         }
         final String workspaceName = pathSplitter.skipTo(1);
-        final String uuid = pathSplitter.remaining();
+        final String uuid = pathSplitter.skipTo(2);
 
         try {
             final Session session = MgnlContext.getJCRSession(workspaceName);

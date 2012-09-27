@@ -33,9 +33,10 @@
  */
 package info.magnolia.imaging.operations.load;
 
-import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.ParameterProvider;
+import org.apache.jackrabbit.JcrConstants;
 
+import javax.jcr.Binary;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
@@ -44,19 +45,10 @@ import javax.jcr.RepositoryException;
  */
 public class FromBinaryNode extends AbstractFromNode<Node> {
 
-    private final String BINARY_NODE_NAME = "photo";
-
     @Override
-    protected Node getBinaryNode(ParameterProvider<Node> param) throws ImagingException {
-        try {
-            final Node node = param.getParameter();
-            if (!node.hasNode(BINARY_NODE_NAME)) {
-                throw new ImagingException("There is no '" + BINARY_NODE_NAME + "' node at " + node.getPath());
-            }
-            return node.getNode(BINARY_NODE_NAME);
+    protected Binary getBinaryFromNode(ParameterProvider<Node> param) throws RepositoryException {
+        final Node node = param.getParameter();
 
-        } catch (RepositoryException e) {
-            throw new RuntimeException(e);
-        }
+        return node.getProperty(JcrConstants.JCR_DATA).getBinary();
     }
 }
