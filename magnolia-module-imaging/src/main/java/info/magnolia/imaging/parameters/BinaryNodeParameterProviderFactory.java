@@ -44,7 +44,7 @@ import javax.jcr.Session;
 /**
  * BinaryNodeParameterProviderFactory.
  */
-public class BinaryNodeParameterProviderFactory extends AbstractWorkspaceAndUuidParamaterProviderFactory<Node> {
+public class BinaryNodeParameterProviderFactory extends AbstractWorkspaceAndUuidParameterProviderFactory<Node> {
     @Override
     protected ParameterProvider<Node> newParameterProviderForUuid(Session session, String uuid) throws RepositoryException {
         final Node node = session.getNodeByIdentifier(uuid);

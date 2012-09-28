@@ -43,11 +43,11 @@ import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * AbstractWorkspaceAndUuidParamaterProviderFactory. This class extracts workspace and uuid from the path.
+ * AbstractWorkspaceAndUuidParameterProviderFactory. This class extracts workspace and uuid from the path.
  * Everything after the uuid is ignored so that one can pass e.g. a properly named filename to the image.
  * @param <PT> type of ParameterProvider's parameter
  */
-public abstract class AbstractWorkspaceAndUuidParamaterProviderFactory<PT>  implements ParameterProviderFactory<HttpServletRequest, PT> {
+public abstract class AbstractWorkspaceAndUuidParameterProviderFactory<PT>  implements ParameterProviderFactory<HttpServletRequest, PT> {
     @Override
     public ParameterProvider<PT> newParameterProviderFor(HttpServletRequest request) {
         String pathInfo = request.getPathInfo();
