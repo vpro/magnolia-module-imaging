@@ -42,10 +42,14 @@ import java.util.Map;
  * @version $Id$
  */
 public class ImagingModuleConfig {
-    private final Map<String, ImageGenerator> generators = new LinkedHashMap<String, ImageGenerator>();
+    private Map<String, ImageGenerator> generators = new LinkedHashMap<String, ImageGenerator>();
 
     public void addGenerator(String name, ImageGenerator generator) {
         generators.put(name, generator);
+    }
+
+    public void setGenerators(Map<String, ImageGenerator> generators) {
+        this.generators = generators;
     }
 
     public Map<String, ImageGenerator> getGenerators() {

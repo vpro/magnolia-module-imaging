@@ -52,7 +52,7 @@ import java.util.List;
  * @version $Id$
  */
 public class ImageOperationChain<P extends ParameterProvider<?>> implements ImageOperation<P>, ImageGenerator<P> {
-    private final List<ImageOperation<P>> operations;
+    private List<ImageOperation<P>> operations;
     private ParameterProviderFactory parameterProviderFactory;
 
     /**
@@ -120,6 +120,10 @@ public class ImageOperationChain<P extends ParameterProvider<?>> implements Imag
 
     public List<ImageOperation<P>> getOperations() {
         return operations;
+    }
+
+    public void setOperations(List<ImageOperation<P>> operations) {
+        this.operations = operations;
     }
 
     public void addOperation(ImageOperation<P> operation) {
