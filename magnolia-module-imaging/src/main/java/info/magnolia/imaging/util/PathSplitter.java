@@ -84,7 +84,10 @@ public class PathSplitter {
             source = source.substring(0, source.length() - 1);
         }
         // trim extension
-        final int dot = source.indexOf('.', source.lastIndexOf(separator));
+        int dot = source.lastIndexOf('.');
+        if (dot < source.lastIndexOf(separator)) { //it isn't the extension but a part of the name
+            dot = -1;
+        }
 
         if (trimExtension && dot >= 0) {
             source = source.substring(0, dot);
