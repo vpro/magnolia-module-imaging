@@ -195,4 +195,11 @@ public class PathSplitterTest {
         assertEquals("", ps.remaining());
     }
 
+    @Test
+    public void testTrimExtensionProperly() {
+        final PathSplitter ps = new PathSplitter("/foo/bar.baz.extension", true);
+        assertEquals("foo", ps.next());
+        assertEquals("bar.baz", ps.skipTo(1));
+        assertEquals("", ps.remaining());
+    }
 }
