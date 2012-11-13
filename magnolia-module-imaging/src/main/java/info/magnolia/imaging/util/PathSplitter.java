@@ -36,7 +36,7 @@ package info.magnolia.imaging.util;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * Splits a String representation path where elements are separated by '/'.
+ * Splits a String representation path where elements are separated by defined or default ('/') separator.
  * Leading and trailing separators are ignored. Empty elements are not
  * ("/a//c/" as three elements, "a", "" and "c")
  *
@@ -54,7 +54,6 @@ public class PathSplitter {
     private static final String[] EMPTY = new String[0];
 
     private final char separator;
-    //private final String source;
     private final String[] pathElements;
     private int position;
 
@@ -85,12 +84,15 @@ public class PathSplitter {
             source = source.substring(0, source.length() - 1);
         }
         // trim extension
-        final int dot = source.lastIndexOf('.');
+        int dot = source.lastIndexOf('.');
+        if (dot < source.lastIndexOf(separator)) { //it isn't the extension but a part of the name
+            dot = -1;
+        }
+
         if (trimExtension && dot >= 0) {
             source = source.substring(0, dot);
         }
 
-        // this.source = source;
         this.pathElements = source.length() == 0 ? EMPTY : source.split(sep, -1); // include trailing empty matches
         this.position = -1;
     }
@@ -106,7 +108,8 @@ public class PathSplitter {
      * Returns the next path element from the internal iterator.
      */
     public String next() {
-        return pathElements[++position];
+        position++;
+        return position < pathElements.length ? pathElements[position] : "";
     }
 
     /**
@@ -115,7 +118,7 @@ public class PathSplitter {
      */
     public String skipTo(int index) {
         position = index;
-        return pathElements[position];
+        return position < pathElements.length ? pathElements[position] : "";
     }
 
     /**
