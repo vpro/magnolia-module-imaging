@@ -72,8 +72,8 @@ public class BasicTextRenderer implements TextRenderer {
         // Could use ascent and descent for more precise positioning.
         // As well as TextLayout, and add support for multi-line, etc.
         // This is left as an exercise to the reader.
-        final float x = horizontalAlignment.getPositionFor(textWidth, img.getWidth(), txtPositionX);
-        final float y = verticalAlignment.getPositionFor(textHeight, img.getHeight(), txtPositionY);
+        final float x = ((Alignment) horizontalAlignment).getPositionFor(textWidth, img.getWidth(), txtPositionX);
+        final float y = ((Alignment) verticalAlignment).getPositionFor(textHeight, img.getHeight(), txtPositionY);
         g.drawGlyphVector(glyph, x, y);
 
         if (drawBoundingBox) {
