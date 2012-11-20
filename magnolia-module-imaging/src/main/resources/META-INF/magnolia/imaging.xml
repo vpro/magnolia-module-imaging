@@ -18,7 +18,7 @@
       <version>5.0/*</version>
     </dependency>
     <dependency>
-      <name>exchange-simple</name>
+      <name>activation</name>
       <version>5.0/*</version>
     </dependency>
     <dependency>
