@@ -1,5 +1,5 @@
 /**
- * This file Copyright (c) 2009-2011 Magnolia International
+ * This file Copyright (c) 2009-2012 Magnolia International
  * Ltd.  (http://www.magnolia-cms.com). All rights reserved.
  *
  *
@@ -35,7 +35,6 @@ package info.magnolia.imaging.util;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Ignore;
 import org.junit.Test;
 /**
  *
@@ -46,19 +45,17 @@ public class PathSplitterTest {
     @Test
     public void testEmptyStringYieldsNoResults() {
         assertEquals(0, new PathSplitter("").count());
-        // unless we'd start checking the position against the elements array length and return null, this can't work:
-        /*assertEquals("", new PathSplitter("").next());
+        assertEquals("", new PathSplitter("").next());
         assertEquals("", new PathSplitter("").skipTo(0));
-        assertEquals("", new PathSplitter("").remaining());*/
+        assertEquals("", new PathSplitter("").remaining());
     }
 
     @Test
     public void testNullsAreHandledGracefullyCauseWeAreThatNice() {
         assertEquals(0, new PathSplitter(null).count());
-        // unless we'd start checking the position against the elements array length and return null, this can't work:
-        /*assertEquals("", new PathSplitter(null).next());
+        assertEquals("", new PathSplitter(null).next());
         assertEquals("", new PathSplitter(null).skipTo(0));
-        assertEquals("", new PathSplitter(null).remaining());*/
+        assertEquals("", new PathSplitter(null).remaining());
     }
 
     @Test
@@ -146,13 +143,47 @@ public class PathSplitterTest {
         assertEquals("", ps.remaining());
     }
 
-    @Ignore("reactivate when solving MGNLIMG-95")
     @Test
     public void testDotsInPathNotAtTheEndAreNotTrimmed() {
         final PathSplitter ps = new PathSplitter("/foo.something/bar", '/', true);
         assertEquals(2, ps.count());
         assertEquals("foo.something", ps.next());
         assertEquals("bar", ps.next());
+        assertEquals("", ps.remaining());
+    }
+
+    @Test
+    public void testOnlyOneToSplit() {
+        final PathSplitter ps = new PathSplitter("foo", '/', true);
+        assertEquals(1, ps.count());
+        assertEquals("foo", ps.next());
+        assertEquals("", ps.next());
+        assertEquals("", ps.remaining());
+    }
+
+    @Test
+    public void testDotsInPathOnlyOneToSplit() {
+        final PathSplitter ps = new PathSplitter("/foo.ext", '/', false);
+        assertEquals(1, ps.count());
+        assertEquals("foo.ext", ps.next());
+        assertEquals("", ps.next());
+        assertEquals("", ps.remaining());
+    }
+
+    @Test
+    public void testDotsInPathOnlyOneToSplitTrimExtension() {
+        final PathSplitter ps = new PathSplitter("foo.ext/", '/', true);
+        assertEquals(1, ps.count());
+        assertEquals("foo", ps.next());
+        assertEquals("", ps.next());
+        assertEquals("", ps.remaining());
+    }
+
+    @Test
+    public void testDotsInNames() {
+        final PathSplitter ps = new PathSplitter("/foo.foo.foo/bar.ext", false);
+        assertEquals("foo.foo.foo", ps.next());
+        assertEquals("bar.ext", ps.skipTo(1));
         assertEquals("", ps.remaining());
     }
 
@@ -164,4 +195,11 @@ public class PathSplitterTest {
         assertEquals("", ps.remaining());
     }
 
+    @Test
+    public void testTrimExtensionProperly() {
+        final PathSplitter ps = new PathSplitter("/foo/bar.baz.extension", true);
+        assertEquals("foo", ps.next());
+        assertEquals("bar.baz", ps.skipTo(1));
+        assertEquals("", ps.remaining());
+    }
 }
