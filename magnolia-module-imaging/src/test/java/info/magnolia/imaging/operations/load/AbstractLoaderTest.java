@@ -68,7 +68,7 @@ public class AbstractLoaderTest extends AbstractRepositoryTestCase {
 
     private final String path = "src/test/resources/AbstractLoaderTest/";
     private final String pathWithOriginals = path + "originals/";
-    private final String pathWithOutputs = path + "outputs/";
+    private final String pathWithOutputs = "";
 
     private final File originalJpg = new File(pathWithOriginals + "originalJpg.jpg");
     private final File originalGif = new File(pathWithOriginals + "originalGif.gif");
