@@ -40,6 +40,7 @@ import info.magnolia.imaging.AbstractRepositoryTestCase;
 import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.ParameterProvider;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.io.File;
@@ -65,34 +66,55 @@ public class AbstractLoaderTest extends AbstractRepositoryTestCase {
     private BufferedImage originalGifImage;
     private BufferedImage originalBmpImage;
     private BufferedImage originalPngWithAlphaImage;
+    private BufferedImage originalPngWithAlphaImageBlackBackground;
+
+    private BufferedImage png2gifOriginalImage;
+    private BufferedImage png2jpgOriginalImage;
+    private BufferedImage jpg2jpgOriginalImage;
+    private BufferedImage gif2gifOriginalImage;
+    private BufferedImage gif2pngOriginalImage;
+    private BufferedImage gif2jpgOriginalImage;
 
     private final String path = "src/test/resources/AbstractLoaderTest/";
     private final String pathWithOriginals = path + "originals/";
-    private final String pathWithOutputs = "";
+    private final String pathWithOutputs = path + "outputs/";
+
+    private final File outputDir = new File(pathWithOutputs);
 
     private final File originalJpg = new File(pathWithOriginals + "originalJpg.jpg");
     private final File originalGif = new File(pathWithOriginals + "originalGif.gif");
     private final File originalPng = new File(pathWithOriginals + "originalPng.png");
     private final File originalBmp = new File(pathWithOriginals + "originalBmp.bmp");
     private final File originalPngWithAlpha = new File(pathWithOriginals + "originalPngWithAlpha.png");
+    private final File originalPngWithAlphaBlackBackground = new File(pathWithOriginals + "originalPngWithAlphaBlackBackground.png");
 
-    private final File jpg2jpg = new File(pathWithOutputs + "jpg2jpg");
-    private final File jpg2png = new File(pathWithOutputs + "jpg2png");
-    private final File jpg2gif = new File(pathWithOutputs + "jpg2gif");
+    private final File png2gifOriginal = new File(pathWithOriginals + "png2gifOriginal.gif");
+    private final File png2jpgOriginal = new File(pathWithOriginals + "png2jpgOriginal.jpg");
+    private final File jpg2jpgOriginal = new File(pathWithOriginals + "jpg2jpgOriginal.jpg");
+    private final File gif2gifOriginal = new File(pathWithOriginals + "gif2gifOriginal.gif");
+    private final File gif2pngOriginal = new File(pathWithOriginals + "gif2pngOriginal.png");
+    private final File gif2jpgOriginal = new File(pathWithOriginals + "gif2jpgOriginal.jpg");
 
-    private final File png2jpg = new File(pathWithOutputs + "png2jpg");
-    private final File png2png = new File(pathWithOutputs + "png2png");
-    private final File png2gif = new File(pathWithOutputs + "png2gif");
+    private final File jpg2jpg = new File(pathWithOutputs + "jpg2jpg.jpg");
+    private final File jpg2png = new File(pathWithOutputs + "jpg2png.png");
+    private final File jpg2gif = new File(pathWithOutputs + "jpg2gif.gif");
 
-    private final File gif2jpg = new File(pathWithOutputs + "gif2jpg");
-    private final File gif2png = new File(pathWithOutputs + "gif2png");
-    private final File gif2gif = new File(pathWithOutputs + "gif2gif");
+    private final File png2jpg = new File(pathWithOutputs + "png2jpg.jpg");
+    private final File png2png = new File(pathWithOutputs + "png2png.png");
+    private final File png2gif = new File(pathWithOutputs + "png2gif.gif");
 
-    private final File pngWithAlpha2Png = new File(pathWithOutputs + "pngWithAlpha2Png");
+    private final File gif2jpg = new File(pathWithOutputs + "gif2jpg.jpg");
+    private final File gif2png = new File(pathWithOutputs + "gif2png.png");
+    private final File gif2gif = new File(pathWithOutputs + "gif2gif.gif");
+
+    private final File pngWithAlpha2Png = new File(pathWithOutputs + "pngWithAlpha2Png.png");
+    private final File pngWithAlpha2PngBlackBackground = new File(pathWithOutputs + "pngWithAlpha2PngBlackBackground.png");
 
     @Before
     @Override
     public void setUp() throws Exception {
+        outputDir.mkdirs();
+
         super.setUp();
         loader = new Loader();
 
@@ -101,6 +123,32 @@ public class AbstractLoaderTest extends AbstractRepositoryTestCase {
         originalGifImage = ImageIO.read(originalGif);
         originalBmpImage = ImageIO.read(originalBmp);
         originalPngWithAlphaImage = ImageIO.read(originalPngWithAlpha);
+        originalPngWithAlphaImageBlackBackground = ImageIO.read(originalPngWithAlphaBlackBackground);
+
+        png2gifOriginalImage = ImageIO.read(png2gifOriginal);
+        png2jpgOriginalImage = ImageIO.read(png2jpgOriginal);
+        jpg2jpgOriginalImage = ImageIO.read(jpg2jpgOriginal);
+        gif2gifOriginalImage = ImageIO.read(gif2gifOriginal);
+        gif2pngOriginalImage = ImageIO.read(gif2pngOriginal);
+        gif2jpgOriginalImage = ImageIO.read(gif2jpgOriginal);
+    }
+
+    @Test
+    public void testBackgroundColor() throws Exception {
+        //GIVEN
+        loader.setSource(originalPngWithAlphaImage);
+        loader.setBackgroundColor(Color.black);
+        //WHEN
+        BufferedImage bufferedImage = loader.apply(null,provider);
+        log.info("\nTest BufferedImage from png with alpha image: source image type: {}, target image type: {}",
+                imageTypeToString(originalPngWithAlphaImage.getType()), imageTypeToString(bufferedImage.getType()));
+        //THEN
+        assertEquals(originalPngWithAlphaImage.getType(),bufferedImage.getType());
+        assertTrue(equalsPictures(originalPngWithAlphaImageBlackBackground,bufferedImage));
+        assertTrue(equalsAlpha(originalPngWithAlphaImageBlackBackground,bufferedImage));
+
+        //for visual checkout
+        ImageIO.write(bufferedImage, "png", pngWithAlpha2PngBlackBackground);
     }
 
     //PNG
@@ -114,7 +162,7 @@ public class AbstractLoaderTest extends AbstractRepositoryTestCase {
                 imageTypeToString(originalPngImage.getType()), imageTypeToString(bufferedImage.getType()));
         //THEN
         assertEquals(originalPngImage.getType(),bufferedImage.getType());
-        assertTrue(equalsPictures(originalPngImage,bufferedImage, 0, 0));
+        assertTrue(equalsPictures(originalPngImage,bufferedImage));
         assertTrue(equalsAlpha(originalPngImage,bufferedImage));
 
         ImageIO.write(bufferedImage, "gif", png2gif);
@@ -132,7 +180,7 @@ public class AbstractLoaderTest extends AbstractRepositoryTestCase {
         log.info("\n Test png to png image: source image type: {}, target image type: {}",
                 imageTypeToString(originalPngImage.getType()), imageTypeToString(bufferedImage.getType()));
         //THEN
-        assertTrue(equalsPictures(originalPngImage,bufferedImage, 0, 0)); //lossless png compression
+        assertTrue(equalsPictures(originalPngImage,bufferedImage));
         assertTrue(equalsAlpha(originalPngImage,bufferedImage));
     }
 
@@ -142,7 +190,7 @@ public class AbstractLoaderTest extends AbstractRepositoryTestCase {
         log.info("\n Test png to jpg image: source image type: {}, target image type: {}",
                 imageTypeToString(originalPngImage.getType()), imageTypeToString(bufferedImage.getType()));
         //THEN
-        assertTrue(equalsPictures(originalPngImage,bufferedImage, 20, 10));
+        assertTrue(equalsPictures(png2jpgOriginalImage,bufferedImage));
         assertTrue(equalsAlpha(originalPngImage,bufferedImage));
     }
 
@@ -152,7 +200,7 @@ public class AbstractLoaderTest extends AbstractRepositoryTestCase {
         log.info("\n Test png to gif image: source image type: {}, target image type: {}",
                 imageTypeToString(originalPngImage.getType()), imageTypeToString(bufferedImage.getType()));
         //THEN
-        assertTrue(equalsPictures(originalPngImage,bufferedImage, 10, 5));
+        assertTrue(equalsPictures(png2gifOriginalImage,bufferedImage));
         assertTrue(equalsAlpha(originalPngImage,bufferedImage));
     }
 
@@ -167,7 +215,7 @@ public class AbstractLoaderTest extends AbstractRepositoryTestCase {
                 imageTypeToString(originalJpgImage.getType()), imageTypeToString(bufferedImage.getType()));
         //THEN
         assertEquals(originalJpgImage.getType(),bufferedImage.getType());
-        assertTrue(equalsPictures(originalJpgImage,bufferedImage, 0, 0));
+        assertTrue(equalsPictures(originalJpgImage,bufferedImage));
         assertTrue(equalsAlpha(originalJpgImage,bufferedImage));
 
         ImageIO.write(bufferedImage, "gif", jpg2gif);
@@ -185,7 +233,7 @@ public class AbstractLoaderTest extends AbstractRepositoryTestCase {
         log.info("\n Test jpg to gif image: source image type: {}, target image type: {}",
                 imageTypeToString(originalJpgImage.getType()), imageTypeToString(bufferedImage.getType()));
         //THEN
-        assertTrue(equalsPictures(originalJpgImage,bufferedImage, 10, 5));
+        assertTrue(equalsPictures(originalGifImage,bufferedImage));
         assertTrue(equalsAlpha(originalJpgImage,bufferedImage));
     }
 
@@ -195,7 +243,7 @@ public class AbstractLoaderTest extends AbstractRepositoryTestCase {
         log.info("\n Test jpg to jpg image: source image type: {}, target image type: {}",
                 imageTypeToString(originalJpgImage.getType()), imageTypeToString(bufferedImage.getType()));
         //THEN
-        assertTrue(equalsPictures(originalJpgImage,bufferedImage, 20, 10));
+        assertTrue(equalsPictures(jpg2jpgOriginalImage,bufferedImage));
         assertTrue(equalsAlpha(originalJpgImage,bufferedImage));
     }
 
@@ -205,7 +253,7 @@ public class AbstractLoaderTest extends AbstractRepositoryTestCase {
         log.info("\n Test jpg to png image: source image type: {}, target image type: {}",
                 imageTypeToString(originalJpgImage.getType()), imageTypeToString(bufferedImage.getType()));
         //THEN
-        assertTrue(equalsPictures(originalJpgImage,bufferedImage, 0, 0));  //lossless png compression
+        assertTrue(equalsPictures(originalJpgImage,bufferedImage));
         assertTrue(equalsAlpha(originalJpgImage,bufferedImage));
     }
 
@@ -217,11 +265,10 @@ public class AbstractLoaderTest extends AbstractRepositoryTestCase {
         BufferedImage bufferedImage = loader.apply(null,provider);
         log.info("\nTest BufferedImage from gif image: source image type: {}, target image type: {}",
                 imageTypeToString(originalGifImage.getType()), imageTypeToString(bufferedImage.getType()));
-        ImageIO.write(bufferedImage, "gif", pngWithAlpha2Png);
 
         //THEN
         assertEquals(originalGifImage.getType(),bufferedImage.getType());
-        assertTrue(equalsPictures(originalGifImage,bufferedImage, 35, 10)); //lossy gif compression
+        assertTrue(equalsPictures(gif2gifOriginalImage,bufferedImage));
         assertTrue(equalsAlpha(originalGifImage,bufferedImage));
 
         ImageIO.write(bufferedImage, "gif", gif2gif);
@@ -239,7 +286,7 @@ public class AbstractLoaderTest extends AbstractRepositoryTestCase {
         log.info("\n Test gif to png image: source image type: {}, target image type: {}",
                 imageTypeToString(originalGifImage.getType()), imageTypeToString(bufferedImage.getType()));
         //THEN
-        assertTrue(equalsPictures(originalGifImage,bufferedImage, 35, 10)); //lossy gif compression
+        assertTrue(equalsPictures(gif2pngOriginalImage,bufferedImage));
         assertTrue(equalsAlpha(originalGifImage,bufferedImage));
     }
 
@@ -249,7 +296,7 @@ public class AbstractLoaderTest extends AbstractRepositoryTestCase {
         log.info("\n Test gif to jpg image: source image type: {}, target image type: {}",
                 imageTypeToString(originalGifImage.getType()), imageTypeToString(bufferedImage.getType()));
         //THEN
-        assertTrue(equalsPictures(originalGifImage,bufferedImage, 35, 10)); //lossy gif compression
+        assertTrue(equalsPictures(gif2jpgOriginalImage,bufferedImage));
         assertTrue(equalsAlpha(originalGifImage,bufferedImage));
     }
 
@@ -259,7 +306,7 @@ public class AbstractLoaderTest extends AbstractRepositoryTestCase {
         log.info("\n Test gif to gif image: source image type: {}, target image type: {}",
                 imageTypeToString(originalGifImage.getType()), imageTypeToString(bufferedImage.getType()));
         //THEN
-        assertTrue(equalsPictures(originalGifImage,bufferedImage, 35, 10)); //lossy gif compression
+        assertTrue(equalsPictures(gif2gifOriginalImage,bufferedImage));
         assertTrue(equalsAlpha(originalGifImage,bufferedImage));
     }
 
@@ -273,7 +320,7 @@ public class AbstractLoaderTest extends AbstractRepositoryTestCase {
                 imageTypeToString(originalBmpImage.getType()), imageTypeToString(bufferedImage.getType()));
         //THEN
         assertEquals(originalBmpImage.getType(),bufferedImage.getType());
-        assertTrue(equalsPictures(originalBmpImage,bufferedImage, 0, 0));
+        assertTrue(equalsPictures(originalBmpImage,bufferedImage));
         assertTrue(equalsAlpha(originalBmpImage,bufferedImage));
     }
 
@@ -287,7 +334,7 @@ public class AbstractLoaderTest extends AbstractRepositoryTestCase {
                 imageTypeToString(originalPngWithAlphaImage.getType()), imageTypeToString(bufferedImage.getType()));
         //THEN
         assertEquals(originalPngWithAlphaImage.getType(),bufferedImage.getType());
-        assertTrue(equalsPictures(originalPngWithAlphaImage,bufferedImage,5,5));
+        assertTrue(equalsPictures(originalPngWithAlphaImage,bufferedImage));
         assertTrue(equalsAlpha(originalPngWithAlphaImage,bufferedImage));
 
         //for visual checkout
@@ -389,42 +436,19 @@ public class AbstractLoaderTest extends AbstractRepositoryTestCase {
         return true;
     }
 
-
-    private boolean equalsPictures(BufferedImage bi1, BufferedImage bi2, int colorTolerance, int wrongPixelsTolerancePercent) {
+    private boolean equalsPictures(BufferedImage bi1, BufferedImage bi2) {
 
         if ( bi1.getWidth() != bi2.getWidth() || bi1.getHeight() != bi2.getHeight() ) {
             return false;
         }
 
-        int differentPixels = 0;
-        int averageError = 0;
-        int size = bi1.getWidth() * bi1.getHeight();
-
         for (int x = 0; x < bi1.getWidth(); x++) {
             for (int y = 0; y < bi1.getHeight(); y++) {
-              int pixel1 = bi1.getRGB(x,y);
-              int pixel2 = bi2.getRGB(x,y);
-
-              int red1 = (pixel1 & 0x00ff0000) >> 16;
-              int red2 = (pixel1 & 0x00ff0000) >> 16;
-
-              int green1 = (pixel1 & 0x0000ff00) >> 8;
-              int green2 = (pixel2 & 0x0000ff00) >> 8;
-
-              int blue1 = pixel1 & 0x000000ff;
-              int blue2 = pixel2 & 0x000000ff;
-
-              int redError = Math.abs(red1 - red2);
-              int greenError = Math.abs(green1 - green2);
-              int blueError = Math.abs(blue1 - blue2);
-
-              if (  redError > colorTolerance || greenError > colorTolerance || blueError > colorTolerance ) {
-                  differentPixels++;
-                  averageError += (redError + greenError + blueError) / 3;
+              if (  bi1.getRGB(x,y) != bi2.getRGB(x,y) ) {
+                  return false;
               }
             }
         }
-
-        return differentPixels > size*wrongPixelsTolerancePercent/100 ? false : true;
+        return true;
     }
 }
