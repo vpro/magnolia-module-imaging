@@ -49,10 +49,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Servlet responsible for the actual generation of the images.
- * TODO This servlet might need some investigation - improvements; particularly how the parameterProvider, and various factories are bound together.
+ * Servlet responsible for the actual generation of the images. TODO This
+ * servlet might need some investigation - improvements; particularly how the
+ * parameterProvider, and various factories are bound together.
  *
- * During development / tests of generators, set the storeGeneratedImages parameter to "false".
+ * During development / tests of generators, set the storeGeneratedImages
+ * parameter to "false".
  *
  * @version $Id$
  */
@@ -89,7 +91,8 @@ public class ImagingServlet extends HttpServlet {
     }
 
     /**
-     * Determines the ImageGenerator to use, using the first path element of the pathInfo.
+     * Determines the ImageGenerator to use, using the first path element of the
+     * pathInfo.
      */
     protected String getImageGeneratorName(HttpServletRequest request) {
         final String pathInfo = request.getPathInfo();
@@ -102,9 +105,12 @@ public class ImagingServlet extends HttpServlet {
     }
 
     protected ImageStreamer getStreamer(ParameterProviderFactory parameterProviderFactory) {
-        // TODO -- CachingImageStreamer currently has a non-static "currentJobs" map.
-        // TODO -- to investigate, but I highly suspect that it's not really useful if
-        // we use a different instance of CachingImageStreamer for every request.
+        // TODO -- CachingImageStreamer currently has a non-static "currentJobs"
+        // map.
+        // TODO -- to investigate, but I highly suspect that it's not really
+        // useful if
+        // we use a different instance of CachingImageStreamer for every
+        // request.
 
         final DefaultImageStreamer newDefaultImageStreamer = new DefaultImageStreamer();
         if (!storeGeneratedImages) {
