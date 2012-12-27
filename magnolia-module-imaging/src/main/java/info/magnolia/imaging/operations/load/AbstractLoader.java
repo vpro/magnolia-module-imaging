@@ -74,7 +74,18 @@ public abstract class AbstractLoader<P extends ParameterProvider<?>> implements 
         if (loaded == null) {
             throw new ImagingException("Could not load image for " + filterParams);
         }
-        final BufferedImage img = new BufferedImage(loaded.getWidth(), loaded.getHeight(), BufferedImage.TYPE_INT_ARGB_PRE);
+
+        int imageType = loaded.getType(); //set the output image type to the source image type
+
+        if (imageType == BufferedImage.TYPE_CUSTOM) { //if the source image type is not set...
+          if ( loaded.getAlphaRaster() != null ) { //with alpha channel
+              imageType = BufferedImage.TYPE_INT_ARGB_PRE;
+          } else { //without alpha channel
+              imageType = BufferedImage.TYPE_INT_RGB;
+          }
+        }
+        final BufferedImage img = new BufferedImage(loaded.getWidth(), loaded.getHeight(), imageType);
+
         final Graphics2D g = img.createGraphics();
 
         if (backgroundColor != null) {
