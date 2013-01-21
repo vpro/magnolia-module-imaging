@@ -41,21 +41,22 @@ import info.magnolia.imaging.caching.CachingStrategy;
 import info.magnolia.imaging.util.PathSplitter;
 import info.magnolia.module.ModuleRegistry;
 
+import java.io.IOException;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * Servlet responsible for the actual generation of the images. TODO This
  * servlet might need some investigation - improvements; particularly how the
  * parameterProvider, and various factories are bound together.
- *
+ * 
  * During development / tests of generators, set the storeGeneratedImages
  * parameter to "false".
- *
+ * 
  * @version $Id$
  */
 public class ImagingServlet extends HttpServlet {
@@ -79,11 +80,6 @@ public class ImagingServlet extends HttpServlet {
         final ParameterProvider p = parameterProviderFactory.newParameterProviderFor(request);
 
         try {
-            // Ensure that browser does not cache image so that when images are
-            // updated, the browser (and user) gets those updates right away.
-            response.setHeader("Cache-Control", "no-cache");
-            response.setHeader("Expires", "0");
-
             // TODO -- mimetype etc.
             final ImageStreamer streamer = getStreamer(parameterProviderFactory);
             streamer.serveImage(generator, p, response.getOutputStream());
