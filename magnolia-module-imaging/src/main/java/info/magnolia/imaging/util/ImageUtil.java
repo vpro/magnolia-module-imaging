@@ -44,12 +44,18 @@ import java.awt.image.WritableRaster;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Keeps utility functions for imaging.
  *
  * @version $Id$
  */
 public class ImageUtil {
+
+    private static final Logger log = LoggerFactory.getLogger(ImageUtil.class);
+
     /**
      * @see info.magnolia.imaging.util.ImageUtilTest#testJpegOddity()
      */
@@ -62,20 +68,29 @@ public class ImageUtil {
 
         if (!isOpaque && !outputFormat.supportsTransparency()) {
             final WritableRaster raster = img.getRaster();
-            final WritableRaster newRaster = raster.createWritableChild(0, 0, img.getWidth(), img.getHeight(), 0, 0, new int[]{0, 1, 2});
+            final WritableRaster newRaster = raster.createWritableChild(0, 0, img.getWidth(), img.getHeight(), 0, 0, new int[] { 0, 1, 2 });
 
-            // create a ColorModel that represents the one of the ARGB except the alpha channel
-            final DirectColorModel cm = (DirectColorModel) img.getColorModel();
-            final DirectColorModel newCM = new DirectColorModel(cm.getPixelSize(), cm.getRedMask(), cm.getGreenMask(), cm.getBlueMask());
+            try {
+                // create a ColorModel that represents the one of the ARGB except the alpha channel
+                final DirectColorModel cm = (DirectColorModel) img.getColorModel();
+                final DirectColorModel newCM = new DirectColorModel(cm.getPixelSize(), cm.getRedMask(), cm.getGreenMask(), cm.getBlueMask());
 
-            // now create the new buffer that we'll use to write the image
-            return new BufferedImage(newCM, newRaster, false, null);
+                // now create the new buffer that we'll use to write the image
+                return new BufferedImage(newCM, newRaster, false, null);
+            } catch (final ClassCastException e) {
+                // If we experience the MGNLDAM-85 issue of java.lang.ClassCastException: java.awt.image.ComponentColorModel cannot be cast to java.awt.image.DirectColorModel,
+                // then use the slower but more robust fillTransparentPixels
+                log.warn("Could not complete flattenTransparentImageForOpaqueFormat on image. Consider replacing image. Falling back to slower fillTransparantPixels method to flatten image. [exception:" + e.getMessage() + "] [img:" + img + "]");
+
+                return fillTransparentPixels(img, Color.black);
+            }
+
         } else {
             return img;
         }
     }
 
-    // this is much slower than flattenTransparentImageForOpaqueFormat; left here for comparisons and tests.
+    // this is much slower than flattenTransparentImageForOpaqueFormat; but more robust.
 
     static BufferedImage fillTransparentPixels(final BufferedImage image, Color fillColor) {
         int w = image.getWidth();

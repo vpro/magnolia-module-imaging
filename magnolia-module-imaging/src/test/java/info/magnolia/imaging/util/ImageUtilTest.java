@@ -42,10 +42,6 @@ import info.magnolia.imaging.operations.load.ImageDecoder;
 import info.magnolia.imaging.operations.load.SunJPEGCodecImageDecoder;
 import info.magnolia.imaging.operations.load.SunJPEGCodecImageDecoderAlt;
 
-import javax.imageio.ImageIO;
-
-import org.junit.Test;
-
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -53,7 +49,13 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 
+import javax.imageio.ImageIO;
+
+import org.junit.Test;
+
 /**
+ * Test ImageUtil class.
+ * 
  * @version $Id$
  */
 public class ImageUtilTest extends AbstractImagingTest {
@@ -217,6 +219,16 @@ public class ImageUtilTest extends AbstractImagingTest {
     @Test
     public void testCanHandleTranslucentPNGSourceWhenFlatteningForJPEG() throws Exception {
         doTestFlattenTransparentImageForOpaqueFormat("/pngtrans/rgba16.png");
+    }
+
+    @Test
+    /**
+     * An unknown issue with this file 'magnolia-logo.png', causes normal path of flattenTransparentImageForOpaqueFormat to fail,
+     * this test ensures that it sucessfully applies the fallback of fillTransparentPixels without causing an exception.
+     * @throws Exception
+     */
+    public void testCanHandleProblematicLogoPNGSourceWhenFlatteningForJPEG() throws Exception {
+        doTestFlattenTransparentImageForOpaqueFormat("/magnolia-logo.png");
     }
 
     private void doTestFlattenTransparentImageForOpaqueFormat(final String source) throws Exception {
