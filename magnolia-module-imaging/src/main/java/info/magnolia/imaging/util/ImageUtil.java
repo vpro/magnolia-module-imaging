@@ -70,20 +70,18 @@ public class ImageUtil {
             final WritableRaster raster = img.getRaster();
             final WritableRaster newRaster = raster.createWritableChild(0, 0, img.getWidth(), img.getHeight(), 0, 0, new int[] { 0, 1, 2 });
 
-            try {
-                // create a ColorModel that represents the one of the ARGB except the alpha channel
-                final DirectColorModel cm = (DirectColorModel) img.getColorModel();
-                final DirectColorModel newCM = new DirectColorModel(cm.getPixelSize(), cm.getRedMask(), cm.getGreenMask(), cm.getBlueMask());
-
-                // now create the new buffer that we'll use to write the image
-                return new BufferedImage(newCM, newRaster, false, null);
-            } catch (final ClassCastException e) {
-                // If we experience the MGNLDAM-85 issue of java.lang.ClassCastException: java.awt.image.ComponentColorModel cannot be cast to java.awt.image.DirectColorModel,
-                // then use the slower but more robust fillTransparentPixels
-                log.warn("Could not complete flattenTransparentImageForOpaqueFormat on image. Consider replacing image. Falling back to slower fillTransparantPixels method to flatten image. [exception:" + e.getMessage() + "] [img:" + img + "]");
-
+            // test for non-operable file
+            if (img.getColorModel() instanceof java.awt.image.ComponentColorModel) {
+                log.warn("flattenTransparentImageForOpaqueFormat cannot run on image with ComponentColorModel. Consider replacing image. Falling back to slower fillTransparantPixels method to flatten image. [img:" + img + "]");
                 return fillTransparentPixels(img, Color.black);
             }
+
+            // create a ColorModel that represents the one of the ARGB except the alpha channel
+            final DirectColorModel cm = (DirectColorModel) img.getColorModel();
+            final DirectColorModel newCM = new DirectColorModel(cm.getPixelSize(), cm.getRedMask(), cm.getGreenMask(), cm.getBlueMask());
+
+            // now create the new buffer that we'll use to write the image
+            return new BufferedImage(newCM, newRaster, false, null);
 
         } else {
             return img;
