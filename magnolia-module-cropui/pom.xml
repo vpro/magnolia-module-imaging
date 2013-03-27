@@ -26,11 +26,7 @@
     </dependency>
     <dependency>
       <groupId>info.magnolia</groupId>
-      <artifactId>magnolia-gui</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>info.magnolia</groupId>
-      <artifactId>magnolia-module-admininterface</artifactId>
+      <artifactId>magnolia-module-legacy-admininterface</artifactId>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>

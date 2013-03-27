@@ -27,7 +27,7 @@
     </dependency>
     <dependency>
       <groupId>info.magnolia</groupId>
-      <artifactId>magnolia-module-admininterface</artifactId>
+      <artifactId>magnolia-module-legacy-admininterface</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
