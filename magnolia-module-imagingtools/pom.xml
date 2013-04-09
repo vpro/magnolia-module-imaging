@@ -11,7 +11,7 @@
   <name>Magnolia Imaging Tools Module</name>
   <description>Provides tools and utilities related to the imaging module.</description>
   <properties>
-  	<cloverCoverageThreshold>40</cloverCoverageThreshold>
+  	<cloverCoverageThreshold>33</cloverCoverageThreshold>
   </properties>
 
   <dependencies>
