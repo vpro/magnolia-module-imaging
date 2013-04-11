@@ -46,7 +46,7 @@
       <dependency>
         <groupId>info.magnolia</groupId>
         <artifactId>magnolia-module-legacy-admininterface</artifactId>
-        <version>5.0-SNAPSHOT</version>
+        <version>1.0-alpha4-1</version>
         <scope>provided</scope>
       </dependency>
       <dependency>

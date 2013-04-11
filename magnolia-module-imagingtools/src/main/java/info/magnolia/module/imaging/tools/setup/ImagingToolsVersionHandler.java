@@ -34,23 +34,12 @@
 package info.magnolia.module.imaging.tools.setup;
 
 import info.magnolia.module.DefaultModuleVersionHandler;
-import info.magnolia.module.InstallContext;
-import info.magnolia.module.admininterface.setup.WrapLegacyPageUIAsMagnoliaAppTask;
-import info.magnolia.module.delta.Task;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * {@link info.magnolia.module.ModuleVersionHandler} for the Imaging Tools module.
  *
+ * @author gjoseph
+ * @version $Revision: $ ($Author: $)
  */
 public class ImagingToolsVersionHandler extends DefaultModuleVersionHandler {
-    @Override
-    protected List<Task> getExtraInstallTasks(InstallContext installContext) {
-        final List<Task> tasks = new ArrayList<Task>();
-        tasks.add(new WrapLegacyPageUIAsMagnoliaAppTask("imageIOPlugins", "Image I/O plugins", "tools", "icon-app", "imageIO.html"));
-
-        return tasks;
-    }
 }
