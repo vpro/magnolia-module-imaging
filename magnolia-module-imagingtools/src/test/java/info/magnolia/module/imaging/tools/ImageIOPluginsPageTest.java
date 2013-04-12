@@ -41,7 +41,7 @@ import java.util.Iterator;
 import org.junit.Test;
 
 /**
- * @version $Id$
+ * ImageIOPluginsPageTest.
  */
 public class ImageIOPluginsPageTest {
 
