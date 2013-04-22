@@ -34,15 +34,17 @@
 package info.magnolia.module.imaging.tools;
 
 import info.magnolia.module.admininterface.TemplatedMVCHandler;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Transformer;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.TreeSet;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.TreeSet;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Transformer;
 
 /**
  * A page displaying the list of available input and output formats for javax.imageio.ImageIO.
