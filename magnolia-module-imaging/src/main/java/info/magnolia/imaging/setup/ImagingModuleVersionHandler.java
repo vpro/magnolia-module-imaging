@@ -34,11 +34,15 @@
 package info.magnolia.imaging.setup;
 
 import info.magnolia.cms.core.Content;
+import info.magnolia.cms.security.Permission;
 import info.magnolia.module.DefaultModuleVersionHandler;
 import info.magnolia.module.InstallContext;
 import info.magnolia.module.delta.AbstractRepositoryTask;
+import info.magnolia.module.delta.AddPermissionTask;
 import info.magnolia.module.delta.AddRoleToUserTask;
+import info.magnolia.module.delta.ArrayDelegateTask;
 import info.magnolia.module.delta.DeltaBuilder;
+import info.magnolia.module.delta.RemovePermissionTask;
 import info.magnolia.module.delta.TaskExecutionException;
 
 import java.util.Collections;
@@ -57,6 +61,12 @@ public class ImagingModuleVersionHandler extends DefaultModuleVersionHandler {
         super();
 
         register(DeltaBuilder.checkPrecondition("2.1.1", "2.2"));
+
+        register(DeltaBuilder.update("2.2.3", "")
+                .addTask(new ArrayDelegateTask("Update simaging-base role", "Change permission for imaging repo from Write-Read into Read only",
+                        new RemovePermissionTask("", "", "imaging-base", "imaging", "/", Permission.WRITE),
+                        new AddPermissionTask("", "", "imaging-base", "imaging", "/", Permission.READ, true))
+                ));
 
     }
 
