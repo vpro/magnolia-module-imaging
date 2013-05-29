@@ -107,6 +107,7 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
         ComponentsTestUtil.setInstance(AuditLoggingManager.class, new AuditLoggingManager());
     }
 
+    @Ignore
     @Test
     public void testRequestForSimilarUncachedImageOnlyGeneratesItOnce() throws Exception {
         final GraphicsEnvironment ge =  GraphicsEnvironment.getLocalGraphicsEnvironment();
