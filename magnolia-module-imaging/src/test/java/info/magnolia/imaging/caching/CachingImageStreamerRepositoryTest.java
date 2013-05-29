@@ -37,15 +37,16 @@ import static org.junit.Assert.*;
 import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.*;
 import info.magnolia.cms.core.Content;
+import info.magnolia.cms.core.DefaultHierarchyManager;
 import info.magnolia.cms.core.HierarchyManager;
 import info.magnolia.cms.core.NodeData;
 import info.magnolia.cms.util.ContentUtil;
-import info.magnolia.cms.util.HierarchyManagerWrapper;
 import info.magnolia.context.MgnlContext;
 import info.magnolia.imaging.AbstractRepositoryTestCase;
 import info.magnolia.imaging.DefaultImageStreamer;
 import info.magnolia.imaging.ImageGenerator;
 import info.magnolia.imaging.ImageStreamer;
+import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.OutputFormat;
 import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.ParameterProviderFactory;
@@ -53,6 +54,7 @@ import info.magnolia.imaging.operations.ImageOperationChain;
 import info.magnolia.imaging.operations.load.URLImageLoader;
 import info.magnolia.imaging.parameters.ContentParameterProvider;
 import info.magnolia.imaging.parameters.SimpleEqualityContentWrapper;
+import info.magnolia.jcr.wrapper.DelegateSessionWrapper;
 import info.magnolia.logging.AuditLoggingManager;
 import info.magnolia.module.ModuleManagementException;
 import info.magnolia.module.ModuleManager;
@@ -61,6 +63,7 @@ import info.magnolia.module.ModuleRegistry;
 import info.magnolia.module.model.ModuleDefinition;
 import info.magnolia.module.model.reader.ModuleDefinitionReader;
 import info.magnolia.test.ComponentsTestUtil;
+import info.magnolia.test.mock.MockContext;
 
 import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
@@ -82,6 +85,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
@@ -137,7 +141,10 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
         when(generator.generate(isA(ParameterProvider.class))).thenReturn(dummyImg);
 
         // yeah, we're using a "wrong" workspace for the image cache, to avoid having to setup a custom one in this test
-        final HierarchyManager hm = new SingleSaveHierarchyManagerWrapper("config");
+        final Session session = new SingleSaveSessionWrapper("config");
+        HierarchyManager hm = new DefaultHierarchyManager(session);
+        MockContext systemContext = (MockContext) MgnlContext.getSystemContext();
+        systemContext.addSession("config", session);
 
         final ImageStreamer streamer = new CachingImageStreamer(hm, ppf.getCachingStrategy(), new DefaultImageStreamer());
 
@@ -228,6 +235,47 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
         outs2[outs2.length - 1] = null;
     }
 
+    @Test
+    public void testGenerateAndStoreIsDoneUnderSystemContext() throws RepositoryException, IOException, ImagingException {
+        // GIVEN
+        final HierarchyManager srcHM = MgnlContext.getHierarchyManager("website");
+        final String srcPath = "/foo/bar";
+        ContentUtil.createPath(srcHM, srcPath);
+
+        // ParameterProvider for tests - return a new instance of the same node everytime
+        // if we'd return the same src instance everytime, the purpose of this test would be null
+        final ParameterProviderFactory<Object, Content> ppf = new TestParameterProviderFactory(srcHM, srcPath);
+
+        final OutputFormat png = new OutputFormat();
+        png.setFormatName("png");
+
+        final BufferedImage dummyImg = ImageIO.read(getClass().getResourceAsStream("/funnel.gif"));
+        assertNotNull("Couldn't load dummy test image", dummyImg);
+
+        final ImageGenerator<ParameterProvider<Content>> generator = mock(ImageGenerator.class);
+        when(generator.getParameterProviderFactory()).thenReturn(ppf);
+        when(generator.getName()).thenReturn("test");
+        when(generator.getOutputFormat(isA(ParameterProvider.class))).thenReturn(png);
+
+        when(generator.generate(isA(ParameterProvider.class))).thenReturn(dummyImg);
+
+        // yeah, we're using a "wrong" workspace for the image cache, to avoid having to setup a custom one in this test
+        SingleSaveSessionWrapper session = new SingleSaveSessionWrapper("config");
+        HierarchyManager hm = new DefaultHierarchyManager(session);
+        MockContext systemContext = (MockContext) MgnlContext.getSystemContext();
+        SingleSaveSessionWrapper systemSession = new SingleSaveSessionWrapper("config");
+        systemContext.addSession("config", systemSession);
+
+        final CachingImageStreamer streamer = new CachingImageStreamer(hm, ppf.getCachingStrategy(), new DefaultImageStreamer());
+
+        // WHEN
+        streamer.generateAndStore(generator, generator.getParameterProviderFactory().newParameterProviderFor(null));
+
+        // THEN
+        assertTrue(systemSession.saved);
+        assertFalse(session.saved);
+    }
+
     /**
      * This test is not executed by default - too long !
      * Used to reproduce the "session already closed issue", see MGNLIMG-59.
@@ -257,7 +305,10 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
         generator.setParameterProviderFactory(ppf);
 
         // yeah, we're using a "wrong" workspace for the image cache, to avoid having to setup a custom one in this test
-        final HierarchyManager hm = new SingleSaveHierarchyManagerWrapper("config");
+        final Session session = new SingleSaveSessionWrapper("config");
+        HierarchyManager hm = new DefaultHierarchyManager(session);
+        MockContext systemContext = (MockContext) MgnlContext.getSystemContext();
+        systemContext.addSession("config", session);
 
         final ImageStreamer streamer = new CachingImageStreamer(hm, ppf.getCachingStrategy(), new DefaultImageStreamer());
 
@@ -419,11 +470,11 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
         }
     }
 
-    private static class SingleSaveHierarchyManagerWrapper extends HierarchyManagerWrapper {
+    private static class SingleSaveSessionWrapper extends DelegateSessionWrapper {
         boolean saved = false;
 
-        public SingleSaveHierarchyManagerWrapper(String repositoryId) {
-            super(MgnlContext.getHierarchyManager(repositoryId));
+        public SingleSaveSessionWrapper(String repositoryId) throws RepositoryException {
+            super(MgnlContext.getJCRSession(repositoryId));
         }
 
         @Override

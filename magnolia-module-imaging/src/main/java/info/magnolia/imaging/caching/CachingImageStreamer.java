@@ -42,6 +42,7 @@ import info.magnolia.cms.core.HierarchyManager;
 import info.magnolia.cms.core.NodeData;
 import info.magnolia.cms.util.ContentUtil;
 import info.magnolia.cms.util.NodeDataUtil;
+import info.magnolia.context.MgnlContext;
 import info.magnolia.imaging.ImageGenerator;
 import info.magnolia.imaging.ImageStreamer;
 import info.magnolia.imaging.ImagingException;
@@ -199,9 +200,10 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
         // it's time to lock now, we can only save one node at a time, since we'll be working on the same nodes as other threads
         lock.lock();
         try {
+            HierarchyManager systemHM = MgnlContext.getSystemContext().getHierarchyManager(hm.getName());
             // create cachePath if needed
             final String cachePath = cachingStrategy.getCachePath(generator, parameterProvider);
-            final Content cacheNode = ContentUtil.createPath(hm, cachePath, false);
+            final Content cacheNode = ContentUtil.createPath(systemHM, cachePath, false);
             final NodeData imageData = NodeDataUtil.getOrCreate(cacheNode, GENERATED_IMAGE_PROPERTY, PropertyType.BINARY);
 
             // store generated image
@@ -216,7 +218,7 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
             cacheNode.getMetaData().setModificationDate();
 
             // finally save it all
-            hm.save();
+            systemHM.save();
             return imageData;
         } catch (RepositoryException e) {
             throw new ImagingException("Can't store rendered image: " + e.getMessage(), e);
