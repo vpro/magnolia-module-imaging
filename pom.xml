@@ -13,7 +13,7 @@
   <description>A set of Magnolia modules which provide image generation, filtering and manipulation capabilities.</description>
   <properties>
     <javaVersion>1.6</javaVersion>
-    <magnoliaVersion>5.0</magnoliaVersion>
+    <magnoliaVersion>5.0.1-SNAPSHOT</magnoliaVersion>
     <documentationURL>http://documentation.magnolia-cms.com/modules/imaging.html</documentationURL>
     <scmTagPrefix>magnolia-imaging</scmTagPrefix>
   </properties>
@@ -46,7 +46,7 @@
       <dependency>
         <groupId>info.magnolia</groupId>
         <artifactId>magnolia-module-legacy-admininterface</artifactId>
-        <version>5.0</version>
+        <version>5.0.1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>javax.servlet</groupId>
