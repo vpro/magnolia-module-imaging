@@ -41,12 +41,15 @@ import info.magnolia.imaging.caching.CachingStrategy;
 import info.magnolia.imaging.util.PathSplitter;
 import info.magnolia.module.ModuleRegistry;
 
+import java.io.IOException;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Servlet responsible for the actual generation of the images.
@@ -75,6 +78,14 @@ public class ImagingServlet extends HttpServlet {
 
         final ParameterProviderFactory parameterProviderFactory = generator.getParameterProviderFactory();
         final ParameterProvider p = parameterProviderFactory.newParameterProviderFor(request);
+
+        String outputFormat = generator.getOutputFormat(p).getFormatName();
+        String requestedPath = StringUtils.substringAfterLast(request.getPathInfo(), "/"); // don't take part of node name as extension, we support dots in node names!
+        String requestedFormat = StringUtils.substringAfterLast(requestedPath, ".");
+        if (!StringUtils.equals(outputFormat, requestedFormat)) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
 
         try {
             // TODO -- mimetype etc.
