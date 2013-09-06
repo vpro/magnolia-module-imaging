@@ -49,11 +49,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * Servlet responsible for the actual generation of the images. TODO This
  * servlet might need some investigation - improvements; particularly how the
  * parameterProvider, and various factories are bound together.
- * 
  * During development / tests of generators, set the storeGeneratedImages
  * parameter to "false".
  * 
@@ -78,6 +79,16 @@ public class ImagingServlet extends HttpServlet {
 
         final ParameterProviderFactory parameterProviderFactory = generator.getParameterProviderFactory();
         final ParameterProvider p = parameterProviderFactory.newParameterProviderFor(request);
+
+        if (getImagingConfiguration().isServeOnlyForCorrectExtension()) {
+            String outputFormat = generator.getOutputFormat(p).getFormatName();
+            String requestedPath = StringUtils.substringAfterLast(request.getPathInfo(), "/"); // don't take part of node name as extension, we support dots in node names!
+            String requestedFormat = StringUtils.substringAfterLast(requestedPath, ".");
+            if (!StringUtils.equals(outputFormat, requestedFormat)) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
+        }
 
         try {
             // TODO -- mimetype etc.

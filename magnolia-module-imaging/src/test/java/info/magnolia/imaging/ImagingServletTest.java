@@ -1,5 +1,5 @@
 /**
- * This file Copyright (c) 2009-2012 Magnolia International
+ * This file Copyright (c) 2009-2013 Magnolia International
  * Ltd.  (http://www.magnolia-cms.com). All rights reserved.
  *
  *
@@ -33,8 +33,9 @@
  */
 package info.magnolia.imaging;
 
-import static org.mockito.Mockito.*;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
+
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.HierarchyManager;
 import info.magnolia.cms.core.NodeData;
@@ -52,21 +53,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
- * @version $Id$
+ * Tests for {@link ImagingServlet}.
  */
 public class ImagingServletTest {
 
-    @After
-    public void tearDown() throws Exception {
-        MgnlContext.setInstance(null);
-    }
+    private final HttpServletRequest req = mock(HttpServletRequest.class);
+    private final HttpServletResponse res = mock(HttpServletResponse.class);
+    private ImagingServlet imagingServlet;
+    private final ByteArrayOutputStream fakedOut = new ByteArrayOutputStream();
+    private final OutputFormat outputFormat = new OutputFormat();
+    private final ImagingModuleConfig cfg = new ImagingModuleConfig();;
 
-    @Test
-    public void testRequestToFactoryToGeneratorToImage() throws Exception {
-        final ByteArrayOutputStream fakedOut = new ByteArrayOutputStream();
+    @Before
+    public void setUp() throws Exception {
+        // GIVEN
         final ServletOutputStream servletOut = new ServletOutputStream() {
             @Override
             public void write(int b) throws IOException {
@@ -77,8 +81,7 @@ public class ImagingServletTest {
         final HierarchyManager hm = mock(HierarchyManager.class);
         final Content node = mock(Content.class);
         final NodeData prop = mock(NodeData.class);
-        final HttpServletRequest req = mock(HttpServletRequest.class);
-        final HttpServletResponse res = mock(HttpServletResponse.class);
+
         when(ctx.getHierarchyManager("imaging")).thenReturn(hm);
         // TODO -- test should substitute another implementation of CachingImageStreamer
         // TODO -- either extract an interface, or make it an ImageGenerator
@@ -88,7 +91,6 @@ public class ImagingServletTest {
         when(node.getNodeData("generated-image")).thenReturn(prop);
         when(prop.isExist()).thenReturn(true);
         when(prop.getStream()).thenReturn(new ByteArrayInputStream(new byte[]{1,2,3}));
-        when(req.getPathInfo()).thenReturn("/myGenerator/someWorkspace/some/path/to/a/node");
         when(req.getRequestURI()).thenReturn("dummyUri");
         when(res.getOutputStream()).thenReturn(servletOut);
         res.flushBuffer();
@@ -105,21 +107,34 @@ public class ImagingServletTest {
             }
         };
 
-        final OutputFormat outputFormat = new OutputFormat();
-        outputFormat.setFormatName("png");
         final TestImageGenerator<StringParameterProvider> generator = new TestImageGenerator<StringParameterProvider>(ppFactory, outputFormat);
 
-        final ImagingServlet imagingServlet = new ImagingServlet() {
+        imagingServlet = new ImagingServlet() {
             @Override
             protected ImagingModuleConfig getImagingConfiguration() {
-                final ImagingModuleConfig cfg = new ImagingModuleConfig();
                 cfg.addGenerator(generator.getName(), generator);
                 return cfg;
             }
         };
 
         MgnlContext.setInstance(ctx);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        MgnlContext.setInstance(null);
+    }
+
+    @Test
+    public void testRequestToFactoryToGeneratorToImage() throws Exception {
+        // GIVEN
+        when(req.getPathInfo()).thenReturn("/myGenerator/someWorkspace/some/path/to/a/node.png");
+        outputFormat.setFormatName("png");
+
+        // WHEN
         imagingServlet.doGet(req, res);
+
+        // THEN
         verify(res, atMost(2)).flushBuffer();
 
         // TODO - disabled for now
@@ -138,6 +153,20 @@ public class ImagingServletTest {
         //        final String filename = getClass().getSimpleName() + ".jpg";
         //        ImageIO.write(img, "jpg", new File(filename));
         // Runtime.getRuntime().exec("open " + filename);
+    }
+
+    @Test
+    public void testDoGetWrongExtension() throws Exception {
+        // GIVEN
+        when(req.getPathInfo()).thenReturn("/myGenerator/someWorkspace/some/path/to/a/node.wrongExtension");
+        outputFormat.setFormatName("png");
+        cfg.setServeOnlyForCorrectExtension(true);
+
+        // WHEN
+        imagingServlet.doGet(req, res);
+
+        // THEN
+        verify(res).sendError(HttpServletResponse.SC_NOT_FOUND);
     }
 
     private static class TestImageGenerator<P extends ParameterProvider<?>> implements ImageGenerator<P> {
