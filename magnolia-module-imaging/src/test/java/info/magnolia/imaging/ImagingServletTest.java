@@ -39,6 +39,7 @@ import static org.mockito.Mockito.*;
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.HierarchyManager;
 import info.magnolia.cms.core.NodeData;
+import info.magnolia.cms.util.CustomServletConfig;
 import info.magnolia.context.Context;
 import info.magnolia.context.MgnlContext;
 import info.magnolia.imaging.caching.CachingStrategy;
@@ -47,7 +48,10 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -90,7 +94,7 @@ public class ImagingServletTest {
 
         when(node.getNodeData("generated-image")).thenReturn(prop);
         when(prop.isExist()).thenReturn(true);
-        when(prop.getStream()).thenReturn(new ByteArrayInputStream(new byte[]{1,2,3}));
+        when(prop.getStream()).thenReturn(new ByteArrayInputStream(new byte[] { 1, 2, 3 }));
         when(req.getRequestURI()).thenReturn("dummyUri");
         when(res.getOutputStream()).thenReturn(servletOut);
         res.flushBuffer();
@@ -149,9 +153,9 @@ public class ImagingServletTest {
         // TODO - disabled for now
         // yes, we could instead feed the test with a FileOutputStream instead of doing the shenanigans of reading/saving, but this piece below shouldn't stay here
         // it just generates a small black jpeg...
-        //        final BufferedImage img = ImageIO.read(new ByteArrayInputStream(fakedOut.toByteArray()));
-        //        final String filename = getClass().getSimpleName() + ".jpg";
-        //        ImageIO.write(img, "jpg", new File(filename));
+        // final BufferedImage img = ImageIO.read(new ByteArrayInputStream(fakedOut.toByteArray()));
+        // final String filename = getClass().getSimpleName() + ".jpg";
+        // ImageIO.write(img, "jpg", new File(filename));
         // Runtime.getRuntime().exec("open " + filename);
     }
 
@@ -160,7 +164,11 @@ public class ImagingServletTest {
         // GIVEN
         when(req.getPathInfo()).thenReturn("/myGenerator/someWorkspace/some/path/to/a/node.wrongExtension");
         outputFormat.setFormatName("png");
-        cfg.setServeOnlyForCorrectExtension(true);
+
+        Map<String, String> initParameters = new HashMap<String, String>();
+        initParameters.put("serveOnlyForCorrectExtension", "true");
+        ServletConfig config = new CustomServletConfig("ImagingServletConfig", null, initParameters);
+        imagingServlet.init(config);
 
         // WHEN
         imagingServlet.doGet(req, res);

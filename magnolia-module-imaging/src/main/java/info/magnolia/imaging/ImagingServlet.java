@@ -62,11 +62,13 @@ import org.apache.commons.lang.StringUtils;
  */
 public class ImagingServlet extends HttpServlet {
     private boolean storeGeneratedImages = true;
+    private boolean serveOnlyForCorrectExtension = false;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         storeGeneratedImages = BooleanUtil.toBoolean(config.getInitParameter("storeGeneratedImages"), true);
+        serveOnlyForCorrectExtension = BooleanUtil.toBoolean(config.getInitParameter("serveOnlyForCorrectExtension"), false);
     }
 
     @Override
@@ -80,7 +82,7 @@ public class ImagingServlet extends HttpServlet {
         final ParameterProviderFactory parameterProviderFactory = generator.getParameterProviderFactory();
         final ParameterProvider p = parameterProviderFactory.newParameterProviderFor(request);
 
-        if (getImagingConfiguration().isServeOnlyForCorrectExtension()) {
+        if (serveOnlyForCorrectExtension) {
             String outputFormat = generator.getOutputFormat(p).getFormatName();
             String requestedPath = StringUtils.substringAfterLast(request.getPathInfo(), "/"); // don't take part of node name as extension, we support dots in node names!
             String requestedFormat = StringUtils.substringAfterLast(requestedPath, ".");
