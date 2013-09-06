@@ -39,6 +39,7 @@ import static org.mockito.Mockito.*;
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.HierarchyManager;
 import info.magnolia.cms.core.NodeData;
+import info.magnolia.cms.util.CustomServletConfig;
 import info.magnolia.context.Context;
 import info.magnolia.context.MgnlContext;
 import info.magnolia.imaging.caching.CachingStrategy;
@@ -47,7 +48,10 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -160,7 +164,11 @@ public class ImagingServletTest {
         // GIVEN
         when(req.getPathInfo()).thenReturn("/myGenerator/someWorkspace/some/path/to/a/node.wrongExtension");
         outputFormat.setFormatName("png");
-        cfg.setServeOnlyForCorrectExtension(true);
+
+        Map<String, String> initParameters = new HashMap<String, String>();
+        initParameters.put("serveOnlyForCorrectExtension", "true");
+        ServletConfig config = new CustomServletConfig("ImagingServletConfig", null, initParameters);
+        imagingServlet.init(config);
 
         // WHEN
         imagingServlet.doGet(req, res);

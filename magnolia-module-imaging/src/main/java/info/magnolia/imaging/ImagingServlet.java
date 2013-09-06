@@ -54,18 +54,19 @@ import org.apache.commons.lang.StringUtils;
 /**
  * Servlet responsible for the actual generation of the images.
  * TODO This servlet might need some investigation - improvements; particularly how the parameterProvider, and various factories are bound together.
- *
  * During development / tests of generators, set the storeGeneratedImages parameter to "false".
- *
+ * 
  * @version $Id$
  */
 public class ImagingServlet extends HttpServlet {
     private boolean storeGeneratedImages = true;
+    private boolean serveOnlyForCorrectExtension = false;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         storeGeneratedImages = BooleanUtil.toBoolean(config.getInitParameter("storeGeneratedImages"), true);
+        serveOnlyForCorrectExtension = BooleanUtil.toBoolean(config.getInitParameter("serveOnlyForCorrectExtension"), false);
     }
 
     @Override
@@ -79,8 +80,7 @@ public class ImagingServlet extends HttpServlet {
         final ParameterProviderFactory parameterProviderFactory = generator.getParameterProviderFactory();
         final ParameterProvider p = parameterProviderFactory.newParameterProviderFor(request);
 
-
-        if (getImagingConfiguration().isServeOnlyForCorrectExtension()) {
+        if (serveOnlyForCorrectExtension) {
             String outputFormat = generator.getOutputFormat(p).getFormatName();
             String requestedPath = StringUtils.substringAfterLast(request.getPathInfo(), "/"); // don't take part of node name as extension, we support dots in node names!
             String requestedFormat = StringUtils.substringAfterLast(requestedPath, ".");
