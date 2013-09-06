@@ -1,5 +1,5 @@
 /**
- * This file Copyright (c) 2009-2012 Magnolia International
+ * This file Copyright (c) 2009-2013 Magnolia International
  * Ltd.  (http://www.magnolia-cms.com). All rights reserved.
  *
  *
@@ -38,11 +38,11 @@ import java.util.Map;
 
 /**
  * Keeps the configuration of the imaging module.
- *
- * @version $Id$
  */
 public class ImagingModuleConfig {
     private final Map<String, ImageGenerator> generators = new LinkedHashMap<String, ImageGenerator>();
+
+    private boolean serveOnlyForCorrectExtension = false;
 
     public void addGenerator(String name, ImageGenerator generator) {
         generators.put(name, generator);
@@ -50,6 +50,14 @@ public class ImagingModuleConfig {
 
     public Map<String, ImageGenerator> getGenerators() {
         return generators;
+    }
+
+    public boolean isServeOnlyForCorrectExtension() {
+        return serveOnlyForCorrectExtension;
+    }
+
+    public void setServeOnlyForCorrectExtension(boolean serveOnlyForCorrectExtensions) {
+        this.serveOnlyForCorrectExtension = serveOnlyForCorrectExtensions;
     }
 
 }
