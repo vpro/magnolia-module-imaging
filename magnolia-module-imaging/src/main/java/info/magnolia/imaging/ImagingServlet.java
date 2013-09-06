@@ -1,5 +1,5 @@
 /**
- * This file Copyright (c) 2009-2012 Magnolia International
+ * This file Copyright (c) 2009-2013 Magnolia International
  * Ltd.  (http://www.magnolia-cms.com). All rights reserved.
  *
  *
@@ -79,12 +79,15 @@ public class ImagingServlet extends HttpServlet {
         final ParameterProviderFactory parameterProviderFactory = generator.getParameterProviderFactory();
         final ParameterProvider p = parameterProviderFactory.newParameterProviderFor(request);
 
-        String outputFormat = generator.getOutputFormat(p).getFormatName();
-        String requestedPath = StringUtils.substringAfterLast(request.getPathInfo(), "/"); // don't take part of node name as extension, we support dots in node names!
-        String requestedFormat = StringUtils.substringAfterLast(requestedPath, ".");
-        if (!StringUtils.equals(outputFormat, requestedFormat)) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return;
+
+        if (getImagingConfiguration().isServeOnlyForCorrectExtension()) {
+            String outputFormat = generator.getOutputFormat(p).getFormatName();
+            String requestedPath = StringUtils.substringAfterLast(request.getPathInfo(), "/"); // don't take part of node name as extension, we support dots in node names!
+            String requestedFormat = StringUtils.substringAfterLast(requestedPath, ".");
+            if (!StringUtils.equals(outputFormat, requestedFormat)) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
         }
 
         try {

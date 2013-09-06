@@ -66,6 +66,7 @@ public class ImagingServletTest {
     private ImagingServlet imagingServlet;
     private final ByteArrayOutputStream fakedOut = new ByteArrayOutputStream();
     private final OutputFormat outputFormat = new OutputFormat();
+    private final ImagingModuleConfig cfg = new ImagingModuleConfig();;
 
     @Before
     public void setUp() throws Exception {
@@ -111,7 +112,6 @@ public class ImagingServletTest {
         imagingServlet = new ImagingServlet() {
             @Override
             protected ImagingModuleConfig getImagingConfiguration() {
-                final ImagingModuleConfig cfg = new ImagingModuleConfig();
                 cfg.addGenerator(generator.getName(), generator);
                 return cfg;
             }
@@ -160,6 +160,7 @@ public class ImagingServletTest {
         // GIVEN
         when(req.getPathInfo()).thenReturn("/myGenerator/someWorkspace/some/path/to/a/node.wrongExtension");
         outputFormat.setFormatName("png");
+        cfg.setServeOnlyForCorrectExtension(true);
 
         // WHEN
         imagingServlet.doGet(req, res);
