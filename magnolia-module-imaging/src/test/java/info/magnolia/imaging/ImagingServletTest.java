@@ -166,7 +166,7 @@ public class ImagingServletTest {
         outputFormat.setFormatName("png");
 
         Map<String, String> initParameters = new HashMap<String, String>();
-        initParameters.put("serveOnlyForCorrectExtension", "true");
+        initParameters.put("validateFileExtension", "true");
         ServletConfig config = new CustomServletConfig("ImagingServletConfig", null, initParameters);
         imagingServlet.init(config);
 
