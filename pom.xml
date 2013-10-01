@@ -4,7 +4,7 @@
   <parent>
     <groupId>info.magnolia</groupId>
     <artifactId>magnolia-parent-pom-community-module</artifactId>
-    <version>25</version>
+    <version>27</version>
   </parent>
   <artifactId>magnolia-module-imaging-parent</artifactId>
   <version>3.0.2-SNAPSHOT</version>
@@ -13,7 +13,7 @@
   <description>A set of Magnolia modules which provide image generation, filtering and manipulation capabilities.</description>
   <properties>
     <javaVersion>1.6</javaVersion>
-    <magnoliaVersion>5.0.2-SNAPSHOT</magnoliaVersion>
+    <magnoliaVersion>5.0.2</magnoliaVersion>
     <documentationURL>http://documentation.magnolia-cms.com/modules/imaging.html</documentationURL>
     <scmTagPrefix>magnolia-imaging</scmTagPrefix>
   </properties>
@@ -46,7 +46,7 @@
       <dependency>
         <groupId>info.magnolia</groupId>
         <artifactId>magnolia-module-legacy-admininterface</artifactId>
-        <version>5.0.2-SNAPSHOT</version>
+        <version>5.0.2</version>
       </dependency>
       <dependency>
         <groupId>javax.servlet</groupId>
