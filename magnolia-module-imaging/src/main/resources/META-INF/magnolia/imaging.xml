@@ -15,7 +15,7 @@
   <dependencies>
     <dependency>
       <name>core</name>
-      <version>5.0/*</version>
+      <version>5.0.2/*</version>
     </dependency>
     <dependency>
       <name>activation</name>
