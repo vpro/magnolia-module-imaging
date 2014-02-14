@@ -59,6 +59,13 @@
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
       </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <!-- Needed for compiling against com.sun classes with Java 7 compiler -->
+          <compilerArgument>-XDignore.symbol.file</compilerArgument>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 </project>
