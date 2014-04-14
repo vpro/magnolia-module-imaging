@@ -33,14 +33,15 @@
  */
 package info.magnolia.imaging.caching;
 
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.*;
 import info.magnolia.cms.core.Content;
-import info.magnolia.cms.core.DefaultHierarchyManager;
 import info.magnolia.cms.core.HierarchyManager;
 import info.magnolia.cms.core.NodeData;
 import info.magnolia.cms.util.ContentUtil;
+import info.magnolia.context.JCRSessionStrategy;
 import info.magnolia.context.MgnlContext;
 import info.magnolia.imaging.AbstractRepositoryTestCase;
 import info.magnolia.imaging.DefaultImageStreamer;
@@ -55,7 +56,6 @@ import info.magnolia.imaging.operations.load.URLImageLoader;
 import info.magnolia.imaging.parameters.ContentParameterProvider;
 import info.magnolia.imaging.parameters.SimpleEqualityContentWrapper;
 import info.magnolia.jcr.wrapper.DelegateSessionWrapper;
-import info.magnolia.logging.AuditLoggingManager;
 import info.magnolia.module.ModuleManagementException;
 import info.magnolia.module.ModuleManager;
 import info.magnolia.module.ModuleManagerImpl;
@@ -108,16 +108,22 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
         // It seems fine as is.
 
         super.setUp();
-        ComponentsTestUtil.setInstance(AuditLoggingManager.class, new AuditLoggingManager());
-    }
 
-    @Test
-    public void testRequestForSimilarUncachedImageOnlyGeneratesItOnce() throws Exception {
+        // Now replace JcrSessionStrategy instances (current ctx and system ctx) with a wrapper than ensures we only save once, for the purpose of these tests.
+        final MockContext systemContext = (MockContext) MgnlContext.getSystemContext();
+        systemContext.setRepositoryStrategy(new DelegatingSessionStrategy(systemContext.getRepositoryStrategy()));
+
+        final MockContext regularContext = (MockContext) MgnlContext.getInstance();
+        regularContext.setRepositoryStrategy(new DelegatingSessionStrategy(regularContext.getRepositoryStrategy()));
+
         final GraphicsEnvironment ge =  GraphicsEnvironment.getLocalGraphicsEnvironment();
         if (!ge.isHeadless()) {
             log.warn("This test should run in headless mode as the server will likely run headless too!!!!!");
         }
+    }
 
+    @Test
+    public void testRequestForSimilarUncachedImageOnlyGeneratesItOnce() throws Exception {
         final HierarchyManager srcHM = MgnlContext.getHierarchyManager("website");
         final String srcPath = "/foo/bar";
         ContentUtil.createPath(srcHM, srcPath);
@@ -141,11 +147,7 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
         when(generator.generate(isA(ParameterProvider.class))).thenReturn(dummyImg);
 
         // yeah, we're using a "wrong" workspace for the image cache, to avoid having to setup a custom one in this test
-        final Session session = new SingleSaveSessionWrapper("config");
-        HierarchyManager hm = new DefaultHierarchyManager(session);
-        MockContext systemContext = (MockContext) MgnlContext.getSystemContext();
-        systemContext.addSession("config", session);
-
+        final HierarchyManager hm = MgnlContext.getHierarchyManager("config");
         final ImageStreamer streamer = new CachingImageStreamer(hm, ppf.getCachingStrategy(), new DefaultImageStreamer());
 
         // Generator instances will always be the same (including paramProvFac)
@@ -260,11 +262,7 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
         when(generator.generate(isA(ParameterProvider.class))).thenReturn(dummyImg);
 
         // yeah, we're using a "wrong" workspace for the image cache, to avoid having to setup a custom one in this test
-        SingleSaveSessionWrapper session = new SingleSaveSessionWrapper("config");
-        HierarchyManager hm = new DefaultHierarchyManager(session);
-        MockContext systemContext = (MockContext) MgnlContext.getSystemContext();
-        SingleSaveSessionWrapper systemSession = new SingleSaveSessionWrapper("config");
-        systemContext.addSession("config", systemSession);
+        final HierarchyManager hm = MgnlContext.getHierarchyManager("config");
 
         final CachingImageStreamer streamer = new CachingImageStreamer(hm, ppf.getCachingStrategy(), new DefaultImageStreamer());
 
@@ -272,8 +270,12 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
         streamer.generateAndStore(generator, generator.getParameterProviderFactory().newParameterProviderFor(null));
 
         // THEN
-        assertTrue(systemSession.saved);
-        assertFalse(session.saved);
+        final Session systemSession = MgnlContext.getSystemContext().getJCRSession("config");
+        final Session session = MgnlContext.getJCRSession("config");
+        assertTrue(systemSession instanceof SingleSaveSessionWrapper);
+        assertTrue(session instanceof SingleSaveSessionWrapper);
+        assertTrue("should have saved in system session", ((SingleSaveSessionWrapper)systemSession).saved);
+        assertFalse("should not have saved in regular session", ((SingleSaveSessionWrapper)session).saved);
     }
 
     /**
@@ -305,10 +307,7 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
         generator.setParameterProviderFactory(ppf);
 
         // yeah, we're using a "wrong" workspace for the image cache, to avoid having to setup a custom one in this test
-        final Session session = new SingleSaveSessionWrapper("config");
-        HierarchyManager hm = new DefaultHierarchyManager(session);
-        MockContext systemContext = (MockContext) MgnlContext.getSystemContext();
-        systemContext.addSession("config", session);
+        final HierarchyManager hm = MgnlContext.getHierarchyManager("config");
 
         final ImageStreamer streamer = new CachingImageStreamer(hm, ppf.getCachingStrategy(), new DefaultImageStreamer());
 
@@ -444,6 +443,38 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
     replay(hm, root, t, m, p, y);
      */
 
+    /**
+     * A JCRSessionStrategy which allows returning a given session instead of the regular one.
+     */
+    private static class DelegatingSessionStrategy implements JCRSessionStrategy {
+        private final Map<String, Session> jcrSessions = new HashMap<String, Session>();
+        private final JCRSessionStrategy delegate;
+
+        DelegatingSessionStrategy(JCRSessionStrategy delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        public Session getSession(String workspaceName) throws RepositoryException {
+            if (jcrSessions.containsKey(workspaceName)) {
+                final Session session = jcrSessions.get(workspaceName);
+                assertThat(session, is(instanceOf(SingleSaveSessionWrapper.class)));
+                return session;
+            } else {
+                final Session session = delegate.getSession(workspaceName);
+                assertThat(session, is(not(instanceOf(SingleSaveSessionWrapper.class))));
+                final SingleSaveSessionWrapper sessionWrapper = new SingleSaveSessionWrapper(session);
+                jcrSessions.put(workspaceName,sessionWrapper);
+                return sessionWrapper;
+            }
+        }
+
+        @Override
+        public void release() {
+            delegate.release();
+        }
+    }
+
     private static class TestParameterProviderFactory implements ParameterProviderFactory {
         private final HierarchyManager srcHM;
         private final String srcPath;
@@ -473,8 +504,8 @@ public class CachingImageStreamerRepositoryTest extends AbstractRepositoryTestCa
     private static class SingleSaveSessionWrapper extends DelegateSessionWrapper {
         boolean saved = false;
 
-        public SingleSaveSessionWrapper(String repositoryId) throws RepositoryException {
-            super(MgnlContext.getJCRSession(repositoryId));
+        public SingleSaveSessionWrapper(Session session) throws RepositoryException {
+            super(session);
         }
 
         @Override

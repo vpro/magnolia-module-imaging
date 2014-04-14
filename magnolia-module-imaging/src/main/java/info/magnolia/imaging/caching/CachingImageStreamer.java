@@ -201,7 +201,7 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
         IOUtils.closeQuietly(out);
     }
 
-    protected NodeData generateAndStore(ImageGenerator<ParameterProvider<P>> generator, ParameterProvider<P> parameterProvider) throws IOException, ImagingException {
+    protected NodeData generateAndStore(final ImageGenerator<ParameterProvider<P>> generator, final ParameterProvider<P> parameterProvider) throws IOException, ImagingException {
         // generate
         final ByteArrayOutputStream tempOut = new ByteArrayOutputStream();
         delegate.serveImage(generator, parameterProvider, tempOut);
@@ -209,26 +209,31 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
         // it's time to lock now, we can only save one node at a time, since we'll be working on the same nodes as other threads
         lock.lock();
         try {
-            HierarchyManager systemHM = MgnlContext.getSystemContext().getHierarchyManager(hm.getName());
-            // create cachePath if needed
-            final String cachePath = cachingStrategy.getCachePath(generator, parameterProvider);
-            final Content cacheNode = ContentUtil.createPath(systemHM, cachePath, false);
-            final NodeData imageData = NodeDataUtil.getOrCreate(cacheNode, GENERATED_IMAGE_PROPERTY, PropertyType.BINARY);
+            return MgnlContext.doInSystemContext(new MgnlContext.Op<NodeData, RepositoryException>() {
+                @Override
+                public NodeData exec() throws RepositoryException {
+                    HierarchyManager systemHM = MgnlContext.getHierarchyManager(hm.getName());
+                    // create cachePath if needed
+                    final String cachePath = cachingStrategy.getCachePath(generator, parameterProvider);
+                    final Content cacheNode = ContentUtil.createPath(systemHM, cachePath, false);
+                    final NodeData imageData = NodeDataUtil.getOrCreate(cacheNode, GENERATED_IMAGE_PROPERTY, PropertyType.BINARY);
 
-            // store generated image
-            final ByteArrayInputStream tempIn = new ByteArrayInputStream(tempOut.toByteArray());
-            imageData.setValue(tempIn);
-            // TODO mimetype, lastmod, and other attributes ?
-            imageData.setAttribute(FileProperties.PROPERTY_CONTENTTYPE, "image/" + generator.getOutputFormat(parameterProvider).getFormatName());
-            imageData.setAttribute(FileProperties.PROPERTY_LASTMODIFIED, Calendar.getInstance());
+                    // store generated image
+                    final ByteArrayInputStream tempIn = new ByteArrayInputStream(tempOut.toByteArray());
+                    imageData.setValue(tempIn);
+                    // TODO mimetype, lastmod, and other attributes ?
+                    imageData.setAttribute(FileProperties.PROPERTY_CONTENTTYPE, "image/" + generator.getOutputFormat(parameterProvider).getFormatName());
+                    imageData.setAttribute(FileProperties.PROPERTY_LASTMODIFIED, Calendar.getInstance());
 
-            // Update metadata of the cache *after* a succesfull image generation (creationDate has been set when creating
-            // Since this might be called from a different thread than the actual request, we can't call cacheNode.updateMetaData(), which by default tries to set the authorId by using the current context
-            cacheNode.getMetaData().setModificationDate();
+                    // Update metadata of the cache *after* a succesfull image generation (creationDate has been set when creating
+                    // Since this might be called from a different thread than the actual request, we can't call cacheNode.updateMetaData(), which by default tries to set the authorId by using the current context
+                    cacheNode.getMetaData().setModificationDate();
 
-            // finally save it all
-            systemHM.save();
-            return imageData;
+                    // finally save it all
+                    systemHM.save();
+                    return imageData;
+                }
+            });
         } catch (RepositoryException e) {
             throw new ImagingException("Can't store rendered image: " + e.getMessage(), e);
         } finally {

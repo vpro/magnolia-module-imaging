@@ -34,10 +34,9 @@
 package info.magnolia.imaging;
 
 import static org.mockito.Mockito.*;
-import info.magnolia.context.SystemContext;
+import info.magnolia.audit.AuditLoggingManager;
 import info.magnolia.imaging.operations.load.DefaultImageIOImageDecoder;
 import info.magnolia.imaging.operations.load.ImageDecoder;
-import info.magnolia.logging.AuditLoggingManager;
 import info.magnolia.module.ModuleManagementException;
 import info.magnolia.module.ModuleManager;
 import info.magnolia.module.ModuleManagerImpl;
@@ -46,7 +45,6 @@ import info.magnolia.module.model.ModuleDefinition;
 import info.magnolia.module.model.reader.ModuleDefinitionReader;
 import info.magnolia.test.ComponentsTestUtil;
 import info.magnolia.test.RepositoryTestCase;
-import info.magnolia.test.mock.MockContext;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -70,7 +68,6 @@ public abstract class AbstractRepositoryTestCase extends RepositoryTestCase {
         ComponentsTestUtil.setInstance(AuditLoggingManager.class, new AuditLoggingManager());
         // this is set via the module descriptor (imaging.xml)
         ComponentsTestUtil.setImplementation(ImageDecoder.class, DefaultImageIOImageDecoder.class);
-        ComponentsTestUtil.setInstance(SystemContext.class, new MockContext());
     }
 
     @Override
