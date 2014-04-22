@@ -36,6 +36,7 @@ package info.magnolia.imaging.operations.load;
 import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.ParameterProvider;
 import info.magnolia.imaging.operations.ImageOperation;
+import info.magnolia.imaging.util.ImageUtil;
 import info.magnolia.objectfactory.Components;
 
 import java.awt.Color;
@@ -75,15 +76,7 @@ public abstract class AbstractLoader<P extends ParameterProvider<?>> implements 
             throw new ImagingException("Could not load image for " + filterParams);
         }
 
-        int imageType = loaded.getType(); //set the output image type to the source image type
-
-        if (imageType == BufferedImage.TYPE_CUSTOM) { //if the source image type is not set...
-          if ( loaded.getAlphaRaster() != null ) { //with alpha channel
-              imageType = BufferedImage.TYPE_INT_ARGB_PRE;
-          } else { //without alpha channel
-              imageType = BufferedImage.TYPE_INT_RGB;
-          }
-        }
+        int imageType = ImageUtil.getImageType(loaded);
         final BufferedImage img = new BufferedImage(loaded.getWidth(), loaded.getHeight(), imageType);
 
         final Graphics2D g = img.createGraphics();

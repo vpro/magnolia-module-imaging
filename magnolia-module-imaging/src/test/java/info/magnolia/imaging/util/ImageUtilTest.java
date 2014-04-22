@@ -33,6 +33,9 @@
  */
 package info.magnolia.imaging.util;
 
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
 import info.magnolia.imaging.AbstractImagingTest;
 import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.operations.ImageOperationChain;
@@ -50,11 +53,13 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.IndexColorModel;
 import java.io.IOException;
 import java.net.URL;
 
 /**
- * @version $Id$
+ * Test {@link ImageUtil} class.
  */
 public class ImageUtilTest extends AbstractImagingTest {
 
@@ -349,4 +354,49 @@ public class ImageUtilTest extends AbstractImagingTest {
             System.out.println("with ClasspathImageLoader - large jpeg: " + (System.currentTimeMillis() - start) + "ms.");
         }
     }
+
+    @Test
+    public void testGetOriginalImageType() throws Exception {
+        // GIVEN
+        BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_3BYTE_BGR);
+
+        // WHEN
+        int imageType = ImageUtil.getImageType(img);
+
+        // THEN
+        assertEquals(BufferedImage.TYPE_3BYTE_BGR, imageType);
+    }
+
+    @Test
+    public void testGetImageTypeIndexedTypeWithoutAlpha() throws Exception {
+        // GIVEN
+        ColorModel colorModel = new IndexColorModel(1, 1, new byte[8], 0, false);
+        assertFalse(colorModel.hasAlpha());
+        BufferedImage img = mock(BufferedImage.class);
+        when(img.getType()).thenReturn(BufferedImage.TYPE_BYTE_INDEXED);
+        when(img.getColorModel()).thenReturn(colorModel);
+
+        // WHEN
+        int imageType = ImageUtil.getImageType(img);
+
+        // THEN
+        assertEquals(BufferedImage.TYPE_BYTE_INDEXED, imageType);
+    }
+
+    @Test
+    public void testGetImageTypeIndexedTypeWithAlpha() throws Exception {
+        // GIVEN
+        ColorModel colorModel = new IndexColorModel(1, 1, new byte[8], 0, true);
+        assertTrue(colorModel.hasAlpha());
+        BufferedImage img = mock(BufferedImage.class);
+        when(img.getType()).thenReturn(BufferedImage.TYPE_BYTE_INDEXED);
+        when(img.getColorModel()).thenReturn(colorModel);
+
+        // WHEN
+        int imageType = ImageUtil.getImageType(img);
+
+        // THEN
+        assertEquals(BufferedImage.TYPE_INT_ARGB_PRE, imageType);
+    }
+
 }
