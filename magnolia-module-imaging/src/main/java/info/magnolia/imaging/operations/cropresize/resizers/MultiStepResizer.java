@@ -35,10 +35,10 @@ package info.magnolia.imaging.operations.cropresize.resizers;
 
 import info.magnolia.imaging.operations.cropresize.Coords;
 import info.magnolia.imaging.operations.cropresize.Size;
+import info.magnolia.imaging.util.ImageUtil;
 
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 
 /**
@@ -55,7 +55,7 @@ public class MultiStepResizer extends BasicResizer {
     public BufferedImage resize(BufferedImage src, Coords srcCoords, Size targetSize) {
         final int targetWidth = targetSize.getWidth();
         final int targetHeight = targetSize.getHeight();
-        final int type = (src.getTransparency() == Transparency.OPAQUE) ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
+        final int type = ImageUtil.getImageType(src);
         BufferedImage ret = src;
         int w, h;
 

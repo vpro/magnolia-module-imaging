@@ -119,4 +119,19 @@ public class ImageUtil {
             }
         };
     }
+
+    public static int getImageType(BufferedImage img) {
+        int imageType = img.getType();
+        if (imageType == BufferedImage.TYPE_CUSTOM) { // if the source image type is not set...
+            if (img.getAlphaRaster() != null) { // with alpha channel
+                imageType = BufferedImage.TYPE_INT_ARGB_PRE;
+            }
+            else {
+                imageType = BufferedImage.TYPE_INT_RGB;
+            }
+        } else if (imageType == BufferedImage.TYPE_BYTE_INDEXED && img.getColorModel().hasAlpha()) {
+            imageType = BufferedImage.TYPE_INT_ARGB_PRE;
+        }
+        return imageType;
+    }
 }

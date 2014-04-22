@@ -36,6 +36,7 @@ package info.magnolia.imaging.operations.load;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
+
 import info.magnolia.imaging.AbstractRepositoryTestCase;
 import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.ParameterProvider;
@@ -340,6 +341,29 @@ public class AbstractLoaderTest extends AbstractRepositoryTestCase {
         ImageIO.write(bufferedImage, "png", pngWithAlpha2Png);
     }
 
+    @Test
+    public void testTransparencyOfIndexedImageIsNotLost() throws Exception {
+        // GIVEN
+        final String fileName = "transparentIndexed";
+        File originalFile = new File(pathWithOriginals + fileName + ".png");
+        File outputFile = new File(this.pathWithOutputs + fileName + "Loaded.png");
+        BufferedImage originalImage = ImageIO.read(originalFile);
+        loader.setSource(originalImage);
+        // WHEN
+        BufferedImage bufferedImage = loader.apply(null, provider);
+        log.info("\nTest BufferedImage from indexed image: source image type: {}, target image type: {}",
+                imageTypeToString(originalBmpImage.getType()), imageTypeToString(bufferedImage.getType()));
+        // THEN
+        // for visual checkout
+        // this.checkVisually(bufferedImage, originalFile, outputFile);
+        assertTrue(bufferedImage.getColorModel().hasAlpha());
+    }
+
+    private void checkVisually(BufferedImage bufferedImage, File originalFile, File outputFile) throws IOException {
+        ImageIO.write(bufferedImage, "png", outputFile);
+        Runtime.getRuntime().exec(String.format("open %s %s", originalFile.getAbsolutePath(), outputFile.getAbsolutePath()));
+    }
+
     final class Loader extends AbstractLoader {
 
         private BufferedImage source;
@@ -410,6 +434,8 @@ public class AbstractLoaderTest extends AbstractRepositoryTestCase {
 
     private boolean equalsAlpha(BufferedImage bi1, BufferedImage bi2) {
         if (bi1.getWidth() != bi2.getWidth() || bi1.getHeight() != bi2.getHeight()) {
+            log.error(String.format("Different size: '%dx%d' vs. '%dx%d'",
+                    bi1.getWidth(), bi1.getHeight(), bi2.getWidth(), bi2.getHeight()));
             return false;
         }
         WritableRaster wr1 = bi1.getAlphaRaster();
@@ -427,6 +453,8 @@ public class AbstractLoaderTest extends AbstractRepositoryTestCase {
 
         for (int x = 0; x < size; x++) {
             if (dArray1[x] != dArray2[x]) {
+                log.error(String.format("Different alpha value at position: %d': '%d' vs. '%d'.",
+                        x, dArray1[x], dArray2[x]));
                 return false;
             }
         }
@@ -436,12 +464,16 @@ public class AbstractLoaderTest extends AbstractRepositoryTestCase {
     private boolean equalsPictures(BufferedImage bi1, BufferedImage bi2) {
 
         if (bi1.getWidth() != bi2.getWidth() || bi1.getHeight() != bi2.getHeight()) {
+            log.error(String.format("Different size: '%dx%d' vs. '%dx%d'",
+                    bi1.getWidth(), bi1.getHeight(), bi2.getWidth(), bi2.getHeight()));
             return false;
         }
 
         for (int x = 0; x < bi1.getWidth(); x++) {
             for (int y = 0; y < bi1.getHeight(); y++) {
                 if (bi1.getRGB(x, y) != bi2.getRGB(x, y)) {
+                    log.error(String.format("Different pixel at position: '%d,%d': '%d' vs. '%d'.",
+                            x, y, bi1.getRGB(x, y), bi2.getRGB(x, y)));
                     return false;
                 }
             }
