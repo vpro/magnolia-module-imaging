@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Keeps utility functions for imaging.
- *
+ * 
  * @version $Id$
  */
 public class ImageUtil {

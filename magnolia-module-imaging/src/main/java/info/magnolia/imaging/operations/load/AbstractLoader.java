@@ -49,9 +49,8 @@ import java.io.InputStream;
  * An abstract ImageOperation used to load images. It takes charge of converting the loaded image
  * to the appropriate type. (ImageIO.read() will return a different image type depending on the
  * source format). Overhead is negligible.
- *
+ * 
  * @param <P> type of ParameterProvider's parameter
- *
  * @version $Id$
  */
 public abstract class AbstractLoader<P extends ParameterProvider<?>> implements ImageOperation<P> {
@@ -75,14 +74,14 @@ public abstract class AbstractLoader<P extends ParameterProvider<?>> implements 
             throw new ImagingException("Could not load image for " + filterParams);
         }
 
-        int imageType = loaded.getType(); //set the output image type to the source image type
+        int imageType = loaded.getType(); // set the output image type to the source image type
 
-        if (imageType == BufferedImage.TYPE_CUSTOM) { //if the source image type is not set...
-          if ( loaded.getAlphaRaster() != null ) { //with alpha channel
-              imageType = BufferedImage.TYPE_INT_ARGB_PRE;
-          } else { //without alpha channel
-              imageType = BufferedImage.TYPE_INT_RGB;
-          }
+        if (imageType == BufferedImage.TYPE_CUSTOM) { // if the source image type is not set...
+            if (loaded.getAlphaRaster() != null) { // with alpha channel
+                imageType = BufferedImage.TYPE_INT_ARGB_PRE;
+            } else { // without alpha channel
+                imageType = BufferedImage.TYPE_INT_RGB;
+            }
         }
         final BufferedImage img = new BufferedImage(loaded.getWidth(), loaded.getHeight(), imageType);
 
