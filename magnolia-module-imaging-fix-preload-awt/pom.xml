@@ -4,7 +4,7 @@
   <parent>
     <groupId>info.magnolia</groupId>
     <artifactId>magnolia-module-imaging-parent</artifactId>
-    <version>3.0.4-SNAPSHOT</version>
+    <version>3.0.4</version>
   </parent>
   <artifactId>magnolia-module-imaging-fix-preload-awt</artifactId>
   <packaging>jar</packaging>
