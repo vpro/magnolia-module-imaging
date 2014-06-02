@@ -38,7 +38,7 @@ import info.magnolia.cms.core.NodeData;
 import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.ParameterProvider;
 import net.sf.json.JSONObject;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.jcr.RepositoryException;
 import java.awt.image.BufferedImage;

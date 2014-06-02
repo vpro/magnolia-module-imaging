@@ -40,7 +40,7 @@ import info.magnolia.cms.gui.control.File;
 import info.magnolia.cms.gui.control.Hidden;
 import info.magnolia.cms.gui.dialog.DialogBox;
 import info.magnolia.cms.gui.misc.CssConstants;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;

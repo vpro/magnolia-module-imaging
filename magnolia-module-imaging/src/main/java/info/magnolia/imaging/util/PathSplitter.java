@@ -33,7 +33,7 @@
  */
 package info.magnolia.imaging.util;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Splits a String representation path where elements are separated by defined or default ('/') separator.
