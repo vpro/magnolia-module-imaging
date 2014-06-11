@@ -68,6 +68,10 @@ public class ImagingModuleVersionHandler extends DefaultModuleVersionHandler {
                         new AddPermissionTask("", "", "imaging-base", "imaging", "/", Permission.READ, true))
                 ));
 
+        register(DeltaBuilder.update("3.0.3", "")
+                .addTask(new AddPermissionTask("Update imaging-base role", "Add read permissions for imaging-base role", "imaging-base", "userroles", "/imaging-base", Permission.READ, false))
+        );
+
     }
 
     @Override
