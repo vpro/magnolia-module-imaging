@@ -56,6 +56,12 @@
       <artifactId>magnolia-core</artifactId>
       <type>test-jar</type>
     </dependency>
+    <dependency>
+      <groupId>info.magnolia.activation</groupId>
+      <artifactId>magnolia-module-activation</artifactId>
+      <scope>test</scope>
+      <version>5.0</version>
+    </dependency>
   </dependencies>
 
   <build>
