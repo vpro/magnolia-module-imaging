@@ -7,7 +7,7 @@
     <version>28</version>
   </parent>
   <artifactId>magnolia-module-imaging-parent</artifactId>
-  <version>3.1-SNAPSHOT</version>
+  <version>3.1-m2</version>
   <packaging>pom</packaging>
   <name>Magnolia Imaging (parent)</name>
   <description>A set of Magnolia modules which provide image generation, filtering and manipulation capabilities.</description>
@@ -25,7 +25,7 @@
     <connection>scm:git:http://git.magnolia-cms.com/modules/imaging</connection>
     <developerConnection>scm:git:https://git.magnolia-cms.com/modules/imaging</developerConnection>
     <url>http://git.magnolia-cms.com/gitweb/?p=modules/imaging.git</url>
-    <tag>HEAD</tag>
+    <tag>magnolia-imaging-3.1-m2</tag>
   </scm>
 
   <modules>
