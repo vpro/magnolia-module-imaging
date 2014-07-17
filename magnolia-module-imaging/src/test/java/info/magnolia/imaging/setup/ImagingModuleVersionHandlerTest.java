@@ -93,12 +93,12 @@ public class ImagingModuleVersionHandlerTest extends ModuleVersionHandlerTestCas
     }
 
     @Test
-    public void testUpdate303AddPermissionsForImagingBaseRole() throws Exception {
+    public void testUpdateFrom304AddsPermissionsForImagingBaseRole() throws Exception {
         // GIVEN
         Session session = MgnlContext.getJCRSession(RepositoryConstants.USER_ROLES);
 
         // WHEN
-        executeUpdatesAsIfTheCurrentlyInstalledVersionWas(Version.parseVersion("3.0.2"));
+        executeUpdatesAsIfTheCurrentlyInstalledVersionWas(Version.parseVersion("3.0.4"));
 
         // THEN
         assertThat(session.itemExists("/imaging-base/acl_userroles/0"), is(true));
