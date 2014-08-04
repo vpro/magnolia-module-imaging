@@ -41,6 +41,7 @@ import info.magnolia.module.delta.AddRoleToUserTask;
 import info.magnolia.module.delta.ArrayDelegateTask;
 import info.magnolia.module.delta.DeltaBuilder;
 import info.magnolia.module.delta.RemovePermissionTask;
+import info.magnolia.repository.RepositoryConstants;
 
 import java.util.Collections;
 import java.util.List;
@@ -63,9 +64,8 @@ public class ImagingModuleVersionHandler extends DefaultModuleVersionHandler {
                 ));
 
         register(DeltaBuilder.update("3.1.1", "")
-                .addTask(new AddPermissionTask("Update imaging-base role", "Add read permissions for imaging-base role", "imaging-base", "userroles", "/imaging-base", Permission.READ, false))
+                .addTask(new AddPermissionTask("Update imaging-base role", "Add read permissions for imaging-base role", "imaging-base", RepositoryConstants.USER_ROLES, "/imaging-base", Permission.READ, false))
         );
-
     }
 
     @Override

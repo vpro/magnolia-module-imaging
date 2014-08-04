@@ -52,6 +52,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.jcr.Node;
+import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
 import org.junit.Before;
@@ -62,6 +63,8 @@ import org.junit.Test;
  */
 public class ImagingModuleVersionHandlerTest extends ModuleVersionHandlerTestCase {
 
+    private Session userRolesSession;
+
     @Override
     @Before
     public void setUp() throws Exception {
@@ -71,8 +74,14 @@ public class ImagingModuleVersionHandlerTest extends ModuleVersionHandlerTestCas
         MgnlRoleManager roleManager = new MgnlRoleManager();
         securitySupport.setRoleManager(roleManager);
         roleManager.createRole("imaging-base");
-    }
 
+        userRolesSession = MgnlContext.getJCRSession(RepositoryConstants.USER_ROLES);
+
+        addSupportForSetupModuleRepositoriesTask("imaging");
+
+        // Setup the filters node to prevent error msg
+        setupConfigNode("/server/filters/servlets");
+    }
 
     @Override
     protected String getModuleDescriptorPath() {
@@ -95,15 +104,30 @@ public class ImagingModuleVersionHandlerTest extends ModuleVersionHandlerTestCas
     @Test
     public void testUpdateFrom31AddsPermissionsForImagingBaseRole() throws Exception {
         // GIVEN
-        Session session = MgnlContext.getJCRSession(RepositoryConstants.USER_ROLES);
 
         // WHEN
         executeUpdatesAsIfTheCurrentlyInstalledVersionWas(Version.parseVersion("3.1"));
 
         // THEN
-        assertThat(session.itemExists("/imaging-base/acl_userroles/0"), is(true));
-        Node role = session.getNode("/imaging-base/acl_userroles/0");
+        assertThatRoleHasReadPermissionToItself();
+    }
+
+    @Test
+    public void testCleanInstallAddsPermissionsForImagingBaseRole() throws Exception {
+        // GIVEN
+
+        // WHEN
+        executeUpdatesAsIfTheCurrentlyInstalledVersionWas(null);
+
+        // THEN
+        assertThatRoleHasReadPermissionToItself();
+    }
+
+    private void assertThatRoleHasReadPermissionToItself() throws RepositoryException {
+        assertThat(userRolesSession.itemExists("/imaging-base/acl_userroles/0"), is(true));
+        Node role = userRolesSession.getNode("/imaging-base/acl_userroles/0");
         assertThat(role, hasProperty("path", "/imaging-base"));
         assertThat(role, hasProperty("permissions", Permission.READ));
     }
+
 }
