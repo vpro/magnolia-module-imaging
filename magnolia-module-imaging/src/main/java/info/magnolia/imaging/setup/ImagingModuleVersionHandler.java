@@ -33,30 +33,24 @@
  */
 package info.magnolia.imaging.setup;
 
-import info.magnolia.cms.core.Content;
 import info.magnolia.cms.security.Permission;
 import info.magnolia.module.DefaultModuleVersionHandler;
 import info.magnolia.module.InstallContext;
-import info.magnolia.module.delta.AbstractRepositoryTask;
 import info.magnolia.module.delta.AddPermissionTask;
 import info.magnolia.module.delta.AddRoleToUserTask;
 import info.magnolia.module.delta.ArrayDelegateTask;
 import info.magnolia.module.delta.DeltaBuilder;
 import info.magnolia.module.delta.RemovePermissionTask;
-import info.magnolia.module.delta.TaskExecutionException;
 
 import java.util.Collections;
 import java.util.List;
 
-import javax.jcr.RepositoryException;
-
 
 /**
  * VersionHandler for the imaging module.
- *
- * @version $Id$
  */
 public class ImagingModuleVersionHandler extends DefaultModuleVersionHandler {
+
     public ImagingModuleVersionHandler() {
         super();
 
@@ -82,17 +76,4 @@ public class ImagingModuleVersionHandler extends DefaultModuleVersionHandler {
         );
     }
 
-    private static class CreateConfigNodeTask extends AbstractRepositoryTask {
-        public CreateConfigNodeTask() {
-            super("Configuration", "Creates an empty configuration node for generators if it does not exist.");
-        }
-
-        @Override
-        protected void doExecute(InstallContext ctx) throws RepositoryException, TaskExecutionException {
-            final Content config = ctx.getOrCreateCurrentModuleConfigNode();
-            if (!config.hasContent("generators")) {
-                config.createContent("generators", "mgnl:content");
-            }
-        }
-    }
 }

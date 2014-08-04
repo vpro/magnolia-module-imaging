@@ -11,7 +11,7 @@
   <name>Magnolia Imaging Module</name>
   <description>A Magnolia module that provides image generation and filtering capabilities.</description>
   <properties>
-  	<cloverCoverageThreshold>65</cloverCoverageThreshold>
+    <cloverCoverageThreshold>65</cloverCoverageThreshold>
   </properties>
 
   <dependencies>
