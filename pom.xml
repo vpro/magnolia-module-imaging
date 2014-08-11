@@ -123,6 +123,16 @@
 
   <build>
     <plugins>
+        <plugin>
+            <!-- this is our default - sub projects can of course override this as needed -->
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+                <source>${javaVersion}</source>
+                <target>${javaVersion}</target>
+                <compilerArgument>-XDignore.symbol.file=true</compilerArgument>
+            </configuration>
+        </plugin>
       <!--<plugin>-->
       <!--<groupId>org.apache.maven.plugins</groupId>-->
       <!--<artifactId>maven-assembly-plugin</artifactId>-->
