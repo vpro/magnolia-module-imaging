@@ -1,5 +1,5 @@
 /**
- * This file Copyright (c) 2009-2012 Magnolia International
+ * This file Copyright (c) 2009-2014 Magnolia International
  * Ltd.  (http://www.magnolia-cms.com). All rights reserved.
  *
  *
@@ -33,9 +33,6 @@
  */
 package info.magnolia.imaging.caching;
 
-import com.google.common.base.Function;
-import com.google.common.collect.ComputationException;
-import com.google.common.collect.MapMaker;
 import info.magnolia.cms.beans.runtime.FileProperties;
 import info.magnolia.cms.core.Content;
 import info.magnolia.cms.core.HierarchyManager;
@@ -47,19 +44,25 @@ import info.magnolia.imaging.ImageGenerator;
 import info.magnolia.imaging.ImageStreamer;
 import info.magnolia.imaging.ImagingException;
 import info.magnolia.imaging.ParameterProvider;
-import org.apache.commons.io.IOUtils;
 
-import javax.jcr.PropertyType;
-import javax.jcr.RepositoryException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Calendar;
-import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
+
+import javax.jcr.PropertyType;
+import javax.jcr.RepositoryException;
+
+import org.apache.commons.io.IOUtils;
+
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 
 /**
  * An ImageStreamer which stores and serves generated images to/from a specific workspace.
@@ -78,15 +81,15 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
 
     /** TODO: make static if we don't use the exact same instance for all threads ? */
     /**
-     * This Map is the key to understanding how this class works.
-     * By using a ConcurrentMap, we are essentially locking all requests
+     * This LoadingCache is the key to understanding how this class works.
+     * By using a LoadingCache, we are essentially locking all requests
      * coming in for the same image (ImageGenerationJob) except the first one.
      *
-     * MapMaker.makeComputingMap() returns a Map implemented as such that the
+     * CacheBuilder.build() returns a LoadingCache implemented as such that the
      * first call to get(K) will generate the value (by calling <V> Function.apply(<K>).
      * Further calls are blocked until the value is generated, and they all retrieve the same value.
      */
-    private final ConcurrentMap<ImageGenerationJob<P>, NodeData> currentJobs;
+    private final LoadingCache<ImageGenerationJob<P>, NodeData> currentJobs;
 
     /**
      * Despite the currentJobs doing quite a good job at avoiding multiple requests
@@ -104,28 +107,34 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
         this.cachingStrategy = cachingStrategy;
         this.delegate = delegate;
 
-        this.currentJobs = new MapMaker()
-        //                    .concurrencyLevel(32)
-        //                    .softKeys() weakKeys()
-        //                    .softValues() weakValues()
-        // entries from the map will be removed 500ms after their creation,
-        // thus unblocking further requests for an equivalent job.
-        .expiration(500, TimeUnit.MILLISECONDS)
+        CacheBuilder<Object, Object> cb = CacheBuilder.newBuilder();
+        this.currentJobs = cb
+                //                    .concurrencyLevel(32)
+                //                    .softKeys() weakKeys()
+                //                    .softValues() weakValues()
 
-        .makeComputingMap(new Function<ImageGenerationJob<P>, NodeData>() {
-            @Override
-            public NodeData apply(ImageGenerationJob<P> job) {
-                try {
-                    return generateAndStore(job.getGenerator(), job.getParams());
-                } catch (IOException e) {
-                    // the map will further wrap these in ComputationExceptions, and we will, in turn, unwrap them ...
-                    throw new RuntimeException(e);
-                } catch (ImagingException e) {
-                    // the map will further wrap these in ComputationExceptions, and we will, in turn, unwrap them ...
-                    throw new RuntimeException(e);
-                }
-            }
-        });
+                // entries from the LoadingCache will be removed 500ms after their creation,
+                // thus unblocking further requests for an equivalent job.
+                .expireAfterWrite(500, TimeUnit.MILLISECONDS)
+
+                .build(new CacheLoader<ImageGenerationJob<P>, NodeData>(){
+
+                    @Override
+                    public NodeData load(ImageGenerationJob<P> job) throws Exception {
+                        try {
+                            return generateAndStore(job.getGenerator(), job.getParams());
+                        } catch (IOException e) {
+                            // the LoadingCache will further wrap these in ExecutionExceptions, and we will, in turn, unwrap them ...
+                            throw new RuntimeException(e);
+                        } catch (ImagingException e) {
+                            // the LoadingCache will further wrap these in ExecutionExceptions, and we will, in turn, unwrap them ...
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                });
+
+
     }
 
     @Override
@@ -135,8 +144,8 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
             // image is not in cache or should be regenerated
             try {
                 imgProp = currentJobs.get(new ImageGenerationJob<P>(generator, params));
-            } catch (ComputationException e) {
-                // thrown if the ComputingMap's Function failed
+            } catch (ExecutionException e) {
+                // thrown if the LoadingCache's Function failed
                 unwrapRuntimeException(e);
             }
         }
@@ -228,11 +237,11 @@ public class CachingImageStreamer<P> implements ImageStreamer<P> {
     }
 
     /**
-     * Unwrap ComputationExceptions wrapping a RuntimeException wrapping an ImagingException or IOException,
+     * Unwrap ExecutionExceptions wrapping a RuntimeException wrapping an ImagingException or IOException,
      * as thrown by the Function of the computing map.
      * @see #currentJobs
      */
-    private void unwrapRuntimeException(RuntimeException e) throws ImagingException, IOException {
+    private void unwrapRuntimeException(Exception e) throws ImagingException, IOException {
         final Throwable cause = e.getCause();
         if (cause instanceof ImagingException) {
             throw (ImagingException) cause;
