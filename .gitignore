@@ -8,6 +8,7 @@ target
 .classpath
 .settings
 *.DS_Store
+**/src/**/rebel.xml
 
 # some tests write files into module
 /magnolia-module-imaging/*.jpg
