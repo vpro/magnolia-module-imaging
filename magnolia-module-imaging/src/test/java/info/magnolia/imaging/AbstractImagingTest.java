@@ -130,6 +130,7 @@ public abstract class AbstractImagingTest {
     private static final BufferedImage horizontalImage;
     private static final BufferedImage verticalImage;
     private static final BufferedImage squareImage;
+    private static final BufferedImage smallImage;
 
     // preload images for this test
 
@@ -139,6 +140,8 @@ public abstract class AbstractImagingTest {
             squareImage = ImageIO.read(AbstractImagingTest.class.getResource("/IMG_4995.JPG"));
             horizontalImage = ImageIO.read(AbstractImagingTest.class.getResource("/IMG_2463.JPG"));
             verticalImage = f.filter(horizontalImage, null);
+            smallImage = ImageIO.read(AbstractImagingTest.class.getResource("/magnolia-logo.png"));
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -169,6 +172,15 @@ public abstract class AbstractImagingTest {
         assertEquals(500, squareImage.getWidth());
         assertEquals(500, squareImage.getHeight());
         return squareImage;
+    }
+
+    /**
+     * Gets a well-known image, ensuring its dimensions haven't changed since the test was written and started.
+     */
+    protected BufferedImage getSmallTestImage() throws Exception {
+        assertEquals(202, smallImage.getWidth());
+        assertEquals(51, smallImage.getHeight());
+        return smallImage;
     }
 
     /**

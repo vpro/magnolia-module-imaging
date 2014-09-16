@@ -82,11 +82,17 @@ public class Size implements Serializable {
     }
 
     public static Size maxSizeComplyingWithSourceRatio(final int sourceWidth, final int sourceHeight, final int maxWidth, final int maxHeight) {
+        return maxSizeComplyingWithSourceRatio(sourceWidth, sourceHeight, maxWidth, maxHeight, true);
+    }
+
+    public static Size maxSizeComplyingWithSourceRatio(final int sourceWidth, final int sourceHeight, final int maxWidth, final int maxHeight, final boolean expand) {
         final double sourceRatio = (double) sourceWidth / (double) sourceHeight;
 
         final int tentativeWidth = maxWidth;
         final int tentativeHeight = (int) (tentativeWidth / sourceRatio);
-
+        if (!expand && sourceWidth <= maxWidth && sourceHeight <= maxHeight) {
+            return new Size(sourceWidth, sourceHeight);
+        }
         if (tentativeHeight <= maxHeight) {
             // first attempt was good enough
             return new Size(tentativeWidth, tentativeHeight);
