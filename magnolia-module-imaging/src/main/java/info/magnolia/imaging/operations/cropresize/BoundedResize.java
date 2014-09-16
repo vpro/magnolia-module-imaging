@@ -47,6 +47,7 @@ import java.awt.image.BufferedImage;
 public class BoundedResize extends AbstractCropAndResize {
     private int maxWidth;
     private int maxHeight;
+    private boolean expand = true;
 
     @Override
     protected Coords getCroopCoords(BufferedImage source, ParameterProvider params) throws ImagingException {
@@ -55,7 +56,7 @@ public class BoundedResize extends AbstractCropAndResize {
 
     @Override
     protected Size getEffectiveTargetSize(BufferedImage source, Coords cropCoords, ParameterProvider params) {
-        return Size.maxSizeComplyingWithSourceRatio(source.getWidth(), source.getHeight(), maxWidth, maxHeight);
+        return Size.maxSizeComplyingWithSourceRatio(source.getWidth(), source.getHeight(), maxWidth, maxHeight, expand);
     }
 
     public int getMaxWidth() {
@@ -72,5 +73,13 @@ public class BoundedResize extends AbstractCropAndResize {
 
     public void setMaxHeight(int maxHeight) {
         this.maxHeight = maxHeight;
+    }
+
+    public boolean getExpand() {
+        return expand;
+    }
+
+    public void setExpand(boolean expand) {
+        this.expand = expand;
     }
 }
