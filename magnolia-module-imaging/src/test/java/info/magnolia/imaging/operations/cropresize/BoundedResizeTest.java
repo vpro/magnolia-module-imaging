@@ -38,12 +38,22 @@ import info.magnolia.imaging.AbstractImagingTest;
 
 import java.awt.image.BufferedImage;
 
+import org.junit.Before;
 import org.junit.Test;
 
 /**
  * @version $Id$
  */
 public class BoundedResizeTest extends AbstractImagingTest {
+
+    BoundedResize op;
+
+    @Override
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+        op = new BoundedResize();
+    }
 
     @Test
     public void testJustResizeIfTargetRatioIsEquivalentToSourceRatio() throws Exception {
@@ -88,8 +98,19 @@ public class BoundedResizeTest extends AbstractImagingTest {
         doTestKeepsOriginalRatioAndCompliesToSmallestMaximumDimension(getHorizontalTestImage(), 400, 0, 400, 300);
     }
 
+    @Test
+    public void testSmallImageNotEnlargedWhileExpandFalse() throws Exception {
+        op.setExpand(false);
+        doTestKeepsOriginalRatioAndCompliesToSmallestMaximumDimension(getSmallTestImage(), 400, 400, 202, 51);
+    }
+
+    @Test
+    public void testSmallImageIsEnlargedWhileExpandTrue() throws Exception {
+        op.setExpand(true);
+        doTestKeepsOriginalRatioAndCompliesToSmallestMaximumDimension(getSmallTestImage(), 400, 400, 400, 100);
+    }
+
     private void doTestKeepsOriginalRatioAndCompliesToSmallestMaximumDimension(final BufferedImage src, final int maxWidth, final int maxHeight, final int expectedWith, final int expectedHeight) throws Exception {
-        final BoundedResize op = new BoundedResize();
         op.setMaxWidth(maxWidth);
         op.setMaxHeight(maxHeight);
 
