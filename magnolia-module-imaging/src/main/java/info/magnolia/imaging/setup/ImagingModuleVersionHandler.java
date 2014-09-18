@@ -33,62 +33,53 @@
  */
 package info.magnolia.imaging.setup;
 
-import info.magnolia.cms.core.Content;
 import info.magnolia.cms.security.Permission;
+import info.magnolia.cms.security.UserManager;
 import info.magnolia.module.DefaultModuleVersionHandler;
 import info.magnolia.module.InstallContext;
-import info.magnolia.module.delta.AbstractRepositoryTask;
 import info.magnolia.module.delta.AddPermissionTask;
 import info.magnolia.module.delta.AddRoleToUserTask;
 import info.magnolia.module.delta.ArrayDelegateTask;
 import info.magnolia.module.delta.DeltaBuilder;
 import info.magnolia.module.delta.RemovePermissionTask;
-import info.magnolia.module.delta.TaskExecutionException;
 
 import java.util.Collections;
 import java.util.List;
 
-import javax.jcr.RepositoryException;
-
-
 /**
  * VersionHandler for the imaging module.
- *
- * @version $Id$
  */
 public class ImagingModuleVersionHandler extends DefaultModuleVersionHandler {
+
+    protected static final String ROLE_IMAGING_BASE = "imaging-base";
+    protected static final String IMAGING_WORKSPACE = "imaging";
+
     public ImagingModuleVersionHandler() {
         super();
 
         register(DeltaBuilder.checkPrecondition("2.1.1", "2.2"));
 
         register(DeltaBuilder.update("2.2.3", "")
-                .addTask(new ArrayDelegateTask("Update simaging-base role", "Change permission for imaging repo from Write-Read into Read only",
-                        new RemovePermissionTask("", "", "imaging-base", "imaging", "/", Permission.WRITE),
-                        new AddPermissionTask("", "", "imaging-base", "imaging", "/", Permission.READ, true))
-                ));
+                .addTask(new ArrayDelegateTask("Update imaging-base role", "Change permission for imaging repo from Write-Read to Read only",
+                        new RemovePermissionTask("", "", ROLE_IMAGING_BASE, IMAGING_WORKSPACE, "/", Permission.WRITE),
+                        new AddPermissionTask("", "", ROLE_IMAGING_BASE, IMAGING_WORKSPACE, "/", Permission.READ, true)
+                        )));
 
+        register(DeltaBuilder.update("2.2.6", "")
+                .addTask(new ArrayDelegateTask("Update imaging-base role",
+                        new RemovePermissionTask("", "", ROLE_IMAGING_BASE, IMAGING_WORKSPACE, "/", Permission.ALL),
+                        new RemovePermissionTask("", "", ROLE_IMAGING_BASE, IMAGING_WORKSPACE, "/", Permission.READ),
+                        new RemovePermissionTask("", "", ROLE_IMAGING_BASE, IMAGING_WORKSPACE, "/*", Permission.ALL),
+                        new AddPermissionTask("", "", ROLE_IMAGING_BASE, IMAGING_WORKSPACE, "/*", Permission.READ, false)
+                        )));
     }
 
     @Override
     protected List getExtraInstallTasks(InstallContext installContext) {
         // TODO - see MGNLIMG-36
         return Collections.singletonList(
-                new AddRoleToUserTask("Add the base role to the anonymous user", "anonymous", "imaging-base")
-        );
+                new AddRoleToUserTask("Add the base role to the anonymous user", UserManager.ANONYMOUS_USER, ROLE_IMAGING_BASE)
+                );
     }
 
-    private static class CreateConfigNodeTask extends AbstractRepositoryTask {
-        public CreateConfigNodeTask() {
-            super("Configuration", "Creates an empty configuration node for generators if it does not exist.");
-        }
-
-        @Override
-        protected void doExecute(InstallContext ctx) throws RepositoryException, TaskExecutionException {
-            final Content config = ctx.getOrCreateCurrentModuleConfigNode();
-            if (!config.hasContent("generators")) {
-                config.createContent("generators", "mgnl:content");
-            }
-        }
-    }
 }
