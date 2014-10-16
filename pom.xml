@@ -127,4 +127,12 @@
       <!--</plugin>-->
     </plugins>
   </build>
+
+  <distributionManagement>
+    <site>
+      <id>${distribSiteId}</id>
+      <url>${distribSiteRoot}/magnolia-imaging/${project.version}/</url>
+    </site>
+  </distributionManagement>
+
 </project>
