@@ -131,7 +131,7 @@
   <distributionManagement>
     <site>
       <id>${distribSiteId}</id>
-      <url>${distribSiteRoot}/magnolia-imaging/${project.version}/</url>
+      <url>${distribSiteRoot}/modules/magnolia-imaging/${project.version}/</url>
     </site>
   </distributionManagement>
 
