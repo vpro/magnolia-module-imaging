@@ -1,59 +1,11 @@
-# /
-/target
-/*.iml
-/*.ipr
-/*.iws
-/*.log
-/.project
-/.classpath
-/.settings
-
-# /magnolia-module-cropui/
-/magnolia-module-cropui/target
-/magnolia-module-cropui/*.iml
-/magnolia-module-cropui/*.ipr
-/magnolia-module-cropui/*.iws
-/magnolia-module-cropui/*.log
-/magnolia-module-cropui/.project
-/magnolia-module-cropui/.classpath
-/magnolia-module-cropui/.settings
-
-# /magnolia-module-imaging/
-/magnolia-module-imaging/target
-/magnolia-module-imaging/*.iml
-/magnolia-module-imaging/*.ipr
-/magnolia-module-imaging/*.iws
-/magnolia-module-imaging/*.log
-/magnolia-module-imaging/.project
-/magnolia-module-imaging/.classpath
-/magnolia-module-imaging/.settings
-
-# /magnolia-dev-project/
-/magnolia-dev-project/target
-/magnolia-dev-project/*.iml
-/magnolia-dev-project/*.ipr
-/magnolia-dev-project/*.iws
-/magnolia-dev-project/*.log
-/magnolia-dev-project/.project
-/magnolia-dev-project/.classpath
-/magnolia-dev-project/.settings
-
-# /magnolia-module-imaging-fix-preload-awt/
-/magnolia-module-imaging-fix-preload-awt/target
-/magnolia-module-imaging-fix-preload-awt/*.iml
-/magnolia-module-imaging-fix-preload-awt/*.ipr
-/magnolia-module-imaging-fix-preload-awt/*.iws
-/magnolia-module-imaging-fix-preload-awt/*.log
-/magnolia-module-imaging-fix-preload-awt/.project
-/magnolia-module-imaging-fix-preload-awt/.classpath
-/magnolia-module-imaging-fix-preload-awt/.settings
-
-# /magnolia-module-imagingtools/
-/magnolia-module-imagingtools/target
-/magnolia-module-imagingtools/*.iml
-/magnolia-module-imagingtools/*.ipr
-/magnolia-module-imagingtools/*.iws
-/magnolia-module-imagingtools/*.log
-/magnolia-module-imagingtools/.project
-/magnolia-module-imagingtools/.classpath
-/magnolia-module-imagingtools/.settings
+target
+*.iml
+*.ipr
+*.iws
+*.log
+.idea
+.project
+.classpath
+.settings
+.checkstyle
+rebel.xml
