@@ -11,7 +11,7 @@
   <name>Magnolia Crop UI for Imaging Module</name>
   <description>Provides a cropping UI component to use in conjunction with the imaging module.</description>
   <properties>
-    <cloverCoverageThreshold>10</cloverCoverageThreshold>
+    <cloverCoverageThreshold>9</cloverCoverageThreshold>
   </properties>
 
   <dependencies>
